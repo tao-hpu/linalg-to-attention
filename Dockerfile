@@ -1,9 +1,9 @@
 # 多阶段构建：pnpm 打包静态资源 → nginx 托管
 FROM node:22-alpine AS builder
 WORKDIR /app
-RUN corepack enable
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN npm install -g pnpm
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install
 COPY . .
 RUN pnpm build
 
