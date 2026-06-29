@@ -1,0 +1,353 @@
+:root {
+  --ink: #111418;
+  --ink-soft: #5b6168;
+  --line: #e4e6e9;
+  --line-strong: #c7cbd0;
+  --paper: #ffffff;
+  --ikb: #002fa7;        /* International Klein Blue —— 瑞士风的那一抹蓝 */
+  --ikb-soft: #e8edff;
+  --warn: #b23a00;
+  --ok: #0a7d52;
+  --shape: #002fa7;
+  --mono: 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  --sans: 'Inter', -apple-system, 'Helvetica Neue', 'PingFang SC',
+          'Microsoft YaHei', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; background: var(--paper); }
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--ikb-soft);
+  color: var(--ikb);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 64px 28px 96px;
+}
+
+/* ---- 报头 ---- */
+.kicker {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ikb);
+  font-weight: 600;
+  border-bottom: 2px solid var(--ikb);
+  display: inline-block;
+  padding-bottom: 6px;
+  margin-bottom: 22px;
+}
+
+h1 {
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+  font-weight: 700;
+}
+.zh-sub {
+  display: block;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  margin-top: 10px;
+  letter-spacing: 0;
+}
+
+.lede {
+  font-size: 17px;
+  color: #2c3036;
+  max-width: 64ch;
+  margin: 0 0 8px;
+}
+.lede strong { font-weight: 650; }
+
+/* ---- 控制区 ---- */
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 44px 0 28px;
+}
+.control {
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--ikb);
+  padding: 16px 18px 18px;
+}
+.control-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.slot-tag {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: var(--ikb);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 2px;
+}
+.control select {
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 2px;
+  flex: 1;
+}
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.slider-row input[type='range'] {
+  flex: 1;
+  accent-color: var(--ikb);
+}
+.param-val {
+  font-family: var(--mono);
+  font-size: 14px;
+  min-width: 56px;
+  text-align: right;
+  color: var(--ink);
+}
+.no-param {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 6px 0 0;
+}
+
+/* ---- 舞台：三块画布 ---- */
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.arrow-sep {
+  font-size: 22px;
+  color: var(--line-strong);
+}
+.panel { margin: 0; }
+.panel svg {
+  display: block;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.panel--active svg { border-color: var(--line-strong); }
+.panel figcaption {
+  margin-top: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.panel-label { font-size: 14px; font-weight: 600; }
+.panel-sub {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* ---- 可拖拽向量画布 ---- */
+.vector-canvas {
+  display: block;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 4px;
+  touch-action: none;       /* 让指针拖拽在触屏上不滚页 */
+  user-select: none;
+}
+.vc-grid { stroke: var(--line); stroke-width: 1; }
+.vc-axis { stroke: var(--line-strong); stroke-width: 1.2; }
+.vc-label { font-family: var(--mono); font-size: 14px; font-weight: 700; }
+.vc-handle {
+  fill: #fff;
+  fill-opacity: 0.01;
+  stroke: var(--ikb);
+  stroke-width: 0;
+}
+.vc-handle:hover { stroke-width: 2; fill-opacity: 0.08; }
+.vc-handle.is-active { stroke-width: 2.5; fill-opacity: 0.12; }
+
+/* SVG 内部样式 */
+.grid { stroke: var(--line); stroke-width: 1; }
+.axis { stroke: var(--line-strong); stroke-width: 1.2; }
+.shape {
+  fill: rgba(0, 47, 167, 0.12);
+  stroke: var(--shape);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.ihat line, .jhat line { stroke-width: 2.5; }
+.ihat { stroke: var(--ikb); fill: var(--ikb); }
+.jhat { stroke: #00b3a4; fill: #00b3a4; }
+
+/* ---- 向量页：画布 + 读数面板 ---- */
+.vstage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.vpanel { min-width: 280px; flex: 1; max-width: 380px; }
+.vrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+.vrow span { font-size: 14px; color: var(--ink-soft); }
+.vrow code {
+  font-family: var(--mono);
+  font-size: 14px;
+  background: var(--ikb-soft);
+  color: var(--ikb);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+.vhint { font-size: 13px; color: var(--ink-soft); margin: 16px 0 0; }
+.note {
+  padding: 20px 22px;
+  background: #fafbfc;
+  border-left: 4px solid var(--line-strong);
+  margin: 26px 0 32px;
+}
+.note p { margin: 0; font-size: 16px; }
+
+/* ---- 矩阵读数 ---- */
+.readouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: center;
+  padding: 26px 0;
+}
+.matrix {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+}
+.matrix-name {
+  font-weight: 700;
+  color: var(--ikb);
+  margin-right: 6px;
+  font-size: 15px;
+}
+.bracket { font-size: 34px; color: var(--line-strong); font-weight: 300; }
+.matrix-rows {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+/* ---- 结论条 ---- */
+.verdict {
+  padding: 18px 22px;
+  border-left: 4px solid;
+  margin: 8px 0 32px;
+  font-size: 16px;
+}
+.verdict p { margin: 0; }
+.verdict--neq { border-color: var(--warn); background: #fff6f1; }
+.verdict--eq { border-color: var(--ok); background: #f0faf5; }
+.verdict em { font-style: normal; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---- 通往 LLM 的桥 ---- */
+.bridge {
+  border: 1px solid var(--ikb);
+  background: var(--ikb-soft);
+  padding: 4px 0 0;
+  margin-bottom: 32px;
+}
+.bridge-tag {
+  background: var(--ikb);
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 8px 22px;
+}
+.bridge-body { padding: 18px 22px 22px; }
+.bridge-body p { margin: 0 0 12px; font-size: 15.5px; }
+.bridge-body p:last-child { margin-bottom: 0; }
+.bridge-body code { background: #fff; }
+
+/* ---- 代码 ---- */
+.code {
+  border: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.code summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 15px;
+  user-select: none;
+}
+.code summary::marker { color: var(--ikb); }
+.code pre {
+  margin: 0;
+  padding: 18px;
+  border-top: 1px solid var(--line);
+  background: #fafbfc;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+/* ---- 页脚 ---- */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 680px) {
+  h1 { font-size: 30px; }
+  .controls { grid-template-columns: 1fr; }
+  .arrow-sep { display: none; }
+  .page { padding: 40px 20px 72px; }
+}

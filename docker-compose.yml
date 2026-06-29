@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    image: linalg-to-attention:latest
+    container_name: linalg-to-attention
+    restart: always
+    # 只监听本地端口，公网由服务器上的 nginx 反代（如 l2a.fim.ai → 此端口）
+    ports:
+      - "127.0.0.1:5191:80"
