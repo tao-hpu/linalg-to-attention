@@ -1,12 +1,13 @@
 /* ============ 站点骨架：顶栏 / 首页 / 目录 / 代码 / 翻页 ============ */
 /* 复用 styles.css 里定义的 :root 变量（--ikb、--ink 等） */
 
-.shell { min-height: 100vh; }
+/* 固定高度外壳：顶栏不动，侧栏与正文各自独立滚动，互不牵连 */
+.shell { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 .arrow { color: var(--ikb); font-weight: 400; }
 
 /* ---- 主体：侧栏 + 内容 ---- */
-.body { display: flex; align-items: flex-start; }
-.content { flex: 1 1 auto; min-width: 0; }
+.body { display: flex; flex: 1 1 auto; min-height: 0; }
+.content { flex: 1 1 auto; min-width: 0; overflow-y: auto; }
 
 .topbar-left { display: flex; align-items: center; gap: 14px; }
 .nav-toggle {
@@ -28,10 +29,9 @@
 .sidebar {
   width: 272px;
   flex-shrink: 0;
-  position: sticky;
-  top: 52px;
-  height: calc(100vh - 52px);
+  height: 100%;
   overflow-y: auto;
+  overscroll-behavior: contain; /* 滚到头不把滚动传给正文 */
   border-right: 1px solid var(--line);
   background: #fcfcfd;
   padding: 18px 12px 48px;
@@ -123,8 +123,7 @@ a.side-link:hover { background: var(--ikb-soft); }
 
 /* ---- 顶栏 ---- */
 .topbar {
-  position: sticky;
-  top: 0;
+  flex-shrink: 0;
   z-index: 20;
   display: flex;
   align-items: center;

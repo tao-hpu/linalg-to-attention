@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { parts, chapterPath } from '../chapters'
 
@@ -45,9 +45,10 @@ export function Layout() {
   const { pathname } = useLocation()
   const [open, setOpen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth > 900 : true)
+  const contentRef = useRef<HTMLElement>(null)
 
-  // 切换章节时回到页首
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  // 切换章节时回到页首（现在滚动容器是 .content，不是 window）
+  useEffect(() => { contentRef.current?.scrollTo(0, 0) }, [pathname])
 
   const closeIfNarrow = () => {
     if (typeof window !== 'undefined' && window.innerWidth <= 900) setOpen(false)
@@ -75,15 +76,16 @@ export function Layout() {
       <div className="body">
         {open && <Sidebar onNavigate={closeIfNarrow} />}
         {open && <div className="nav-scrim" onClick={() => setOpen(false)} />}
-        <main className="content"><Outlet /></main>
+        <main className="content" ref={contentRef}>
+          <Outlet />
+          <footer className="site-footer">
+            <span>
+              © 2026 <a href="https://fim.ai" target="_blank" rel="noreferrer">FIM Labs</a>
+            </span>
+            <span>线性代数 → 注意力 · 一个开源教学项目</span>
+          </footer>
+        </main>
       </div>
-
-      <footer className="site-footer">
-        <span>
-          © 2026 <a href="https://fim.ai" target="_blank" rel="noreferrer">FIM Labs</a>
-        </span>
-        <span>线性代数 → 注意力 · 一个开源教学项目</span>
-      </footer>
     </div>
   )
 }

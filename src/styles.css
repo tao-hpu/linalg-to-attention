@@ -101,10 +101,13 @@ h1 {
   font-size: 15px;
   color: #fff;
   background: var(--ikb);
-  width: 26px;
+  min-width: 26px;            /* 单字母（A/B）仍是方块；多字标签自动加宽不再裁切 */
   height: 26px;
-  display: grid;
+  padding: 0 8px;
+  box-sizing: border-box;
+  display: inline-grid;
   place-items: center;
+  white-space: nowrap;
   border-radius: 2px;
 }
 .control select {
