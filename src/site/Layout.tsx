@@ -77,6 +77,13 @@ export function Layout() {
         {open && <div className="nav-scrim" onClick={() => setOpen(false)} />}
         <main className="content"><Outlet /></main>
       </div>
+
+      <footer className="site-footer">
+        <span>
+          © 2026 <a href="https://fim.ai" target="_blank" rel="noreferrer">FIM Labs</a>
+        </span>
+        <span>线性代数 → 注意力 · 一个开源教学项目</span>
+      </footer>
     </div>
   )
 }

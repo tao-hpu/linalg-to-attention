@@ -85,6 +85,21 @@ a.side-link:hover { background: var(--ikb-soft); }
 .side-title { font-size: 13.5px; line-height: 1.35; }
 .side-star { color: #e0a400; }
 
+/* ---- 全局页脚 ---- */
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 22px 28px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  background: #fcfcfd;
+}
+.site-footer a { color: var(--ikb); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
 .nav-scrim { display: none; }
 
 @media (max-width: 900px) {
@@ -126,7 +141,7 @@ a.side-link:hover { background: var(--ikb-soft); }
   color: var(--ink);
   text-decoration: none;
 }
-.topnav { display: flex; gap: 22px; }
+.topnav { display: flex; align-items: center; gap: 22px; }
 .topnav a {
   font-size: 14px;
   color: var(--ink-soft);
