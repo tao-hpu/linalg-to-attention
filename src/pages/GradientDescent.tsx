@@ -139,8 +139,11 @@ export function GradientDescent() {
 
   const handleSvgClick = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
-    const dx = Math.max(-3.5, Math.min(3.5, fromSvgX(e.clientX - rect.left)))
-    const dy = Math.max(-3.0, Math.min(3.0, fromSvgY(e.clientY - rect.top)))
+    // SVG 现在带 viewBox，移动端会被等比缩放——先把屏幕像素换回 viewBox 内坐标
+    const px = (e.clientX - rect.left) * (SVG_W / rect.width)
+    const py = (e.clientY - rect.top) * (SVG_H / rect.height)
+    const dx = Math.max(-3.5, Math.min(3.5, fromSvgX(px)))
+    const dy = Math.max(-3.0, Math.min(3.0, fromSvgY(py)))
     setStart({ x: dx, y: dy })
     setPlaying(false)
   }, [])
@@ -230,8 +233,9 @@ export function GradientDescent() {
 
         <svg
           width={SVG_W} height={SVG_H}
+          viewBox={`0 0 ${SVG_W} ${SVG_H}`}
           onClick={handleSvgClick}
-          style={{ cursor: 'crosshair', border: '1px solid #e8e8e8', borderRadius: 6, background: '#fafafa' }}
+          style={{ cursor: 'crosshair', border: '1px solid #e8e8e8', borderRadius: 6, background: '#fafafa', maxWidth: '100%', height: 'auto', display: 'block' }}
         >
           <defs>
             {/* arrowhead for descent direction */}

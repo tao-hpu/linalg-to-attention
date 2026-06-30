@@ -30,57 +30,55 @@ const DOT_TERMS: string[][] = [
   ['3·5 + 4·7 = 43', '3·6 + 4·8 = 50'],
 ]
 
-const OUTER_TERMS: { mat: number[][]; label: string }[] = [
-  { mat: [[5, 6], [15, 18]], label: 'col₀(A) ⊗ row₀(B)' },
-  { mat: [[14, 16], [28, 32]], label: 'col₁(A) ⊗ row₁(B)' },
+// 两个 rank-1 外积项：col_k(A) ⊗ row_k(B)
+const OUTER_TERMS: { mat: number[][]; aCol: number[]; bRow: number[] }[] = [
+  { mat: [[5, 6], [15, 18]], aCol: [A[0][0], A[1][0]], bRow: B[0] },   // [1,3] ⊗ [5,6]
+  { mat: [[14, 16], [28, 32]], aCol: [A[0][1], A[1][1]], bRow: B[1] }, // [2,4] ⊗ [7,8]
 ]
 
-function SmallMatrix({
-  data,
-  name,
-  rowHighlight,
-  colHighlight,
-  colorScheme = 'blue',
-}: {
-  data: number[][]
-  name?: string
-  rowHighlight?: number
-  colHighlight?: number
-  colorScheme?: 'blue' | 'warm' | 'neutral'
-}) {
-  const primary = colorScheme === 'warm' ? WARM : colorScheme === 'neutral' ? '#555' : IKB
+type Tone = 'plain' | 'blue' | 'warm' | 'active' | 'activeWarm'
 
+function toneStyle(t: Tone): { background: string; color: string; fontWeight: number; border: string } {
+  switch (t) {
+    case 'blue': return { background: SOFT, color: IKB, fontWeight: 600, border: '1.5px solid transparent' }
+    case 'warm': return { background: WARM_SOFT, color: WARM, fontWeight: 600, border: '1.5px solid transparent' }
+    case 'active': return { background: SOFT, color: IKB, fontWeight: 700, border: `1.5px solid ${IKB}` }
+    case 'activeWarm': return { background: WARM_SOFT, color: WARM, fontWeight: 700, border: `1.5px solid ${WARM}` }
+    default: return { background: 'transparent', color: '#1b1f24', fontWeight: 400, border: '1.5px solid transparent' }
+  }
+}
+
+const OP = (s: string) => (
+  <span style={{ fontSize: 22, color: '#9aa0a6', fontFamily: 'var(--mono)' }}>{s}</span>
+)
+
+// 通用 2×2 矩阵：每格 tone 由调用方决定，可选 onCell 让格子可点。
+function Matrix({ data, name, nameColor = '#555', tone, onCell }: {
+  data: number[][]
+  name: string
+  nameColor?: string
+  tone: (i: number, j: number) => Tone
+  onCell?: (i: number, j: number) => void
+}) {
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'monospace' }}>
-      {name && (
-        <span style={{ fontWeight: 700, color: primary, marginRight: 2, fontSize: 15 }}>{name}</span>
-      )}
-      <span style={{ fontSize: 22, color: '#888', lineHeight: 1 }}>[</span>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'var(--mono)' }}>
+      <span style={{ fontWeight: 700, color: nameColor, marginRight: 2, fontSize: 15 }}>{name}</span>
+      <span style={{ fontSize: 30, color: NEUTRAL_BORDER, fontWeight: 300, lineHeight: 1 }}>[</span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {data.map((row, i) => (
           <div key={i} style={{ display: 'flex', gap: 4 }}>
             {row.map((val, j) => {
-              const isRowHl = rowHighlight === i
-              const isColHl = colHighlight === j
-              let bg = 'transparent'
-              let color = '#1b1f24'
-              let fontWeight: number = 400
-              if (isRowHl) { bg = SOFT; color = IKB; fontWeight = 600 }
-              else if (isColHl) { bg = WARM_SOFT; color = WARM; fontWeight = 600 }
+              const ts = toneStyle(tone(i, j))
               return (
                 <span
                   key={j}
+                  onClick={onCell ? () => onCell(i, j) : undefined}
                   style={{
-                    display: 'inline-block',
-                    width: 28,
-                    textAlign: 'center',
-                    borderRadius: 3,
-                    padding: '2px 0',
-                    background: bg,
-                    color,
-                    fontWeight,
-                    fontSize: 14,
-                    transition: 'background 0.15s, color 0.15s',
+                    display: 'inline-block', width: 30, textAlign: 'center',
+                    borderRadius: 3, padding: '3px 0', fontSize: 15,
+                    cursor: onCell ? 'pointer' : 'default',
+                    transition: 'background .15s, color .15s, border-color .15s',
+                    ...ts,
                   }}
                 >
                   {val}
@@ -90,236 +88,165 @@ function SmallMatrix({
           </div>
         ))}
       </div>
-      <span style={{ fontSize: 22, color: '#888', lineHeight: 1 }}>]</span>
+      <span style={{ fontSize: 30, color: NEUTRAL_BORDER, fontWeight: 300, lineHeight: 1 }}>]</span>
     </div>
   )
 }
 
+// 点积视角：点 C 的格子 → 高亮 A 的那一行 · B 的那一列。
 function DotView() {
   const [active, setActive] = useState<[number, number] | null>(null)
 
   return (
-    <div>
-      <p style={{ marginBottom: 16, color: '#444', lineHeight: 1.7 }}>
-        点击 C 中任意一个格子，可以看到它由 A 的哪一行与 B 的哪一列做内积得到。
+    <>
+      <h3 className="sec-h" style={{ color: IKB }}>① 点积视角 · C[i][j] = row i(A) · col j(B)</h3>
+      <p style={{ marginTop: 0 }}>
+        点击 C 中任意一个格子，看它由 <strong>A 的哪一行</strong>与 <strong>B 的哪一列</strong>做内积得到。
       </p>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-        <SmallMatrix data={A} name="A" rowHighlight={active !== null ? active[0] : undefined} />
-        <span style={{ fontSize: 20, color: '#888' }}>·</span>
-        <SmallMatrix
-          data={B}
-          name="B"
-          colHighlight={active !== null ? active[1] : undefined}
-          colorScheme="warm"
-        />
-        <span style={{ fontSize: 20, color: '#888' }}>=</span>
 
-        {/* C matrix — clickable cells */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'monospace' }}>
-          <span style={{ fontWeight: 700, color: '#555', marginRight: 2, fontSize: 15 }}>C</span>
-          <span style={{ fontSize: 22, color: '#888', lineHeight: 1 }}>[</span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {C.map((row, i) => (
-              <div key={i} style={{ display: 'flex', gap: 4 }}>
-                {row.map((val, j) => {
-                  const isActive = active !== null && active[0] === i && active[1] === j
-                  return (
-                    <span
-                      key={j}
-                      onClick={() => setActive(isActive ? null : [i, j])}
-                      style={{
-                        display: 'inline-block',
-                        width: 28,
-                        textAlign: 'center',
-                        borderRadius: 3,
-                        padding: '2px 0',
-                        background: isActive ? SOFT : 'transparent',
-                        color: isActive ? IKB : '#1b1f24',
-                        fontWeight: isActive ? 700 : 400,
-                        fontSize: 14,
-                        cursor: 'pointer',
-                        border: `1.5px solid ${isActive ? IKB : NEUTRAL_BORDER}`,
-                        transition: 'all 0.15s',
-                      }}
-                    >
-                      {val}
-                    </span>
-                  )
-                })}
-              </div>
-            ))}
-          </div>
-          <span style={{ fontSize: 22, color: '#888', lineHeight: 1 }}>]</span>
-        </div>
+      <section className="stage">
+        <Matrix data={A} name="A" nameColor={IKB}
+          tone={(i) => (active && i === active[0] ? 'blue' : 'plain')} />
+        {OP('·')}
+        <Matrix data={B} name="B" nameColor={WARM}
+          tone={(_i, j) => (active && j === active[1] ? 'warm' : 'plain')} />
+        {OP('=')}
+        <Matrix data={C} name="C"
+          tone={(i, j) => (active && i === active[0] && j === active[1] ? 'active' : 'plain')}
+          onCell={(i, j) => setActive(active && active[0] === i && active[1] === j ? null : [i, j])} />
+      </section>
+
+      <div className="note">
+        {active ? (
+          <p style={{ fontFamily: 'var(--mono)' }}>
+            <strong style={{ color: IKB }}>C[{active[0]}][{active[1]}]</strong> = {DOT_TERMS[active[0]][active[1]]}
+          </p>
+        ) : (
+          <p style={{ color: 'var(--ink-soft)' }}>点击 C 的某个格子查看它的内积展开。</p>
+        )}
       </div>
-
-      {active !== null ? (
-        <div style={{
-          marginTop: 16,
-          padding: '10px 16px',
-          background: SOFT,
-          borderLeft: `3px solid ${IKB}`,
-          borderRadius: 4,
-          fontFamily: 'monospace',
-          fontSize: 14,
-          color: IKB,
-        }}>
-          C[{active[0]}][{active[1]}] = {DOT_TERMS[active[0]][active[1]]}
-        </div>
-      ) : (
-        <p style={{ marginTop: 12, color: '#999', fontSize: 13 }}>← 点击 C 中的格子查看内积展开</p>
-      )}
-    </div>
+    </>
   )
 }
 
+// 列的线性组合：点 C 的某一列 → C 的第 j 列是 A 的两列按 B 第 j 列加权求和。
 function ColView() {
-  // col j of C = A · col j of B = B[0][j]·col0(A) + B[1][j]·col1(A)
+  const [sel, setSel] = useState<number | null>(null)
+
   return (
-    <div>
-      <p style={{ marginBottom: 16, color: '#444', lineHeight: 1.7 }}>
-        C 的第 j 列 = A 作用在 B 的第 j 列——即 A 的各列按 B 的列分量加权求和。
+    <>
+      <h3 className="sec-h" style={{ color: IKB }}>② 列的线性组合 · col j(C) = A · col j(B)</h3>
+      <p style={{ marginTop: 0 }}>
+        点击 C 的<strong>某一列</strong>：它是 A 的两列（蓝）按 B 同一列的分量（橙，即权重）加权求和。
       </p>
-      {[0, 1].map((j) => {
-        const bCol = B.map((r) => r[j])
-        const cCol = C.map((r) => r[j])
-        return (
-          <div key={j} style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <span style={{ color: '#555', fontFamily: 'monospace', fontSize: 13 }}>col {j} of C:</span>
-            {[0, 1].map((k) => (
-              <span key={k} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'monospace' }}>
-                {k > 0 && <span style={{ color: '#888' }}>+</span>}
-                <span style={{ fontWeight: 700, color: WARM }}>{bCol[k]}</span>
-                <span style={{ color: '#888' }}>·</span>
-                <span style={{ fontSize: 18, color: '#888' }}>[</span>
-                <span style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  {[0, 1].map((i) => (
-                    <span key={i} style={{
-                      display: 'inline-block', width: 20, textAlign: 'center',
-                      background: SOFT, color: IKB, fontWeight: 600,
-                      borderRadius: 2, padding: '1px 0', fontSize: 13,
-                    }}>
-                      {A[i][k]}
-                    </span>
-                  ))}
-                </span>
-                <span style={{ fontSize: 18, color: '#888' }}>]</span>
-              </span>
-            ))}
-            <span style={{ color: '#888' }}>=</span>
-            <span style={{ fontSize: 18, color: '#888' }}>[</span>
-            <span style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              {cCol.map((v, i) => (
-                <span key={i} style={{
-                  display: 'inline-block', width: 24, textAlign: 'center',
-                  background: '#f3f3f3', fontWeight: 600, borderRadius: 2, padding: '1px 0', fontSize: 13,
-                }}>
-                  {v}
-                </span>
-              ))}
-            </span>
-            <span style={{ fontSize: 18, color: '#888' }}>]</span>
-          </div>
-        )
-      })}
-    </div>
+
+      <section className="stage">
+        <Matrix data={A} name="A" nameColor={IKB}
+          tone={() => (sel !== null ? 'blue' : 'plain')} />
+        {OP('·')}
+        <Matrix data={B} name="B" nameColor={WARM}
+          tone={(_i, j) => (sel !== null && j === sel ? 'warm' : 'plain')} />
+        {OP('=')}
+        <Matrix data={C} name="C"
+          tone={(_i, j) => (sel !== null && j === sel ? 'active' : 'plain')}
+          onCell={(_i, j) => setSel(sel === j ? null : j)} />
+      </section>
+
+      <div className="note">
+        {sel !== null ? (
+          <p style={{ fontFamily: 'var(--mono)' }}>
+            <strong style={{ color: IKB }}>col {sel}(C)</strong> = {B[0][sel]}·col₀(A) + {B[1][sel]}·col₁(A)
+            {' = '}{B[0][sel]}·[{A[0][0]},{A[1][0]}]ᵀ + {B[1][sel]}·[{A[0][1]},{A[1][1]}]ᵀ = [{C[0][sel]},{C[1][sel]}]ᵀ
+          </p>
+        ) : (
+          <p style={{ color: 'var(--ink-soft)' }}>点击 C 的某一列查看它是 A 各列的哪种加权组合。</p>
+        )}
+      </div>
+    </>
   )
 }
 
+// 行的线性组合：点 C 的某一行 → C 的第 i 行是 B 的两行按 A 第 i 行加权求和。
 function RowView() {
-  // row i of C = row i of A · B = A[i][0]·row0(B) + A[i][1]·row1(B)
+  const [sel, setSel] = useState<number | null>(null)
+
   return (
-    <div>
-      <p style={{ marginBottom: 16, color: '#444', lineHeight: 1.7 }}>
-        C 的第 i 行 = A 的第 i 行作用在 B 上——即 B 的各行按 A 的行分量加权求和。
+    <>
+      <h3 className="sec-h" style={{ color: IKB }}>③ 行的线性组合 · row i(C) = row i(A) · B</h3>
+      <p style={{ marginTop: 0 }}>
+        点击 C 的<strong>某一行</strong>：它是 B 的两行（橙）按 A 同一行的分量（蓝，即权重）加权求和。
       </p>
-      {[0, 1].map((i) => {
-        const aRow = A[i]
-        const cRow = C[i]
-        return (
-          <div key={i} style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <span style={{ color: '#555', fontFamily: 'monospace', fontSize: 13 }}>row {i} of C:</span>
-            {[0, 1].map((k) => (
-              <span key={k} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'monospace' }}>
-                {k > 0 && <span style={{ color: '#888' }}>+</span>}
-                <span style={{ fontWeight: 700, color: IKB }}>{aRow[k]}</span>
-                <span style={{ color: '#888' }}>·</span>
-                <span style={{ fontSize: 18, color: '#888' }}>[</span>
-                <span style={{ display: 'flex', gap: 3 }}>
-                  {[0, 1].map((j) => (
-                    <span key={j} style={{
-                      display: 'inline-block', width: 20, textAlign: 'center',
-                      background: WARM_SOFT, color: WARM, fontWeight: 600,
-                      borderRadius: 2, padding: '1px 0', fontSize: 13,
-                    }}>
-                      {B[k][j]}
-                    </span>
-                  ))}
-                </span>
-                <span style={{ fontSize: 18, color: '#888' }}>]</span>
-              </span>
-            ))}
-            <span style={{ color: '#888' }}>=</span>
-            <span style={{ fontSize: 18, color: '#888' }}>[</span>
-            <span style={{ display: 'flex', gap: 3 }}>
-              {cRow.map((v, j) => (
-                <span key={j} style={{
-                  display: 'inline-block', width: 24, textAlign: 'center',
-                  background: '#f3f3f3', fontWeight: 600, borderRadius: 2, padding: '1px 0', fontSize: 13,
-                }}>
-                  {v}
-                </span>
-              ))}
-            </span>
-            <span style={{ fontSize: 18, color: '#888' }}>]</span>
-          </div>
-        )
-      })}
-    </div>
+
+      <section className="stage">
+        <Matrix data={A} name="A" nameColor={IKB}
+          tone={(i) => (sel !== null && i === sel ? 'blue' : 'plain')} />
+        {OP('·')}
+        <Matrix data={B} name="B" nameColor={WARM}
+          tone={() => (sel !== null ? 'warm' : 'plain')} />
+        {OP('=')}
+        <Matrix data={C} name="C"
+          tone={(i) => (sel !== null && i === sel ? 'active' : 'plain')}
+          onCell={(i) => setSel(sel === i ? null : i)} />
+      </section>
+
+      <div className="note">
+        {sel !== null ? (
+          <p style={{ fontFamily: 'var(--mono)' }}>
+            <strong style={{ color: IKB }}>row {sel}(C)</strong> = {A[sel][0]}·row₀(B) + {A[sel][1]}·row₁(B)
+            {' = '}{A[sel][0]}·[{B[0][0]},{B[0][1]}] + {A[sel][1]}·[{B[1][0]},{B[1][1]}] = [{C[sel][0]},{C[sel][1]}]
+          </p>
+        ) : (
+          <p style={{ color: 'var(--ink-soft)' }}>点击 C 的某一行查看它是 B 各行的哪种加权组合。</p>
+        )}
+      </div>
+    </>
   )
 }
 
+// 秩-1 外积之和：点某一个 rank-1 项 → 高亮它的来源（A 的列 ⊗ B 的行），并说明它逐格贡献整个 C。
 function OuterView() {
+  const [sel, setSel] = useState<number | null>(null)
+
   return (
-    <div>
-      <p style={{ marginBottom: 16, color: '#444', lineHeight: 1.7 }}>
-        C = A·B 等于 A 的各列与 B 对应各行的<strong>外积</strong>（rank-1 矩阵）之和。
-        每一项 col<sub>k</sub>(A) ⊗ row<sub>k</sub>(B) 的秩只有 1——
-        这正是注意力对 value 向量加权求和、以及 LoRA 低秩分解的几何种子。
+    <>
+      <h3 className="sec-h" style={{ color: IKB }}>④ 秩-1 外积之和 · C = Σ col k(A) ⊗ row k(B)</h3>
+      <p style={{ marginTop: 0 }}>
+        点击<strong>某一个 rank-1 项</strong>：它是 A 的一列与 B 的一行的外积，秩只有 1。
+        每个 rank-1 项都<strong>逐格贡献整个 C</strong>——C 的每一格 = 两项对应格之和。
+        这正是注意力对 value 加权求和、LoRA 低秩分解的几何种子。
       </p>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+
+      <section className="stage">
         {OUTER_TERMS.map((term, k) => (
-          <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            {k > 0 && <span style={{ fontSize: 20, color: '#888' }}>+</span>}
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{term.label}</div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'monospace' }}>
-                <span style={{ fontSize: 18, color: '#888' }}>[</span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {term.mat.map((row, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 4 }}>
-                      {row.map((val, j) => (
-                        <span key={j} style={{
-                          display: 'inline-block', width: 28, textAlign: 'center',
-                          background: k === 0 ? SOFT : WARM_SOFT,
-                          color: k === 0 ? IKB : WARM,
-                          fontWeight: 500, borderRadius: 3, padding: '2px 0', fontSize: 14,
-                        }}>
-                          {val}
-                        </span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-                <span style={{ fontSize: 18, color: '#888' }}>]</span>
-              </div>
-            </div>
+          <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {k > 0 && OP('+')}
+            <Matrix
+              data={term.mat}
+              name={`R${k + 1}`}
+              nameColor={k === 0 ? IKB : WARM}
+              tone={() => (sel === k ? (k === 0 ? 'active' : 'activeWarm') : (k === 0 ? 'blue' : 'warm'))}
+              onCell={() => setSel(sel === k ? null : k)}
+            />
           </div>
         ))}
-        <span style={{ fontSize: 20, color: '#888' }}>=</span>
-        <SmallMatrix data={C} name="C" colorScheme="neutral" />
+        {OP('=')}
+        <Matrix data={C} name="C" tone={() => 'plain'} />
+      </section>
+
+      <div className="note">
+        {sel !== null ? (
+          <p style={{ fontFamily: 'var(--mono)' }}>
+            <strong style={{ color: sel === 0 ? IKB : WARM }}>R{sel + 1}</strong> = col{sel}(A) ⊗ row{sel}(B)
+            {' = '}[{OUTER_TERMS[sel].aCol.join(',')}]ᵀ ⊗ [{OUTER_TERMS[sel].bRow.join(',')}]
+            <span style={{ fontFamily: 'var(--sans)', color: 'var(--ink-soft)' }}>
+              {' '}—— 它和另一项逐格相加，得到完整的 C。
+            </span>
+          </p>
+        ) : (
+          <p style={{ color: 'var(--ink-soft)' }}>点击 R1 或 R2 查看这个 rank-1 项由 A 的哪一列、B 的哪一行外积而来。</p>
+        )}
       </div>
-    </div>
+    </>
   )
 }
 
@@ -366,71 +293,31 @@ export function MatmulViews() {
         </p>
       </header>
 
-      {/* 切换视角 tab row */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
+      {/* 切换视角：复用站点 .chip 胶囊，is-on 即 IKB 高亮，自带 hover 与响应式 */}
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '40px 0 4px' }}>
         {VIEW_LABELS.map(({ id, label }) => (
           <button
             key={id}
+            className={`chip${view === id ? ' is-on' : ''}`}
             onClick={() => setView(id)}
-            style={{
-              padding: '6px 14px',
-              borderRadius: 6,
-              border: `1.5px solid ${view === id ? IKB : NEUTRAL_BORDER}`,
-              background: view === id ? IKB : 'white',
-              color: view === id ? 'white' : '#444',
-              fontWeight: view === id ? 700 : 400,
-              cursor: 'pointer',
-              fontSize: 13,
-              transition: 'all 0.15s',
-            }}
           >
             {label}
           </button>
         ))}
       </div>
 
-      {/* View content area */}
-      <div style={{
-        padding: '20px 24px',
-        border: `1.5px solid ${NEUTRAL_BORDER}`,
-        borderRadius: 8,
-        background: '#fafbfd',
-        marginBottom: 32,
-        minHeight: 200,
-      }}>
-        {view === 'dot' && (
-          <>
-            <h3 style={{ margin: '0 0 12px', color: IKB, fontSize: 15, fontWeight: 700 }}>
-              ① 点积视角 — C[i][j] = row i(A) · col j(B)
-            </h3>
-            <DotView />
-          </>
-        )}
-        {view === 'col' && (
-          <>
-            <h3 style={{ margin: '0 0 12px', color: IKB, fontSize: 15, fontWeight: 700 }}>
-              ② 列的线性组合 — col j(C) = A · col j(B)
-            </h3>
-            <ColView />
-          </>
-        )}
-        {view === 'row' && (
-          <>
-            <h3 style={{ margin: '0 0 12px', color: IKB, fontSize: 15, fontWeight: 700 }}>
-              ③ 行的线性组合 — row i(C) = row i(A) · B
-            </h3>
-            <RowView />
-          </>
-        )}
-        {view === 'outer' && (
-          <>
-            <h3 style={{ margin: '0 0 12px', color: IKB, fontSize: 15, fontWeight: 700 }}>
-              ④ 秩-1 外积之和 — C = Σ<sub>k</sub> col<sub>k</sub>(A) ⊗ row<sub>k</sub>(B)
-            </h3>
-            <OuterView />
-          </>
-        )}
-      </div>
+      {view === 'dot' && <DotView />}
+      {view === 'col' && <ColView />}
+      {view === 'row' && <RowView />}
+      {view === 'outer' && <OuterView />}
+
+      <section className="verdict verdict--eq">
+        <p>
+          <strong>四种视角算的是同一个乘积，只是看法不同。</strong>
+          A·B 的答案唯一——点积、列的线性组合、行的线性组合、秩-1 外积之和，
+          只是从四个角度<em>读</em>同一个 C。哪种顺手用哪种，换一种写法也认得出是同一件事。
+        </p>
+      </section>
 
       <section className="bridge">
         <div className="bridge-tag">这就是 LLM 里的什么</div>

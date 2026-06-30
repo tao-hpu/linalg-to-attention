@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { VectorCanvas } from '../components/VectorCanvas'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
-import { sub, dot, norm, projectOnto, fmt } from '../vec'
+import { sub, dot, norm, projectOnto, fmt, type V } from '../vec'
 
 const IKB   = '#002fa7'   // a 方向 / subspace 线
 const RUST  = '#c75b39'   // b 向量
@@ -30,14 +30,49 @@ console.log(dot(residual, a))         // ≈ 0  ✓
 //      [a.y·a.x, a.y²]] / dot(a, a)
 // P @ b = proj，  P @ proj = proj（再投影不变）`
 
+const PRESETS: { label: string; a: V; b: V }[] = [
+  { label: '一般情形',          a: { x: 3, y: 1 }, b: { x: 1, y: 3 } },
+  { label: 'b 几乎落在 a 上',   a: { x: 3, y: 1 }, b: { x: 2.6, y: 1 } },
+  { label: 'b ⊥ a',            a: { x: 3, y: 1 }, b: { x: -1, y: 3 } },
+]
+
+const ctrlBtn = (active: boolean): CSSProperties => ({
+  padding: '6px 12px',
+  fontFamily: 'var(--sans)',
+  fontSize: 13,
+  fontWeight: active ? 600 : 400,
+  background: active ? 'var(--ikb)' : '#fff',
+  color: active ? '#fff' : 'var(--ink-soft)',
+  border: `1px solid ${active ? 'var(--ikb)' : 'var(--line-strong)'}`,
+  borderRadius: 3,
+  cursor: 'pointer',
+})
+
 export function OrthogonalProjection() {
-  const [a, setA] = useState({ x: 3, y: 1 })
-  const [b, setB] = useState({ x: 1, y: 3 })
+  const [a, setA] = useState<V>({ x: 3, y: 1 })
+  const [b, setB] = useState<V>({ x: 1, y: 3 })
+  const [showP, setShowP] = useState(false)
 
   const proj     = projectOnto(b, a)
   const residual = sub(b, proj)
   const residLen = norm(residual)
   const dotCheck = dot(residual, a)
+
+  // 投影矩阵 P = a aᵀ / (aᵀa)（2×2）
+  const aa   = dot(a, a)
+  const safe = aa > 1e-9
+  const P00  = safe ? (a.x * a.x) / aa : 0
+  const P01  = safe ? (a.x * a.y) / aa : 0
+  const P10  = safe ? (a.y * a.x) / aa : 0
+  const P11  = safe ? (a.y * a.y) / aa : 0
+  // P·b 应等于 proj（闭环验证）
+  const Pbx  = P00 * b.x + P01 * b.y
+  const Pby  = P10 * b.x + P11 * b.y
+  // P² 各元素（幂等：P² = P）
+  const Q00  = P00 * P00 + P01 * P10
+  const Q01  = P00 * P01 + P01 * P11
+  const Q10  = P10 * P00 + P11 * P10
+  const Q11  = P10 * P01 + P11 * P11
 
   const onDrag = (id: string, x: number, y: number) => {
     if (id === 'a') setA({ x, y })
@@ -111,12 +146,59 @@ export function OrthogonalProjection() {
         </VectorCanvas>
 
         <div className="vpanel">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
+            {PRESETS.map(p => {
+              const active =
+                a.x === p.a.x && a.y === p.a.y && b.x === p.b.x && b.y === p.b.y
+              return (
+                <button
+                  key={p.label}
+                  style={ctrlBtn(active)}
+                  onClick={() => { setA(p.a); setB(p.b) }}
+                >
+                  {p.label}
+                </button>
+              )
+            })}
+          </div>
+
           <div className="vrow"><span>b（rust）</span><code>({fmt(b.x)}, {fmt(b.y)})</code></div>
           <div className="vrow"><span>a（方向）</span><code>({fmt(a.x)}, {fmt(a.y)})</code></div>
           <div className="vrow"><span>proj_a b</span><code>({fmt(proj.x)}, {fmt(proj.y)})</code></div>
           <div className="vrow"><span>‖b − proj‖（最短距离）</span><code>{fmt(residLen)}</code></div>
           <div className="vrow"><span>(b−proj)·a</span><code>{fmt(dotCheck, 6)}</code></div>
           <div className="vrow"><span>误差 ⊥ 子空间</span><code>✓</code></div>
+
+          <div className="vrow">
+            <span>投影矩阵 P = aaᵀ/(aᵀa)</span>
+            <button style={ctrlBtn(showP)} onClick={() => setShowP(v => !v)}>
+              {showP ? '隐藏 P' : '显示 P'}
+            </button>
+          </div>
+
+          {showP && (
+            <div style={{ margin: '16px 0 0', fontFamily: 'var(--mono)', fontSize: 13 }}>
+              <div
+                style={{
+                  display: 'inline-grid',
+                  gridTemplateColumns: 'auto auto',
+                  gap: '4px 18px',
+                  background: 'var(--ikb-soft)',
+                  color: 'var(--ikb)',
+                  padding: '10px 16px',
+                  borderRadius: 4,
+                }}
+              >
+                <span>{fmt(P00)}</span><span>{fmt(P01)}</span>
+                <span>{fmt(P10)}</span><span>{fmt(P11)}</span>
+              </div>
+              <div style={{ marginTop: 12, color: 'var(--ink-soft)', lineHeight: 1.8 }}>
+                P·b = ({fmt(Pbx)}, {fmt(Pby)}) = proj ✓<br />
+                P² = [{fmt(Q00)}, {fmt(Q01)}; {fmt(Q10)}, {fmt(Q11)}] = P ✓（幂等）
+              </div>
+            </div>
+          )}
+
           <p className="vhint">
             橙色粗箭头是 b 投影到 span(a) 上的最近点（proj）；灰色虚线是 residual；
             直角标记说明 residual ⊥ subspace。
@@ -149,11 +231,12 @@ export function OrthogonalProjection() {
           PCA 降维、最小二乘<strong>回归 = 投影</strong>（下一节 20 专门讲）全是同一套几何。
         </p>
         <p>
-          <code>P²=P</code>（idempotent）：projection matrix 是幂等的——
-          把一个已经在 subspace 里的向量再投影一次，结果不变。
-          这个性质说明<strong>「投完就够了」</strong>：
-          多头注意力里每个 head 的子空间投影，
-          叠多少层线性变换，subspace 内的信息都不会再被二次拉走。
+          <code>P²=P</code>（idempotent）：投影矩阵是幂等的——
+          已经被拍扁到 subspace 上的向量，再拍一次原地不动。
+          打开上面的「显示 P」就能看到这件事闭环：
+          <code>P·b = proj</code>，而对 proj 再投一次 <code>P·proj 仍 = proj</code>。
+          注意幂等只是说<strong>「同一个投影重复做没有新效果」</strong>——
+          它推不出「堆叠不同的线性层会保住子空间里的信息」，那是另一回事。
         </p>
       </Bridge>
 

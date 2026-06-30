@@ -30,6 +30,7 @@ const N = TOKENS.length   // 5
 const H      = 3          // number of heads
 const D      = 6          // model dimension d
 const D_HEAD = D / H      // 2  — per-head dimension d_head = d / h
+const SQRT_DHEAD = Math.sqrt(D_HEAD)   // √d_head ≈ 1.41 — 标准缩放因子
 
 // ── Preset raw scores (before softmax) ───────────────────────────────────────
 //  Head 0 — local / diagonal   (each token ↔ self + immediate neighbors)
@@ -53,7 +54,7 @@ const RAW_SCORES: number[][][] = [
   [
     [0.5, 0.5, 0.5, 0.5, 2.5],
     [0.5, 0.5, 0.5, 2.5, 0.5],
-    [0.5, 0.5, 2.0, 0.5, 0.5],
+    [0.5, 0.5, 2.5, 0.5, 0.5],   // ← 中间行的反对角峰落在正中（N-1-2=2），与其余行统一为 2.5，保持反对角强度一致
     [0.5, 2.5, 0.5, 0.5, 0.5],
     [2.5, 0.5, 0.5, 0.5, 0.5],
   ],
@@ -67,8 +68,15 @@ function softmaxRow(row: number[]): number[] {
   return exps.map((e) => e / sum)
 }
 
-// Pre-compute H × N × N attention weight matrices (all rows sum to 1)
-const ATTN: number[][][] = RAW_SCORES.map((hs) => hs.map((r) => softmaxRow(r)))
+// 用给定缩放因子 scale 实时跑 softmax：每个分数先 ÷scale，再按行归一化。
+//   scale = 1            → 不缩放（分布最尖）
+//   scale = √d_head≈1.41 → 标准注意力
+//   scale 越大           → 分布越平
+// 注意：RAW_SCORES 是「示意模式」——手工构造的 QKᵀ 分数，用来展示三个 head 各自
+// 能学到的关系类型，并非从真实 X·W_Q/W_K 算出。真实数值 pipeline 见自注意力一节。
+function attnAtScale(scale: number): number[][][] {
+  return RAW_SCORES.map((hs) => hs.map((r) => softmaxRow(r.map((v) => v / scale))))
+}
 
 // ── Head labels & notes ───────────────────────────────────────────────────────
 const HEAD_LABEL: string[] = [
@@ -294,12 +302,101 @@ def multi_head_attention(X, WQs, WKs, WVs, WO):
 
 # PyTorch 等价：nn.MultiheadAttention(embed_dim=d, num_heads=h)`
 
+// ── DistributionBars — SVG: ÷1 vs ÷τ 的分布对比 ───────────────────────────────
+//  curRow = 当前缩放下选中 query 的注意力分布；refRow = ÷1（不缩放）的同一行分布。
+//  柱状图直观展示「调缩放 → 变尖/变平」，并把 ÷√d_head 前后的差别画出来。
+function DistributionBars({
+  refRow, curRow, accent, tau,
+}: {
+  refRow: number[]
+  curRow: number[]
+  accent: string
+  tau: number
+}) {
+  const W = 460, Hh = 224
+  const padL = 36, padR = 16, padT = 22, padB = 52
+  const plotW = W - padL - padR
+  const plotH = Hh - padT - padB
+  const n = curRow.length
+  const slot = plotW / n
+  const barW = Math.min(46, slot * 0.46)
+  const yOf = (v: number) => padT + plotH * (1 - v)   // v∈[0,1] → y
+  const uniform = 1 / n
+
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${Hh}`}
+      style={{ width: '100%', maxWidth: W, display: 'block', overflow: 'visible' }}
+      aria-label="注意力分布：不缩放 ÷1 与当前缩放 ÷τ 的对比"
+    >
+      {/* 顶/底参考线 */}
+      <line x1={padL} y1={yOf(1)} x2={W - padR} y2={yOf(1)} stroke="#eee" strokeWidth={1} />
+      <line x1={padL} y1={yOf(0)} x2={W - padR} y2={yOf(0)} stroke="#ccc" strokeWidth={1} />
+      {/* 均匀分布参考虚线 1/n */}
+      <line
+        x1={padL} y1={yOf(uniform)} x2={W - padR} y2={yOf(uniform)}
+        stroke="#bbb" strokeWidth={1} strokeDasharray="3 3"
+      />
+      <text x={W - padR} y={yOf(uniform) - 3} textAnchor="end" fontSize={9} fill="#aaa" fontFamily="monospace">
+        均匀 {uniform.toFixed(2)}
+      </text>
+      <text x={padL - 6} y={yOf(1) + 3} textAnchor="end" fontSize={9} fill="#aaa" fontFamily="monospace">1.0</text>
+      <text x={padL - 6} y={yOf(0) + 3} textAnchor="end" fontSize={9} fill="#aaa" fontFamily="monospace">0</text>
+
+      {/* 每个 key 一对柱：÷1 虚线轮廓 + ÷τ 实心 */}
+      {curRow.map((cv, j) => {
+        const cx = padL + slot * j + slot / 2
+        const rv = refRow[j]
+        return (
+          <g key={j}>
+            <rect
+              x={cx - barW / 2} y={yOf(rv)} width={barW} height={yOf(0) - yOf(rv)}
+              fill="none" stroke={RUST} strokeWidth={1.4} strokeDasharray="3 2" opacity={0.85}
+            />
+            <rect
+              x={cx - barW / 2 + 2} y={yOf(cv)} width={barW - 4} height={yOf(0) - yOf(cv)}
+              fill={accent} opacity={0.85}
+            />
+            <text x={cx} y={yOf(cv) - 4} textAnchor="middle" fontSize={10} fill={accent} fontWeight={700} fontFamily="monospace">
+              {cv.toFixed(2)}
+            </text>
+            <text x={cx} y={yOf(0) + 16} textAnchor="middle" fontSize={11} fill="#666" fontFamily="sans-serif">
+              {TOKENS[j]}
+            </text>
+          </g>
+        )
+      })}
+
+      {/* 图例 */}
+      <g fontFamily="sans-serif" fontSize={10}>
+        <rect x={padL} y={Hh - 14} width={12} height={9} fill={accent} opacity={0.85} />
+        <text x={padL + 16} y={Hh - 5} fill="#555">÷τ（当前 τ = {tau.toFixed(2)}）</text>
+        <rect x={padL + 170} y={Hh - 14} width={12} height={9} fill="none" stroke={RUST} strokeDasharray="3 2" />
+        <text x={padL + 186} y={Hh - 5} fill="#555">÷1 不缩放（参照）</text>
+      </g>
+    </svg>
+  )
+}
+
 // ── Main component ─────────────────────────────────────────────────────────────
 export function MultiHeadAttention() {
   const [selectedQuery, setSelectedQuery] = useState(0)
+  const [scale, setScale]                 = useState(SQRT_DHEAD)   // 缩放因子 τ，默认 √d_head
 
   const me             = findChapter('multi-head')!
   const { prev, next } = neighbors('multi-head')
+
+  // 拖动滑块时实时重算三张热图（÷τ → softmax）
+  const ATTN = attnAtScale(scale)
+
+  // 以 Head 0（局部头）为例，做「÷1 vs ÷τ」分布对比
+  const focusHead   = 0
+  const refRow      = softmaxRow(RAW_SCORES[focusHead][selectedQuery])           // ÷1
+  const curRow      = ATTN[focusHead][selectedQuery]                            // ÷τ
+  const maxRef      = Math.max(...refRow)
+  const maxCur      = Math.max(...curRow)
+  const nearScaled  = Math.abs(scale - SQRT_DHEAD) < 0.05
+  const nearUnscaled = Math.abs(scale - 1) < 0.05
 
   return (
     <article className="page">
@@ -324,8 +421,9 @@ export function MultiHeadAttention() {
         </p>
       </header>
 
-      {/* ── Token query selector ── */}
-      <section className="controls" style={{ gridTemplateColumns: '1fr' }}>
+      {/* ── 控制区：Query 选择 + ÷τ 缩放滑块 ── */}
+      <section className="controls">
+        {/* Query 选择 */}
         <div className="control">
           <div className="control-head">
             <span className="slot-tag">Query</span>
@@ -358,9 +456,75 @@ export function MultiHeadAttention() {
             ))}
           </div>
         </div>
+
+        {/* ÷τ 缩放 / 温度滑块 —— 本章高潮：QKᵀ/√d_head */}
+        <div className="control" style={{ borderLeft: `3px solid ${IKB}`, paddingLeft: '0.75rem' }}>
+          <div className="control-head">
+            <span className="slot-tag" style={{ color: IKB }}>缩放 ÷τ（√d_head）</span>
+            <span style={{ fontSize: '0.74rem', color: 'var(--ink-soft)', marginLeft: '0.4rem' }}>
+              拖动改变 softmax 温度：τ 小 → 分布变尖，τ 大 → 变平
+            </span>
+          </div>
+          <label className="slider-row" style={{ marginTop: 8 }}>
+            <input
+              type="range" min={0.3} max={4} step={0.05}
+              value={scale}
+              onChange={(e) => setScale(Number(e.target.value))}
+            />
+            <span className="param-val" style={{ color: IKB }}>÷{scale.toFixed(2)}</span>
+          </label>
+          <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setScale(1)}
+              style={{
+                padding: '5px 14px', fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                border: `2px solid ${nearUnscaled ? RUST : 'var(--line-strong)'}`,
+                borderRadius: 6,
+                background: nearUnscaled ? 'rgba(199,91,57,0.10)' : '#fff',
+                color: nearUnscaled ? RUST : 'var(--ink)',
+              }}
+            >
+              ÷1 不缩放
+            </button>
+            <button
+              onClick={() => setScale(SQRT_DHEAD)}
+              style={{
+                padding: '5px 14px', fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                border: `2px solid ${nearScaled ? IKB : 'var(--line-strong)'}`,
+                borderRadius: 6,
+                background: nearScaled ? IKB : '#fff',
+                color: nearScaled ? '#fff' : 'var(--ink)',
+              }}
+            >
+              ÷√d_head = ÷{SQRT_DHEAD.toFixed(2)} ✓
+            </button>
+          </div>
+          <p style={{ fontSize: 11, color: '#888', margin: '6px 0 0', lineHeight: 1.5 }}>
+            标准注意力固定除以 √d_head = √{D_HEAD} ≈ {SQRT_DHEAD.toFixed(2)}（本章核心）。
+            这里把它放开成可调温度，亲手看「÷ √d 前后」softmax 的差别。
+          </p>
+        </div>
       </section>
 
-      {/* ── Three heatmaps side by side ── */}
+      {/* ── 示意模式声明 ── */}
+      <p style={{
+        margin: '4px 0 0',
+        padding: '10px 14px',
+        background: 'var(--ikb-soft)',
+        border: `1px solid var(--line)`,
+        borderLeft: `3px solid ${RUST}`,
+        borderRadius: 4,
+        fontSize: '12.5px',
+        color: 'var(--ink-soft)',
+        lineHeight: 1.6,
+      }}>
+        <strong style={{ color: RUST }}>这三张热图是「示意模式」</strong>——
+        分数是<strong>手工构造的 QKᵀ</strong>，用来展示三个 head 各自能学到的关系类型，
+        <em>并非</em>从真实 <code>X·W_Q</code>/<code>X·W_K</code> 算出。
+        想看真实数值跑完整 pipeline，见自注意力那一节。下方滑块对这些示意分数实时重跑 softmax。
+      </p>
+
+      {/* ── Three heatmaps side by side （随 ÷τ 实时重算） ── */}
       <section
         className="stage"
         style={{ alignItems: 'flex-start', gap: '28px' }}
@@ -373,6 +537,36 @@ export function MultiHeadAttention() {
             selectedQuery={selectedQuery}
           />
         ))}
+      </section>
+
+      {/* ── ÷1 vs ÷τ 分布对比（√d_head 高潮可视化） ── */}
+      <section className="stage" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '0.9rem' }}>
+        <h2 className="sec-h">
+          ÷ √d_head 前后，softmax 怎么变？
+        </h2>
+        <p style={{ color: 'var(--ink-soft)', fontSize: '0.9rem', margin: 0, maxWidth: 620, lineHeight: 1.65 }}>
+          以 <strong style={{ color: headAccent(focusHead) }}>Head 0（局部头）</strong>、
+          Query <strong style={{ color: RUST }}>「{TOKENS[selectedQuery]}」</strong>为例。
+          实心柱是当前缩放 <code>÷τ</code> 的分布，锈色虚线柱是 <code>÷1</code>（完全不缩放）的同一行。
+          把滑块拖到 <code>÷√d_head ≈ {SQRT_DHEAD.toFixed(2)}</code> 再拖到 <code>÷1</code>：
+          <strong>不缩放时分数更大，softmax 更尖（趋向 one-hot）</strong>；除以 √d_head 后峰被压平，梯度更健康。
+        </p>
+        <DistributionBars
+          refRow={refRow}
+          curRow={curRow}
+          accent={headAccent(focusHead)}
+          tau={scale}
+        />
+        <p style={{
+          fontSize: 12.5,
+          fontFamily: 'var(--mono)',
+          color: 'var(--ink-soft)',
+          margin: 0,
+        }}>
+          最大权重：÷1 时 = <strong style={{ color: RUST }}>{maxRef.toFixed(3)}</strong>
+          {'  →  '}当前 ÷{scale.toFixed(2)} 时 = <strong style={{ color: headAccent(focusHead) }}>{maxCur.toFixed(3)}</strong>
+          {nearScaled && '　（此刻正是标准的 ÷√d_head 缩放 ✓）'}
+        </p>
       </section>
 
       {/* ── Shape readout: concat + W_O ── */}

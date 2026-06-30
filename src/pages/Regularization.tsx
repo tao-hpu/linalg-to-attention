@@ -15,7 +15,15 @@ const SCALE = PLOT_W / (D_MAX - D_MIN) // 50.5 px per unit
 // ── Fixed OLS (unconstrained) solution ──────────────────────────────────────
 const BHAT_1 = 2.5
 const BHAT_2 = 1.8
-const BHAT_DIST = Math.sqrt(BHAT_1 ** 2 + BHAT_2 ** 2) // ≈ 3.08
+const BHAT_L2 = Math.sqrt(BHAT_1 ** 2 + BHAT_2 ** 2) // ‖β̂‖₂ ≈ 3.08（L2 圆包住 β̂ 的半径）
+const BHAT_L1 = Math.abs(BHAT_1) + Math.abs(BHAT_2)  // ‖β̂‖₁ = 4.3（L1 菱形包住 β̂ 的预算）
+
+// 约束失效（退回无约束 OLS 解）的阈值——按范数类型取，不能混用：
+// L2 用 ‖β̂‖₂，L1 用 ‖β̂‖₁。两者不等，混用会让 L1 在 t∈[3.08,4.3) 时
+// 误判为「已到无约束」，而 β̂ 此刻仍在菱形之外，画面自相矛盾。
+function unconstrainedT(mode: Mode): number {
+  return mode === 'L2' ? BHAT_L2 : BHAT_L1
+}
 
 // ── Anisotropic quadratic loss centered at β̂ ────────────────────────────────
 // loss(β) = LA·(β₁−β̂₁)² + LB·(β₂−β̂₂)²
@@ -42,7 +50,7 @@ function lossAt(b1: number, b2: number): number {
 
 // ── Find constrained solution by scanning the boundary ───────────────────────
 function findSolution(t: number, mode: Mode): [number, number] {
-  if (t >= BHAT_DIST) return [BHAT_1, BHAT_2]
+  if (t >= unconstrainedT(mode)) return [BHAT_1, BHAT_2]
 
   if (mode === 'L2') {
     // Scan circle (t·cosθ, t·sinθ)
@@ -116,7 +124,7 @@ export function Regularization() {
   const [s1, s2] = findSolution(t, mode)
   const isSparse1 = Math.abs(s1) < SPARSE_EPS
   const isSparse2 = Math.abs(s2) < SPARSE_EPS
-  const isConstrained = t < BHAT_DIST
+  const isConstrained = t < unconstrainedT(mode)
 
   // Loss contour levels: smallest passes through solution, rest expand out
   const lSol = lossAt(s1, s2)

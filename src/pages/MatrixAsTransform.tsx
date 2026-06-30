@@ -140,8 +140,12 @@ function BasisCanvas({
       onPointerMove={(e) => {
         if (!dragging.current || !svgRef.current) return
         const rect = svgRef.current.getBoundingClientRect()
-        const mx = snapClamp(toMx(e.clientX - rect.left))
-        const my = snapClamp(toMy(e.clientY - rect.top))
+        // 移动端 SVG 会被 CSS 等比缩放（rect.width < SIZE），先把屏幕像素换算回
+        // viewBox 内坐标，否则除以写死的 UNIT 会让拖动偏移。
+        const sclX = SIZE / rect.width
+        const sclY = SIZE / rect.height
+        const mx = snapClamp(toMx((e.clientX - rect.left) * sclX))
+        const my = snapClamp(toMy((e.clientY - rect.top) * sclY))
         if (dragging.current === 'i') onIHat([mx, my])
         else onJHat([mx, my])
       }}

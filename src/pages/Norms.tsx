@@ -113,7 +113,8 @@ export function Norms() {
         </p>
         <p>
           还有一处更隐蔽的长度校正:Transformer 的"缩放点积注意力"把分数除以 <code>√d</code>。
-          维度 d 越高，两个随机向量的内积天然越大（长度/尺度效应），
+          维度 d 越高，两个随机向量的内积<strong>波动幅度</strong>天然越大
+          （期望约为 0，但标准差按 <code>√d</code> 增长），
           除以 <code>√d</code> 就是在抵消这件事，让 <code>softmax</code> 不至于一上来就饱和。
           把第 04 节的内积、和这一节的长度校正合起来，就是 <code>q·k/√d</code> 的全部含义。
         </p>

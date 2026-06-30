@@ -17,7 +17,7 @@ interface Word extends V {
   group: 'animal' | 'vehicle'
 }
 
-const VOCAB: Word[] = [
+const INITIAL_VOCAB: Word[] = [
   { id: 'cat', label: '猫', x: 2.0, y: 3.2, group: 'animal' },
   { id: 'dog', label: '狗', x: 2.6, y: 2.6, group: 'animal' },
   { id: 'tiger', label: '老虎', x: 3.1, y: 3.4, group: 'animal' },
@@ -27,6 +27,28 @@ const VOCAB: Word[] = [
 ]
 
 const groupColor = (g: Word['group']) => (g === 'animal' ? TEAL : RUST)
+
+// 画布参数（与 <VectorCanvas size range> 保持一致），用于把鼠标/触摸坐标换算回数学坐标。
+const SIZE = 380
+const RANGE = 5
+const CENTER = SIZE / 2
+const UNIT = SIZE / 2 / RANGE
+const SNAP = 0.1
+
+// 把屏幕坐标换算成画布里的数学坐标。
+// 按 rect.width 归一化 → 即使 SVG 被 CSS 缩放（移动端）也准确；并夹紧到可视范围、按 SNAP 吸附。
+function clientToMath(svg: SVGSVGElement, clientX: number, clientY: number): V {
+  const rect = svg.getBoundingClientRect()
+  const px = ((clientX - rect.left) / rect.width) * SIZE
+  const py = ((clientY - rect.top) / rect.height) * SIZE
+  let x = (px - CENTER) / UNIT
+  let y = (CENTER - py) / UNIT
+  x = Math.max(-RANGE, Math.min(RANGE, x))
+  y = Math.max(-RANGE, Math.min(RANGE, y))
+  x = Math.round(x / SNAP) * SNAP
+  y = Math.round(y / SNAP) * SNAP
+  return { x, y }
+}
 
 const SNIPPET = `// 词表：6 个词，每个词有一个固定的下标
 const VOCAB = ['猫', '狗', '老虎', '汽车', '卡车', '飞机']
@@ -48,20 +70,29 @@ const cosine = (a: number[], b: number[]) => dot(a, b) / (norm(a) * norm(b))
 
 // 关键对比：
 cosine(oneHot('猫'), oneHot('狗'))  // = 0  → one-hot 说「猫 和 狗 毫无关系」
-cosine(EMB['猫'], EMB['狗'])        // ≈ 0.99 → embedding 说「猫 和 狗 很像」`
+cosine(EMB['猫'], EMB['狗'])        // ≈ 0.97 → embedding 说「猫 和 狗 很像」`
 
 export function BowEmbedding() {
   const [selId, setSelId] = useState('cat')
-  const selected = VOCAB.find((w) => w.id === selId)!
-  const selIdx = VOCAB.findIndex((w) => w.id === selId)
+  const [words, setWords] = useState<Word[]>(INITIAL_VOCAB)
+  const [dragId, setDragId] = useState<string | null>(null)
+
+  const selected = words.find((w) => w.id === selId)!
+  const selIdx = words.findIndex((w) => w.id === selId)
 
   // 对所有其它词算 cosine，按相似度从高到低排序
-  const ranked = VOCAB
+  const ranked = words
     .filter((w) => w.id !== selId)
     .map((w) => ({ word: w, cos: cosineSimilarity(selected, w) }))
     .sort((a, b) => b.cos - a.cos)
 
   const nearest = ranked[0]
+
+  const moveWord = (id: string, x: number, y: number) =>
+    setWords((ws) => ws.map((w) => (w.id === id ? { ...w, x, y } : w)))
+
+  const resetWords = () => setWords(INITIAL_VOCAB)
+  const moved = words.some((w, i) => w.x !== INITIAL_VOCAB[i].x || w.y !== INITIAL_VOCAB[i].y)
 
   return (
     <ChapterShell
@@ -73,12 +104,13 @@ export function BowEmbedding() {
           它们都能用，但有个躲不开的毛病——<strong>任意两个不同的词都「互相垂直」</strong>，
           cosine 永远是 0，模型没法表达「猫 和 狗 相似」。
           这一节我们换成<strong>稠密 embedding</strong>：把每个词放进一个连续空间里，
-          让<strong>意思相近的词，向量也相近</strong>。下面挑一个词，看它的近邻是谁。
+          让<strong>意思相近的词，向量也相近</strong>。下面的词点都能<strong>拖动</strong>——
+          亲手把一个词拖进/拖出某个簇，看 cosine 相似度实时翻转。
         </>
       }
     >
       <section className="vstage">
-        <VectorCanvas vectors={[]} size={380} range={5}>
+        <VectorCanvas vectors={[]} size={SIZE} range={RANGE}>
           {({ sx, sy }) => (
             <>
               {/* 选中词作为一个「箭头」：从原点出发的方向 */}
@@ -92,28 +124,52 @@ export function BowEmbedding() {
                 x2={sx(nearest.word.x)} y2={sy(nearest.word.y)}
                 stroke={TEAL} strokeWidth={2} strokeDasharray="5 5"
               />
-              {/* 所有词：圆点 + 标签，颜色按语义簇区分 */}
-              {VOCAB.map((w) => {
+              {/* 所有词：可拖拽的圆点 + 标签，颜色按语义簇区分 */}
+              {words.map((w) => {
                 const isSel = w.id === selId
                 const isNear = w.id === nearest.word.id
                 const base = groupColor(w.group)
                 return (
-                  <g key={w.id}>
+                  <g key={w.id} style={{ cursor: dragId === w.id ? 'grabbing' : 'grab' }}>
                     <circle
                       cx={sx(w.x)} cy={sy(w.y)}
                       r={isSel ? 8 : 6}
                       fill={isSel ? IKB : base}
                       stroke={isNear ? TEAL : '#ffffff'}
                       strokeWidth={isNear ? 3 : 2}
+                      style={{ pointerEvents: 'none' }}
                     />
                     <text
                       x={sx(w.x) + 11} y={sy(w.y) - 9}
                       fill={isSel ? IKB : '#1b1f24'}
                       fontSize={isSel ? 15 : 13}
                       fontWeight={isSel ? 700 : 500}
+                      style={{ pointerEvents: 'none', userSelect: 'none' }}
                     >
                       {w.label}
                     </text>
+                    {/* 透明的大命中区，方便鼠标/手指抓取 */}
+                    <circle
+                      cx={sx(w.x)} cy={sy(w.y)} r={16}
+                      fill="transparent"
+                      style={{ touchAction: 'none' }}
+                      onPointerDown={(e) => {
+                        e.currentTarget.setPointerCapture(e.pointerId)
+                        setSelId(w.id)
+                        setDragId(w.id)
+                      }}
+                      onPointerMove={(e) => {
+                        if (dragId !== w.id) return
+                        const svg = e.currentTarget.ownerSVGElement
+                        if (!svg) return
+                        const m = clientToMath(svg, e.clientX, e.clientY)
+                        moveWord(w.id, m.x, m.y)
+                      }}
+                      onPointerUp={(e) => {
+                        e.currentTarget.releasePointerCapture(e.pointerId)
+                        setDragId(null)
+                      }}
+                    />
                   </g>
                 )
               })}
@@ -133,7 +189,7 @@ export function BowEmbedding() {
                   border: 'none', background: 'transparent', cursor: 'pointer',
                 }}
               >
-                {VOCAB.map((w) => (
+                {words.map((w) => (
                   <option key={w.id} value={w.id}>{w.label}</option>
                 ))}
               </select>
@@ -166,7 +222,7 @@ export function BowEmbedding() {
           <div className="vrow">
             <span>one-hot</span>
             <code>
-              [{VOCAB.map((_, i) => (i === selIdx ? '1' : '0')).join(', ')}]
+              [{words.map((_, i) => (i === selIdx ? '1' : '0')).join(', ')}]
             </code>
           </div>
 
@@ -175,8 +231,27 @@ export function BowEmbedding() {
             <code>与任何其它词 = 0</code>
           </div>
 
+          {moved && (
+            <div className="vrow" style={{ justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                onClick={resetWords}
+                style={{
+                  font: 'inherit', fontSize: 13, fontWeight: 600,
+                  color: IKB, background: 'transparent',
+                  border: `1px solid ${IKB}`, borderRadius: 6,
+                  padding: '4px 12px', cursor: 'pointer',
+                }}
+              >
+                ↺ 复位
+              </button>
+            </div>
+          )}
+
           <p className="vhint">
-            蓝线是选中词从原点出发的方向；绿色虚线连到它的最近邻。换个词，看簇怎么变。
+            <strong>直接拖动任意一个词点</strong>，右边的 cosine 会实时重算、最近邻排名随之翻转。
+            试着把<strong>「猫」拖出动物簇、推向汽车那一带</strong>，看它的近邻怎么从「狗 / 老虎」变成「汽车 / 卡车」——
+            这就是「意思相近 → 向量相近」。蓝线是选中词从原点出发的方向，绿色虚线连到它当前的最近邻。
           </p>
         </div>
       </section>

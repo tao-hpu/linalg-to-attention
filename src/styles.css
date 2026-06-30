@@ -157,9 +157,9 @@ h1 {
   font-size: 22px;
   color: var(--line-strong);
 }
-/* 移动端安全网：任何舞台里的 SVG 都不许撑破容器（带 viewBox 的会等比缩放；
-   写死宽高、无 viewBox 的至少不会让页面横向溢出。逐页 viewBox 化另行处理）。 */
-.stage svg, .panel svg { max-width: 100%; height: auto; }
+/* 移动端安全网：任何页面内的 SVG 都不许撑破容器（带 viewBox 的会等比缩放；
+   写死宽高、无 viewBox 的至少不会让页面横向溢出。拖拽页的指针换算逐页修正）。 */
+.page svg, .stage svg, .panel svg { max-width: 100%; height: auto; }
 .panel { margin: 0; }
 .panel svg {
   display: block;
@@ -184,6 +184,8 @@ h1 {
 /* ---- 可拖拽向量画布 ---- */
 .vector-canvas {
   display: block;
+  max-width: 100%;        /* 移动端：380px 画布不撑破窄屏（viewBox 已在，等比缩放安全） */
+  height: auto;
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 4px;

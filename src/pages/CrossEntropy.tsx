@@ -255,7 +255,7 @@ function MultiSection() {
       </p>
 
       {/* Token cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 14, marginBottom: 24 }}>
         {SEQ_TOKENS.map((tok, i) => (
           <div
             key={tok}
@@ -316,7 +316,7 @@ function MultiSection() {
       <div style={{ background: '#fafbfc', border: '1px solid var(--line)', padding: '20px 24px' }}>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: 20,
           marginBottom: 20,
           fontFamily: 'var(--mono)',

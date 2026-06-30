@@ -27,7 +27,7 @@ K_T = K.transpose(-2, -1)      # (n, d) → (d, n)，即 shape: (3, 4)
 
 # 现在内维对齐：Q 列数 d=3 == K_T 行数 d=3 ✓
 scores = Q @ K_T               # shape: (4, 4) — n×n 打分矩阵
-scores = scores / math.sqrt(d) # 缩放，防止梯度爆炸
+scores = scores / math.sqrt(d) # 缩放：压住点积方差，避免 softmax 饱和（饱和→梯度消失）
 weights = torch.softmax(scores, dim=-1)  # (4, 4)，每行和为 1
 
 out = weights @ V              # (4, 4) @ (4, 3) = (4, 3) — 回到 n×d

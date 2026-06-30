@@ -3,13 +3,24 @@ import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
 import { neighbors, allChapters, findChapter } from '../chapters'
 
-// 固定权重样本（16 个）。最后一个 5.60 是故意的「离群值」——
-// 它会迫使 int4 采用过大的 scale，让小权重大量塌缩到 0，
+// 前 15 个权重固定。第 16 个（w15）是可拖动的「离群值」——
+// 拖大它就会迫使 scale 变大，让小权重大量塌缩到 0，
 // 从而直观地演示 per-channel quantization 存在的必要。
-const WEIGHTS: readonly number[] = [
+const FIXED_WEIGHTS: readonly number[] = [
   -1.00, -0.75, -0.55, -0.40, -0.28, -0.18, -0.08,  0.04,
-   0.14,  0.26,  0.38,  0.52,  0.68,  0.82,  0.95,  5.60,
+   0.14,  0.26,  0.38,  0.52,  0.68,  0.82,  0.95,
 ]
+const OUTLIER_MIN = 0.95   // 等于次大权重 → 实际上没有离群值
+const OUTLIER_MAX = 8.0    // 极端离群值
+const OUTLIER_DEFAULT = 5.60
+
+// per-channel 时把这一组权重切成两个「通道」，每通道单独定 scale。
+// 离群值落在第 2 通道，于是第 1 通道（全是小权重）能用很细的 scale 恢复精度。
+const CHANNEL_SIZE = 8
+
+function buildWeights(outlier: number): number[] {
+  return [...FIXED_WEIGHTS, outlier]
+}
 
 type BitWidth = 'fp32' | 8 | 4 | 2
 
@@ -27,51 +38,81 @@ const BIT_OPTIONS: readonly BitOption[] = [
 ]
 
 interface QuantResult {
-  scale: number
-  wHat: readonly number[]
-  errors: readonly number[]
+  scales:  readonly number[]   // 每个通道一个 scale（per-tensor 时长度为 1）
+  wHat:    readonly number[]
+  errors:  readonly number[]
   meanErr: number
-  maxErr: number
+  maxErr:  number
   bytesPerWeight: number
 }
 
-// 对称量化：scale = max|w| / (2^(bits-1) - 1)
-function runQuant(weights: readonly number[], bits: BitWidth): QuantResult {
+// 对单个通道做对称量化：scale = max|w| / (2^(bits-1) - 1)
+function quantChannel(
+  weights: readonly number[],
+  maxInt:  number,
+  minInt:  number,
+): { scale: number; wHat: number[]; errors: number[] } {
+  const maxAbs = Math.max(...weights.map(w => Math.abs(w))) || 1e-9
+  const scale  = maxAbs / maxInt
+  const wHat:   number[] = []
+  const errors: number[] = []
+  for (const w of weights) {
+    const q  = Math.max(minInt, Math.min(maxInt, Math.round(w / scale)))
+    const wh = q * scale
+    wHat.push(wh)
+    errors.push(Math.abs(w - wh))
+  }
+  return { scale, wHat, errors }
+}
+
+// 对称量化。perChannel = false → 整组共用一个 scale；
+// perChannel = true → 按 CHANNEL_SIZE 切分通道，每通道单独定 scale。
+function runQuant(
+  weights:    readonly number[],
+  bits:       BitWidth,
+  perChannel: boolean,
+): QuantResult {
   if (bits === 'fp32') {
     return {
-      scale: 0,
-      wHat: [...weights],
-      errors: weights.map(() => 0),
+      scales:  [],
+      wHat:    [...weights],
+      errors:  weights.map(() => 0),
       meanErr: 0,
-      maxErr: 0,
+      maxErr:  0,
       bytesPerWeight: 4,
     }
   }
-  const maxAbs = Math.max(...weights.map(w => Math.abs(w)))
   const maxInt = Math.pow(2, bits - 1) - 1
   const minInt = -Math.pow(2, bits - 1)
-  const scale  = maxAbs / maxInt
+  const step   = perChannel ? CHANNEL_SIZE : weights.length
 
-  const pairs = weights.map(w => {
-    const q  = Math.max(minInt, Math.min(maxInt, Math.round(w / scale)))
-    const wh = q * scale
-    return { wh, err: Math.abs(w - wh) }
-  })
+  const scales: number[] = []
+  const wHat:   number[] = []
+  const errors: number[] = []
 
-  const wHat   = pairs.map(p => p.wh)
-  const errors = pairs.map(p => p.err)
+  for (let start = 0; start < weights.length; start += step) {
+    const chunk = weights.slice(start, start + step)
+    const res   = quantChannel(chunk, maxInt, minInt)
+    scales.push(res.scale)
+    for (let k = 0; k < chunk.length; k++) {
+      wHat.push(res.wHat[k]!)
+      errors.push(res.errors[k]!)
+    }
+  }
+
   const meanErr = errors.reduce((a, b) => a + b, 0) / errors.length
   const maxErr  = Math.max(...errors)
   const bytesPerWeight = bits === 8 ? 1 : bits === 4 ? 0.5 : 0.25
 
-  return { scale, wHat, errors, meanErr, maxErr, bytesPerWeight }
+  return { scales, wHat, errors, meanErr, maxErr, bytesPerWeight }
 }
 
 // ─── 权重条形图 ────────────────────────────────────────────────────────────────
 
-function WeightBars({ weights, result }: {
-  weights: readonly number[]
-  result:  QuantResult
+function WeightBars({ weights, result, perChannel }: {
+  weights:    readonly number[]
+  result:     QuantResult
+  perChannel: boolean
 }) {
   const maxAbsAll = Math.max(...weights.map(w => Math.abs(w)))
   const BAR = 96 // 最大条宽 px
@@ -108,6 +149,16 @@ function WeightBars({ weights, result }: {
 
         {rows.map(({ w, wh, err }, i) => (
           <div key={i} style={{ display: 'contents' }}>
+            {/* 通道分隔线：per-channel 时在通道边界处划一条横线 */}
+            {perChannel && i > 0 && i % CHANNEL_SIZE === 0 && (
+              <div style={{
+                gridColumn: '1 / -1',
+                height: 0,
+                borderTop: '1px dashed #002fa7',
+                opacity: 0.35,
+                margin: '3px 0',
+              }} />
+            )}
             {/* 序号 */}
             <div style={{ color: '#bbb', textAlign: 'right' }}>w{i}</div>
 
@@ -171,22 +222,25 @@ function NumberLine({ weights, result, bits }: {
   bits:    BitWidth
 }) {
   const VIEW_MIN = -1.8
-  const VIEW_MAX =  7.0
+  const VIEW_MAX =  8.6
   const span = VIEW_MAX - VIEW_MIN
 
   const toP = (v: number): string =>
     `${Math.max(0, Math.min(100, ((v - VIEW_MIN) / span) * 100)).toFixed(2)}%`
 
-  // 量化格点（int8 有 256 个，每隔 16 显一条；int4/int2 全显）
+  // 量化格点（int8 有 256 个，每隔 16 显一条；int4/int2 全显）。
+  // per-channel 时每个通道有各自的 scale → 画出各自的格点。
   const gridTicks: number[] = []
   if (bits !== 'fp32') {
     const maxInt = Math.pow(2, bits - 1) - 1
     const minInt = -Math.pow(2, bits - 1)
     const step   = bits === 8 ? 16 : 1
-    for (let q = minInt; q <= maxInt; q += step) {
-      const gp = q * result.scale
-      if (gp >= VIEW_MIN - 0.1 && gp <= VIEW_MAX + 0.1) {
-        gridTicks.push(gp)
+    for (const scale of result.scales) {
+      for (let q = minInt; q <= maxInt; q += step) {
+        const gp = q * scale
+        if (gp >= VIEW_MIN - 0.1 && gp <= VIEW_MAX + 0.1) {
+          gridTicks.push(gp)
+        }
       }
     }
   }
@@ -266,40 +320,61 @@ function NumberLine({ weights, result, bits }: {
 
 // ─── 代码片段 ──────────────────────────────────────────────────────────────────
 
-const SNIPPET = `// 对称量化（Symmetric Int Quantization）
-function quantize(weights: number[], bits: number) {
-  const maxAbs = Math.max(...weights.map(Math.abs))
-  const maxInt = 2 ** (bits - 1) - 1          // int8 → 127，int4 → 7
-  const minInt = -(2 ** (bits - 1))            // int8 → -128，int4 → -8
-  const scale  = maxAbs / maxInt               // 把 float 值域映射到整数格
+const SNIPPET = `import numpy as np
 
-  // 量化：除以 scale 取整，clip 防溢出
-  const q     = weights.map(w =>
-    Math.max(minInt, Math.min(maxInt, Math.round(w / scale)))
-  )
-  // 反量化（dequantize）：乘回 scale
-  const wHat  = q.map(qi => qi * scale)
-  const error = weights.map((w, i) => Math.abs(w - wHat[i]))
+def quantize_symmetric(w, bits, axis=None):
+    """对称量化：q = round(w / scale)，scale = max|w| / (2**(bits-1) - 1)
 
-  // 内存：fp32 每权重 4 字节；int8 = 1 B（4×）；int4 = 0.5 B（8×）
-  const quantBytes = weights.length * (bits / 8)
-  const factor     = (weights.length * 4) / quantBytes  // 压缩倍数
-  return { scale, q, wHat, error, factor }
-}`
+    axis=None → per-tensor：整组共用一个 scale，离群值会把 scale 拉大
+    axis=1    → per-channel：每行单独定 scale，离群值只影响自己那一行
+    """
+    q_max =  2 ** (bits - 1) - 1          # int8 → 127，int4 → 7，int2 → 1
+    q_min = -2 ** (bits - 1)              # int8 → -128，int4 → -8，int2 → -2
+
+    max_abs = np.max(np.abs(w), axis=axis, keepdims=True)
+    scale   = max_abs / q_max             # 把 float 值域映射到整数格
+
+    q     = np.clip(np.round(w / scale), q_min, q_max)   # 量化 + clip 防溢出
+    w_hat = q * scale                                    # 反量化（dequantize）
+    err   = np.abs(w - w_hat)
+    return q.astype(np.int8), w_hat, scale, err
+
+
+# 两行 = 两个通道；第 2 行含离群值 5.60
+W = np.array([[-1.00, -0.40, -0.08,  0.26,  0.52,  0.82],   # 全是小权重
+              [ 0.10,  0.05, -0.12,  0.30, -0.20,  5.60]])  # 含离群值
+
+# per-tensor：整张张量一个 scale，小权重被离群值挤到 round 成 0
+_, w_hat_t, _, err_t = quantize_symmetric(W, bits=4, axis=None)
+
+# per-channel：按行（axis=1）各自定 scale，小权重那行精度恢复
+_, w_hat_c, _, err_c = quantize_symmetric(W, bits=4, axis=1)
+
+print(err_t.mean(), err_c.mean())     # per-channel 的平均误差明显更小
+
+# 内存：fp32 每权重 4 字节；int8 = 1 B（4×）；int4 = 0.5 B（8×）
+factor = 32 / 4                        # 压缩倍数：32 bit / 4 bit = 8×`
 
 // ─── 主组件 ────────────────────────────────────────────────────────────────────
 
 export function Quantization() {
-  const [bits, setBits] = useState<BitWidth>('fp32')
+  const [bits, setBits]             = useState<BitWidth>('fp32')
+  const [outlier, setOutlier]       = useState<number>(OUTLIER_DEFAULT)
+  const [perChannel, setPerChannel] = useState<boolean>(false)
 
-  const result = runQuant(WEIGHTS, bits)
-  const me     = findChapter('quantization')!
+  const weights = buildWeights(outlier)
+  const result  = runQuant(weights, bits, perChannel)
+  const me      = findChapter('quantization')!
   const { prev, next } = neighbors('quantization')
 
-  const n           = WEIGHTS.length
+  const n           = weights.length
   const fp32Bytes   = n * 4
   const curBytes    = n * result.bytesPerWeight
   const compFactor  = fp32Bytes / curBytes   // 1× (fp32) / 4× (int8) / 8× (int4) / 16× (int2)
+
+  // 含离群值那一通道的 scale（per-tensor 时即唯一 scale）与小权重通道的 scale
+  const outlierScale = result.scales.length ? result.scales[result.scales.length - 1]! : 0
+  const smallScale   = result.scales.length ? result.scales[0]! : 0
 
   return (
     <article className="page">
@@ -359,13 +434,71 @@ export function Quantization() {
             ))}
           </div>
         </div>
+
+        {/* 离群值滑块 — 用 rust 边框标出它的特殊地位 */}
+        <div
+          className="control"
+          style={{ borderLeft: '3px solid #c75b39', paddingLeft: '0.75rem' }}
+        >
+          <div className="control-head">
+            <span className="slot-tag" style={{ color: '#c75b39' }}>w15</span>
+            <span style={{ color: '#888', fontSize: 13, marginLeft: '0.3rem' }}>
+              离群值（outlier）——拖大它，看 scale 被撑大、小权重塌缩到 0
+            </span>
+          </div>
+          <label className="slider-row">
+            <input
+              type="range"
+              min={OUTLIER_MIN}
+              max={OUTLIER_MAX}
+              step={0.05}
+              value={outlier}
+              onChange={(e) => setOutlier(Number(e.target.value))}
+            />
+            <span className="param-val" style={{ color: '#c75b39' }}>
+              {outlier.toFixed(2)}
+            </span>
+          </label>
+        </div>
+
+        {/* per-channel 开关 */}
+        <div
+          className="control"
+          style={{ borderLeft: '3px solid #002fa7', paddingLeft: '0.75rem' }}
+        >
+          <div className="control-head">
+            <span className="slot-tag" style={{ color: '#002fa7' }}>per-channel</span>
+            <span style={{ color: '#888', fontSize: 13, marginLeft: '0.3rem' }}>
+              关 = 整组共用一个 scale；开 = 每 {CHANNEL_SIZE} 个权重分一通道、各自定 scale
+            </span>
+          </div>
+          <button
+            onClick={() => setPerChannel(v => !v)}
+            aria-pressed={perChannel}
+            style={{
+              marginTop: 8,
+              padding:      '7px 18px',
+              border:       `2px solid ${perChannel ? '#002fa7' : '#d0d5dd'}`,
+              borderRadius: 6,
+              background:   perChannel ? '#002fa7' : '#fff',
+              color:        perChannel ? '#fff' : '#333',
+              cursor:       'pointer',
+              fontFamily:   'monospace',
+              fontSize:     13,
+              fontWeight:   700,
+              transition:   'border-color 0.15s, background 0.15s',
+            }}
+          >
+            per-channel：{perChannel ? '开（分通道）' : '关（per-tensor）'}
+          </button>
+        </div>
       </section>
 
       {/* ── 可视化主区 ── */}
       <section className="stage" style={{ display: 'block' }}>
-        <WeightBars weights={WEIGHTS} result={result} />
+        <WeightBars weights={weights} result={result} perChannel={perChannel} />
         <div style={{ marginTop: 32 }}>
-          <NumberLine weights={WEIGHTS} result={result} bits={bits} />
+          <NumberLine weights={weights} result={result} bits={bits} />
         </div>
       </section>
 
@@ -441,10 +574,18 @@ export function Quantization() {
             borderRadius: 6, minWidth: 120,
           }}>
             <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Scale
+              Scale{perChannel ? `（${result.scales.length} 通道）` : ''}
             </div>
-            <div style={{ fontSize: 20, fontWeight: 700, fontFamily: 'monospace', marginTop: 4 }}>
-              {result.scale.toFixed(4)}
+            <div style={{
+              fontSize: perChannel ? 15 : 20, fontWeight: 700,
+              fontFamily: 'monospace', marginTop: 4,
+              display: 'flex', flexDirection: 'column', lineHeight: 1.35,
+            }}>
+              {result.scales.map((s, i) => (
+                <span key={i} style={{ color: perChannel && i === 0 ? '#002fa7' : '#1b1f24' }}>
+                  {perChannel ? `ch${i}: ` : ''}{s.toFixed(4)}
+                </span>
+              ))}
             </div>
             <div style={{ fontSize: 11, color: '#aaa' }}>
               max|w| / {Math.pow(2, bits - 1) - 1}
@@ -466,32 +607,40 @@ export function Quantization() {
         {bits === 8 && (
           <p>
             <strong>int8：4× 压缩，误差几乎可忽略不计。</strong>{' '}
-            256 个格点足以覆盖绝大多数权重分布，平均误差通常低于 0.01。
-            注意 w15 = 5.60 这个离群值（outlier）：它把 scale 拉到
-            约 {result.scale.toFixed(4)}，虽然小权重的格点间距随之变大，
-            但 256 级分辨率仍然够用——
-            <strong>per-channel quantization</strong> 会把每一层的每一「行」单独定 scale，
-            进一步减小 outlier 的影响。int8 是生产中最常见的量化精度。
+            256 个格点足以覆盖绝大多数权重分布，平均误差通常很低。
+            注意 w15 = {outlier.toFixed(2)} 这个离群值（outlier）：它把 scale 拉到
+            约 {outlierScale.toFixed(4)}，虽然小权重的格点间距随之变大，
+            但 256 级分辨率仍然够用。把上面的离群值滑块拖到底，再切到
+            int4，就能看清 outlier 真正的破坏力。int8 是生产中最常见的量化精度。
           </p>
         )}
-        {bits === 4 && (
+        {bits === 4 && !perChannel && (
           <p>
             <strong>int4：离群值（outlier）吃掉了精度。</strong>{' '}
-            w15 = 5.60 迫使 scale = {result.scale.toFixed(4)}，
-            16 个格点间距达 {result.scale.toFixed(3)}——
-            结果是 ±{(result.scale * 0.5).toFixed(3)} 以内的小权重全部被 round 到 0，
+            w15 = {outlier.toFixed(2)} 迫使整组共用 scale = {outlierScale.toFixed(4)}，
+            16 个格点间距达 {outlierScale.toFixed(3)}——
+            结果是 ±{(outlierScale * 0.5).toFixed(3)} 以内的小权重全部被 round 到 0，
             条形图里你能看到多行误差变红。
-            这就是 <strong>per-channel scale</strong> 存在的原因：
-            把 outlier 所在的行单独处理，其他行用更细的 scale，
-            精度就能大幅恢复。
+            打开上面的 <strong>per-channel</strong> 开关：把 outlier 所在的通道单独处理，
+            其他通道用更细的 scale，精度立刻大幅恢复。
+          </p>
+        )}
+        {bits === 4 && perChannel && (
+          <p>
+            <strong>int4 + per-channel：精度回来了。</strong>{' '}
+            现在两个通道各自定 scale——含离群值的通道仍是
+            {' '}{outlierScale.toFixed(4)}，但全是小权重的第 1 通道用上了细得多的
+            scale = {smallScale.toFixed(4)}，格点间距只有 per-tensor 的一个零头。
+            条形图里第 1 通道的误差红条几乎消失：这就是 per-channel quantization
+            存在的全部理由——别让一个 outlier 毁掉整组小权重。
           </p>
         )}
         {bits === 2 && (
           <p>
             <strong>int2：只有 4 个格点，精度已接近崩溃。</strong>{' '}
-            scale = {result.scale.toFixed(2)}，整个权重空间只被
-            {' '}{(-2 * result.scale).toFixed(2)}、{(-1 * result.scale).toFixed(2)}、
-            0、{result.scale.toFixed(2)} 四个值覆盖。
+            含离群值通道的 scale = {outlierScale.toFixed(2)}，整个权重空间只被
+            {' '}{(-2 * outlierScale).toFixed(2)}、{(-1 * outlierScale).toFixed(2)}、
+            0、{outlierScale.toFixed(2)} 四个值覆盖。
             绝大多数小权重都塌到 0，语义信息严重丢失。
             int2 是压力测试——实际工程止步于 int4，且必须搭配精心设计的校准数据（calibration）。
           </p>
@@ -531,7 +680,7 @@ export function Quantization() {
       {/* ── 代码 ── */}
       <section className="codeblock-wrap">
         <h2 className="sec-h">看代码：对称量化（symmetric int quant）</h2>
-        <CodeBlock code={SNIPPET} language="typescript" title="quantize.ts" />
+        <CodeBlock code={SNIPPET} language="python" title="quantize.py" />
       </section>
 
       {/* ── 翻页导航 ── */}

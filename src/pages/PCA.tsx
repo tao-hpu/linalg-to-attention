@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, type Dispatch, type SetStateAction } from 'react'
 import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
 import { neighbors, allChapters, findChapter } from '../chapters'
@@ -23,8 +23,15 @@ const f2 = (n: number): string => {
 }
 
 // ── Preset cloud data ─────────────────────────────────────────────────────────
-// Raw 2-D points in data units; centroid ≈ (0,0) — centering done in computePCA
+// Raw 2-D points in data units; centroid ≈ (0,0) — centering done in computePCA.
+// Presets are just convenient *starting points*; every point is draggable.
 type PresetKey = 'strong' | 'weak' | 'iso'
+
+// A draggable data point lives in raw data coordinates (NOT pre-centered).
+type DataPoint = { id: number; x: number; y: number }
+
+const toDataPoints = (raw: readonly [number, number][]): DataPoint[] =>
+  raw.map(([x, y], id) => ({ id, x, y }))
 
 const CLOUDS: Record<PresetKey, [number, number][]> = {
   // 强相关: elongated cloud at ≈35°
@@ -55,7 +62,8 @@ const PRESET_META: { key: PresetKey; label: string }[] = [
 
 // ── PCA computation (exact closed form for 2×2 symmetric covariance) ──────────
 interface PCAResult {
-  centeredPts: [number, number][]
+  mx: number             // centroid x (data units)
+  my: number             // centroid y (data units)
   cxx: number
   cxy: number
   cyy: number
@@ -65,27 +73,24 @@ interface PCAResult {
   v2: [number, number]   // unit eigenvector for lam2 (PC2, ⊥ PC1)
 }
 
-function computePCA(rawPts: [number, number][]): PCAResult {
-  const n  = rawPts.length
-  const mx = rawPts.reduce((s, p) => s + p[0], 0) / n
-  const my = rawPts.reduce((s, p) => s + p[1], 0) / n
+function computePCA(pts: readonly DataPoint[]): PCAResult {
+  const n  = pts.length
+  const mx = pts.reduce((s, p) => s + p.x, 0) / n
+  const my = pts.reduce((s, p) => s + p.y, 0) / n
 
-  // 1. Center
-  const centeredPts: [number, number][] = rawPts.map(p => [p[0] - mx, p[1] - my] as [number, number])
+  // 1. Covariance matrix C = (1/n) XᵀX over centered points (xᵢ − x̄, yᵢ − ȳ)
+  const cxx = pts.reduce((s, p) => s + (p.x - mx) * (p.x - mx), 0) / n
+  const cyy = pts.reduce((s, p) => s + (p.y - my) * (p.y - my), 0) / n
+  const cxy = pts.reduce((s, p) => s + (p.x - mx) * (p.y - my), 0) / n
 
-  // 2. Covariance matrix C = (1/n) XᵀX
-  const cxx = centeredPts.reduce((s, p) => s + p[0] * p[0], 0) / n
-  const cyy = centeredPts.reduce((s, p) => s + p[1] * p[1], 0) / n
-  const cxy = centeredPts.reduce((s, p) => s + p[0] * p[1], 0) / n
-
-  // 3. Eigenvalues of symmetric [[cxx, cxy], [cxy, cyy]]
+  // 2. Eigenvalues of symmetric [[cxx, cxy], [cxy, cyy]]
   //    λ = (cxx+cyy)/2 ± sqrt(((cxx−cyy)/2)² + cxy²)
   const mid  = (cxx + cyy) / 2
   const disc = Math.sqrt(((cxx - cyy) / 2) ** 2 + cxy * cxy)
   const lam1 = mid + disc
   const lam2 = Math.max(0, mid - disc)   // clamp for floating-point safety (C is PSD)
 
-  // 4. Eigenvectors
+  // 3. Eigenvectors
   let v1: [number, number], v2: [number, number]
   if (Math.abs(cxy) < 1e-10) {
     // Diagonal matrix — standard-basis eigenvectors ordered by eigenvalue
@@ -99,26 +104,26 @@ function computePCA(rawPts: [number, number][]): PCAResult {
     v2 = [-v1[1], v1[0]]   // 90° rotation → always ⊥ v1
   }
 
-  return { centeredPts, cxx, cxy, cyy, lam1, lam2, v1, v2 }
+  return { mx, my, cxx, cxy, cyy, lam1, lam2, v1, v2 }
 }
 
 // ── Principal-component axis arrow (bidirectional, scaled to √λ = std dev) ────
 function PCAxis({
-  v, sdScale, color, label,
+  v, sdScale, color, label, origin,
 }: {
   v: [number, number]
   sdScale: number
   color: string
   label: string
+  origin: [number, number]   // axis origin in data units (the centroid)
 }) {
   const [vx, vy] = v
   if (sdScale < 1e-6) return null
 
-  const orgX = CX, orgY = CY
-  const tipX = toSX( vx * sdScale)
-  const tipY = toSY( vy * sdScale)
-  const negX = toSX(-vx * sdScale)
-  const negY = toSY(-vy * sdScale)
+  const [ox, oy] = origin
+  const orgX = toSX(ox),               orgY = toSY(oy)
+  const tipX = toSX(ox + vx * sdScale), tipY = toSY(oy + vy * sdScale)
+  const negX = toSX(ox - vx * sdScale), negY = toSY(oy - vy * sdScale)
 
   // Arrowhead
   const dx = tipX - orgX, dy = tipY - orgY
@@ -162,17 +167,55 @@ function PCAxis({
 
 // ── Interactive scatter + PCA canvas ─────────────────────────────────────────
 function PCACanvas({
-  centeredPts, v1, v2, lam1, lam2, showProj,
+  pts, setPts, mx, my, v1, v2, lam1, lam2, showProj,
 }: {
-  centeredPts: [number, number][]
+  pts: DataPoint[]
+  setPts: Dispatch<SetStateAction<DataPoint[]>>
+  mx: number
+  my: number
   v1: [number, number]
   v2: [number, number]
   lam1: number
   lam2: number
   showProj: boolean
 }) {
+  const svgRef = useRef<SVGSVGElement>(null)
+  const [dragId, setDragId] = useState<number | null>(null)
+
   const sd1 = Math.sqrt(lam1)
   const sd2 = Math.sqrt(lam2)
+
+  // Convert a pointer's client position → data coordinates, robust to any CSS
+  // scaling of the SVG. getScreenCTM() maps user-space (viewBox) → screen, so
+  // its inverse maps screen → viewBox; we then undo toSX/toSY. Falls back to
+  // bounding-rect scaling (clientX·SIZE/rect.width) if no CTM is available.
+  function clientToData(clientX: number, clientY: number): { x: number; y: number } {
+    const svg = svgRef.current
+    let vx: number, vy: number
+    if (svg && svg.getScreenCTM()) {
+      const ctm = svg.getScreenCTM()!
+      const p = new DOMPoint(clientX, clientY).matrixTransform(ctm.inverse())
+      vx = p.x; vy = p.y
+    } else if (svg) {
+      const rect = svg.getBoundingClientRect()
+      vx = (clientX - rect.left) * SIZE / rect.width
+      vy = (clientY - rect.top)  * SIZE / rect.height
+    } else {
+      vx = CX; vy = CY
+    }
+    // viewBox px → data units, then clamp to the visible window
+    const clamp = (v: number) => Math.max(-RANGE, Math.min(RANGE, v))
+    return {
+      x: Math.round(clamp((vx - CX) / UNIT) * 20) / 20,   // 0.05 step
+      y: Math.round(clamp((CY - vy) / UNIT) * 20) / 20,
+    }
+  }
+
+  function onMove(clientX: number, clientY: number) {
+    if (dragId === null) return
+    const { x, y } = clientToData(clientX, clientY)
+    setPts(prev => prev.map(p => (p.id === dragId ? { ...p, x, y } : p)))
+  }
 
   // Grid lines
   const gridLines: JSX.Element[] = []
@@ -191,18 +234,27 @@ function PCACanvas({
     )
   }
 
-  // Orthogonal projection of each centered point onto the PC1 line
-  const projData = centeredPts.map(p => {
-    const t = p[0] * v1[0] + p[1] * v1[1]   // scalar coord along PC1
-    return { px: p[0], py: p[1], qx: t * v1[0], qy: t * v1[1] }
+  // Orthogonal projection of each point onto the PC1 line through the centroid
+  const projData = pts.map(p => {
+    const dx = p.x - mx, dy = p.y - my
+    const t = dx * v1[0] + dy * v1[1]            // scalar coord along PC1
+    return { px: p.x, py: p.y, qx: mx + t * v1[0], qy: my + t * v1[1] }
   })
 
   return (
     <svg
+      ref={svgRef}
       width={SIZE} height={SIZE}
       viewBox={`0 0 ${SIZE} ${SIZE}`}
-      style={{ display: 'block' }}
-      aria-label="PCA 主成分散点图"
+      style={{
+        width: '100%', height: 'auto', maxWidth: SIZE, display: 'block',
+        touchAction: 'none', userSelect: 'none',
+        cursor: dragId !== null ? 'grabbing' : 'default',
+      }}
+      aria-label="PCA 主成分散点图（数据点可拖动）"
+      onPointerMove={(e) => onMove(e.clientX, e.clientY)}
+      onPointerUp={() => setDragId(null)}
+      onPointerLeave={() => setDragId(null)}
     >
       <defs>
         <clipPath id="pca-clip">
@@ -215,9 +267,9 @@ function PCACanvas({
         {gridLines}
 
         {/* PC2 axis drawn first (lower z-order) */}
-        <PCAxis v={v2} sdScale={sd2} color={IKB}  label={`PC2  λ₂=${f2(lam2)}`} />
+        <PCAxis v={v2} sdScale={sd2} color={IKB}  label={`PC2  λ₂=${f2(lam2)}`} origin={[mx, my]} />
         {/* PC1 axis on top of PC2 */}
-        <PCAxis v={v1} sdScale={sd1} color={RUST} label={`PC1  λ₁=${f2(lam1)}`} />
+        <PCAxis v={v1} sdScale={sd1} color={RUST} label={`PC1  λ₁=${f2(lam1)}`} origin={[mx, my]} />
 
         {/* Projection drop-lines + collapsed 1-D points on PC1 */}
         {showProj && projData.map((d, i) => (
@@ -234,12 +286,22 @@ function PCACanvas({
           </g>
         ))}
 
-        {/* Original data points (IKB, faded when projection is on) */}
-        {centeredPts.map((p, i) => (
+        {/* Centroid marker (data mean) — axes pivot here */}
+        <circle cx={toSX(mx)} cy={toSY(my)} r={4} fill="#5b6168" />
+        <circle cx={toSX(mx)} cy={toSY(my)} r={8} fill="none" stroke="#5b6168" strokeWidth={1} opacity={0.5} />
+
+        {/* Original data points (IKB) — draggable */}
+        {pts.map(p => (
           <circle
-            key={`pt-${i}`}
-            cx={toSX(p[0])} cy={toSY(p[1])} r={5.5}
-            fill={IKB} fillOpacity={showProj ? 0.32 : 0.82}
+            key={`pt-${p.id}`}
+            cx={toSX(p.x)} cy={toSY(p.y)} r={dragId === p.id ? 7.5 : 6}
+            fill={IKB} fillOpacity={showProj ? 0.42 : 0.82}
+            stroke="#fff" strokeWidth={1.2}
+            style={{ cursor: dragId !== null ? 'grabbing' : 'grab' }}
+            onPointerDown={(e) => {
+              ;(e.target as Element).setPointerCapture(e.pointerId)
+              setDragId(p.id)
+            }}
           />
         ))}
       </g>
@@ -281,10 +343,17 @@ X_1d = X_c @ eigvecs[:, :1]           # (n, 1)  ← 降到 1-D
 // ── Main page component ───────────────────────────────────────────────────────
 export function PCA() {
   const [preset,   setPreset]   = useState<PresetKey>('strong')
+  const [pts,      setPts]      = useState<DataPoint[]>(() => toDataPoints(CLOUDS.strong))
   const [showProj, setShowProj] = useState(false)
 
-  const { centeredPts, cxx, cxy, cyy, lam1, lam2, v1, v2 } =
-    computePCA(CLOUDS[preset])
+  const { mx, my, cxx, cxy, cyy, lam1, lam2, v1, v2 } = computePCA(pts)
+
+  // Load a preset as a fresh, fully-editable starting point
+  const loadPreset = (key: PresetKey) => {
+    setPreset(key)
+    setPts(toDataPoints(CLOUDS[key]))
+    setShowProj(false)
+  }
 
   const totalVar  = lam1 + lam2
   const explained = totalVar > 1e-12 ? lam1 / totalVar : 1
@@ -347,20 +416,25 @@ export function PCA() {
         {/* Cloud preset selector */}
         <div className="control">
           <div className="control-head">
-            <span className="slot-tag">数据云形状</span>
-            <span style={{ color: '#888', fontSize: '0.85rem' }}>切换看 PCA 如何随相关性变化</span>
+            <span className="slot-tag">起始数据云</span>
+            <span style={{ color: '#888', fontSize: '0.85rem' }}>选一个起点，然后直接拖动散点图里的蓝点</span>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', paddingTop: '0.4rem' }}>
             {PRESET_META.map(({ key, label }) => (
               <button
                 key={key}
-                onClick={() => { setPreset(key); setShowProj(false) }}
+                onClick={() => loadPreset(key)}
                 style={presetStyle(preset === key)}
               >
                 {label}
               </button>
             ))}
           </div>
+          <p style={{ fontSize: 13, color: '#5b6168', margin: '8px 0 0', maxWidth: '52ch' }}>
+            预设只是<strong>懒得手调时的起点</strong>。拖动任意数据点，
+            协方差矩阵 C、特征值 λ₁/λ₂、主轴方向和解释方差比都会<strong>实时重算</strong>；
+            想从头来就再点一次形状按钮重置。
+          </p>
         </div>
 
         {/* Dimensionality-reduction toggle */}
@@ -409,20 +483,24 @@ export function PCA() {
           overflow: 'hidden',
           background: '#fff',
           boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
+          maxWidth: '100%',
+          width: SIZE,
         }}>
           <PCACanvas
-            centeredPts={centeredPts}
+            pts={pts} setPts={setPts}
+            mx={mx} my={my}
             v1={v1} v2={v2}
             lam1={lam1} lam2={lam2}
             showProj={showProj}
           />
         </div>
-        <p style={{ color: '#888', fontSize: '0.82rem', margin: 0, textAlign: 'center' }}>
-          原点 = 数据重心（已中心化）；
+        <p style={{ color: '#888', fontSize: '0.82rem', margin: 0, textAlign: 'center', maxWidth: '52ch' }}>
+          <strong>拖动蓝点</strong>试试 ·
+          {' '}<span style={{ color: '#5b6168', fontWeight: 700 }}>⊙</span> = 数据重心（centroid，随点移动）；
           {' '}<span style={{ color: RUST, fontWeight: 700 }}>—— PC1</span>
           {' '}= 最大方差方向，箭头长度 = 标准差 √λ₁；
           {' '}<span style={{ color: IKB, fontWeight: 700 }}>—— PC2</span>
-          {' '}⊥ PC1，长度 = √λ₂。
+          {' '}⊥ PC1，长度 = √λ₂。主轴始终穿过重心。
         </p>
       </section>
 

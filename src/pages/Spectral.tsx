@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { apply, multiply, nearlyEqual, type Mat2, type Vec2 } from '../linalg'
 import { CodeBlock } from '../components/CodeBlock'
@@ -6,17 +6,23 @@ import { neighbors, allChapters, findChapter } from '../chapters'
 
 // ── Canvas constants ──────────────────────────────────────────────────────────
 const SIZE = 360
-const RANGE = 3
-const UNIT = SIZE / 2 / RANGE   // 60 px per math unit
+// Visible math half-range. 3.5 (not 3) keeps λ≈3 axis arrows off the canvas edge.
+const RANGE = 3.5
+const GRID_MAX = 3              // integer gridlines drawn from −GRID_MAX..GRID_MAX
+const UNIT = SIZE / 2 / RANGE   // px per math unit
 const CX = SIZE / 2
 const CY = SIZE / 2
 
 const toSx = (x: number) => CX + x * UNIT
 const toSy = (y: number) => CY - y * UNIT
+// Inverse: screen px (already mapped into the SVG's 0..SIZE viewBox space) → math
+const toMx = (px: number) => (px - CX) / UNIT
+const toMy = (py: number) => (CY - py) / UNIT
 
-const RUST = '#c75b39'
-const IKB  = '#002fa7'
-const GRID = '#e6e8ea'
+const RUST  = '#c75b39'         // principal axis 1 / λ₁ component
+const IKB   = '#002fa7'         // principal axis 2 / λ₂ component
+const PROBE = '#0a7d6b'         // teal — draggable probe v and its image Mv
+const GRID  = '#e6e8ea'
 
 const fmt = (n: number): string => {
   const r = Math.round(n * 100) / 100
@@ -123,8 +129,50 @@ function EigenArrow({
   )
 }
 
-// ── SpectralCanvas ────────────────────────────────────────────────────────────
-function SpectralCanvas({ a, b, d }: { a: number; b: number; d: number }) {
+// ── Vector: single directional arrow from origin to tip ───────────────────────
+function Vector({
+  tip, color, width = 2.5, label,
+}: { tip: Vec2; color: string; width?: number; label?: string }) {
+  const [x, y] = tip
+  if (Math.hypot(x, y) < 1e-6) return null
+  const tx = toSx(x), ty = toSy(y)
+  const ox = toSx(0), oy = toSy(0)
+  const ang = Math.atan2(oy - ty, tx - ox)
+  const ah = 9, aw = 4.5
+  const b1x = tx - ah * Math.cos(ang) - aw * Math.sin(ang)
+  const b1y = ty + ah * Math.sin(ang) - aw * Math.cos(ang)
+  const b2x = tx - ah * Math.cos(ang) + aw * Math.sin(ang)
+  const b2y = ty + ah * Math.sin(ang) + aw * Math.cos(ang)
+  const dlen = Math.hypot(tx - ox, ty - oy) || 1
+  const lx = tx + ((tx - ox) / dlen) * 14
+  const ly = ty + ((ty - oy) / dlen) * 14 + 4
+  return (
+    <g>
+      <line x1={ox} y1={oy} x2={tx} y2={ty}
+        stroke={color} strokeWidth={width} strokeLinecap="round" />
+      <polygon points={`${tx},${ty} ${b1x},${b1y} ${b2x},${b2y}`} fill={color} />
+      {label && (
+        <text x={lx} y={ly} fill={color} fontSize={12} fontWeight="bold"
+          textAnchor={tx - ox > 5 ? 'start' : (tx - ox < -5 ? 'end' : 'middle')}
+          style={{ pointerEvents: 'none', userSelect: 'none' }}>
+          {label}
+        </text>
+      )}
+    </g>
+  )
+}
+
+// ── SpectralCanvas (interactive: drag the probe on the unit circle) ───────────
+function SpectralCanvas({
+  a, b, d, probe, onProbe,
+}: {
+  a: number; b: number; d: number
+  probe: Vec2                  // unit vector v on the input circle
+  onProbe: (v: Vec2) => void
+}) {
+  const svgRef = useRef<SVGSVGElement>(null)
+  const dragging = useRef(false)
+
   const M: Mat2 = [a, b, b, d]
   const { lam1, lam2, v1, v2 } = computeEigen(a, b, d)
 
@@ -136,10 +184,9 @@ function SpectralCanvas({ a, b, d }: { a: number; b: number; d: number }) {
     return `${toSx(ex).toFixed(1)},${toSy(ey).toFixed(1)}`
   }).join(' ')
 
-  // Background grid (undeformed reference)
+  // Background grid (undeformed reference) — integer lines, span full canvas
   const gridLines: JSX.Element[] = []
-  for (let idx = 0; idx <= RANGE * 2; idx++) {
-    const k = idx - RANGE
+  for (let k = -GRID_MAX; k <= GRID_MAX; k++) {
     const stroke = k === 0 ? '#9aa5b0' : GRID
     const sw = k === 0 ? 1.5 : 1
     gridLines.push(
@@ -156,11 +203,45 @@ function SpectralCanvas({ a, b, d }: { a: number; b: number; d: number }) {
   const axis1: Vec2 = [v1[0] * Math.abs(lam1), v1[1] * Math.abs(lam1)]
   const axis2: Vec2 = [v2[0] * Math.abs(lam2), v2[1] * Math.abs(lam2)]
 
+  // ── Probe v (unit vector) and its image Mv ──────────────────────────────────
+  const Mv = apply(M, probe)
+  // Decompose onto the orthonormal eigenbasis, then scale axis 1 by its λ:
+  // v = c₁·v₁ + c₂·v₂  →  Mv = (λ₁c₁)·v₁ + (λ₂c₂)·v₂.
+  // P1 is the first leg's endpoint (along v₁); the leg P1→Mv covers the v₂ part.
+  const c1 = probe[0] * v1[0] + probe[1] * v1[1]
+  const comp1 = lam1 * c1   // signed length along v1
+  const P1: Vec2 = [v1[0] * comp1, v1[1] * comp1]
+
+  // Pointer → unit probe direction. Scale client px into viewBox space first so
+  // it stays correct even when CSS shrinks the SVG (.page svg max-width:100%).
+  const handleMove = (clientX: number, clientY: number) => {
+    const svg = svgRef.current
+    if (!svg) return
+    const rect = svg.getBoundingClientRect()
+    if (rect.width === 0 || rect.height === 0) return
+    const px = (clientX - rect.left) * (SIZE / rect.width)
+    const py = (clientY - rect.top) * (SIZE / rect.height)
+    const mx = toMx(px)
+    const my = toMy(py)
+    const len = Math.hypot(mx, my)
+    if (len < 1e-3) return
+    onProbe([mx / len, my / len])   // snap to the unit circle
+  }
+
   return (
     <svg
+      ref={svgRef}
       width={SIZE} height={SIZE}
       viewBox={`0 0 ${SIZE} ${SIZE}`}
-      style={{ display: 'block' }}
+      style={{ display: 'block', touchAction: 'none', cursor: 'crosshair' }}
+      onPointerDown={(e) => {
+        e.currentTarget.setPointerCapture(e.pointerId)
+        dragging.current = true
+        handleMove(e.clientX, e.clientY)
+      }}
+      onPointerMove={(e) => { if (dragging.current) handleMove(e.clientX, e.clientY) }}
+      onPointerUp={() => { dragging.current = false }}
+      onPointerCancel={() => { dragging.current = false }}
     >
       <defs>
         <clipPath id="spectral-clip">
@@ -193,6 +274,34 @@ function SpectralCanvas({ a, b, d }: { a: number; b: number; d: number }) {
       <g clipPath="url(#spectral-clip)">
         <EigenArrow v={axis1} color={RUST} label={`λ₁ = ${fmt(lam1)}`} />
         <EigenArrow v={axis2} color={IKB}  label={`λ₂ = ${fmt(lam2)}`} />
+      </g>
+
+      {/* Decomposition of Mv onto the two principal axes (L-shaped legs) */}
+      <g clipPath="url(#spectral-clip)">
+        {/* leg 1: origin → P1, along v1, length λ₁c₁ */}
+        <line
+          x1={toSx(0)} y1={toSy(0)} x2={toSx(P1[0])} y2={toSy(P1[1])}
+          stroke={RUST} strokeWidth={2} strokeDasharray="5 3" opacity={0.85}
+        />
+        {/* leg 2: P1 → Mv, along v2, length λ₂c₂ */}
+        <line
+          x1={toSx(P1[0])} y1={toSy(P1[1])} x2={toSx(Mv[0])} y2={toSy(Mv[1])}
+          stroke={IKB} strokeWidth={2} strokeDasharray="5 3" opacity={0.85}
+        />
+      </g>
+
+      {/* Probe v on the unit circle and its image Mv on the ellipse */}
+      <g clipPath="url(#spectral-clip)">
+        <Vector tip={Mv} color={PROBE} width={2.8} label="Mv" />
+        <Vector tip={probe} color={PROBE} width={2.2} />
+        {/* Mv tip dot (sits on the ellipse) */}
+        <circle cx={toSx(Mv[0])} cy={toSy(Mv[1])} r={4.5} fill={PROBE} />
+        {/* Draggable probe handle (sits on the unit circle) */}
+        <circle
+          cx={toSx(probe[0])} cy={toSy(probe[1])}
+          r={9} fill={PROBE} stroke="white" strokeWidth={2.5}
+          style={{ cursor: 'grab' }}
+        />
       </g>
     </svg>
   )
@@ -246,11 +355,17 @@ export function Spectral() {
   const [a, setA] = useState(2)
   const [b, setB] = useState(1)
   const [d, setD] = useState(2)
+  // Probe: a unit vector on the input circle (default ≈ 40°)
+  const [probe, setProbe] = useState<Vec2>([Math.cos(0.7), Math.sin(0.7)])
 
   // Symmetric matrix M = [[a,b],[b,d]]
   const M: Mat2 = [a, b, b, d]
 
   const { lam1, lam2, v1, v2 } = computeEigen(a, b, d)
+
+  // Live probe decomposition for the readout: v = c₁v₁ + c₂v₂ → Mv = λ₁c₁v₁ + λ₂c₂v₂
+  const pc1 = probe[0] * v1[0] + probe[1] * v1[1]
+  const pc2 = probe[0] * v2[0] + probe[1] * v2[1]
 
   // Spectral decomposition pieces
   // Q: columns = unit eigenvectors.  Mat2 = [a,b,c,d] means [[a,b],[c,d]]
@@ -362,13 +477,34 @@ export function Spectral() {
           background: '#fff',
           boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
         }}>
-          <SpectralCanvas a={a} b={b} d={d} />
+          <SpectralCanvas a={a} b={b} d={d} probe={probe} onProbe={setProbe} />
         </div>
+
+        {/* Live probe decomposition readout */}
+        <div style={{
+          fontFamily: 'monospace', fontSize: '0.84rem', lineHeight: 1.7,
+          textAlign: 'center', color: '#444',
+          background: '#f7f8fa', border: '1px solid #e6e8ea', borderRadius: 6,
+          padding: '0.5rem 0.9rem', maxWidth: 420,
+        }}>
+          <div>
+            <span style={{ color: PROBE, fontWeight: 700 }}>v</span> 沿主轴分解：
+            {' '}v = <span style={{ color: RUST }}>{fmt(pc1)}</span>·v₁
+            {' '}+ <span style={{ color: IKB }}>{fmt(pc2)}</span>·v₂
+          </div>
+          <div>
+            <span style={{ color: PROBE, fontWeight: 700 }}>Mv</span> = λ₁c₁·v₁ + λ₂c₂·v₂ =
+            {' '}<span style={{ color: RUST }}>{fmt(lam1 * pc1)}</span>·v₁
+            {' '}+ <span style={{ color: IKB }}>{fmt(lam2 * pc2)}</span>·v₂
+          </div>
+        </div>
+
         <p style={{ color: '#888', fontSize: '0.82rem', margin: 0, textAlign: 'center' }}>
-          虚线圆 = 单位圆（输入）；实线椭圆 = M 变换后的像；
-          {' '}<span style={{ color: RUST, fontWeight: 700 }}>● 轴₁</span> 和
+          拖动单位圆上的{' '}<span style={{ color: PROBE, fontWeight: 700 }}>● 探针 v</span>
+          ——它的像{' '}<span style={{ color: PROBE, fontWeight: 700 }}>Mv</span> 实时落在椭圆上，
+          虚折线把 Mv 拆到{' '}<span style={{ color: RUST, fontWeight: 700 }}>● 轴₁</span> 和
           {' '}<span style={{ color: IKB, fontWeight: 700 }}>● 轴₂</span>
-          {' '}= 两个特征向量主轴，始终互相垂直
+          {' '}两个特征方向上（每轴按各自 λ 缩放）。两主轴始终互相垂直。
         </p>
       </section>
 
