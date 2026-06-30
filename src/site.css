@@ -410,10 +410,164 @@ a.side-link:hover { background: var(--ikb-soft); }
   padding-top: 18px;
 }
 
+/* ---- 章节按需加载时的占位 ---- */
+.page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+
+/* ---- 已读标记 ---- */
+.side-link.is-done .side-num { color: var(--ok); }
+.ch-row.is-done .row-num { color: var(--ok); }
+.row-status.is-live { /* 已读时由 .is-done 覆盖背景 */ }
+.ch-row.is-done .row-status.is-live { background: var(--ok); }
+
+/* ---- 进度条 ---- */
+.progress-bar-wrap { margin: 4px 0 26px; }
+.progress-bar {
+  height: 6px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--ikb);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  flex-wrap: wrap;
+}
+.progress-actions { display: flex; gap: 8px; }
+.chip {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  padding: 4px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chip:hover { border-color: var(--ikb); color: var(--ikb); }
+.chip.is-on { background: var(--ikb); border-color: var(--ikb); color: #fff; }
+.chip--ghost { border-style: dashed; }
+
+/* ---- ⌘K 搜索 ---- */
+.search-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding: 5px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--paper);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.search-trigger:hover { border-color: var(--ikb); color: var(--ikb); }
+.search-trigger-icon { font-size: 15px; }
+.search-kbd, .search-foot kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 1px 5px;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: #f7f8fa;
+  color: var(--ink-soft);
+}
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 20, 24, 0.32);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 12vh;
+  z-index: 100;
+}
+.search-box {
+  width: min(620px, 92vw);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(0, 12, 48, 0.22);
+  overflow: hidden;
+}
+.search-input {
+  font-family: var(--sans);
+  font-size: 16px;
+  padding: 16px 18px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  outline: none;
+  color: var(--ink);
+}
+.search-input::placeholder { color: #aeb4ba; }
+.search-results { list-style: none; margin: 0; padding: 6px; overflow-y: auto; }
+.search-empty { padding: 22px; text-align: center; color: var(--ink-soft); font-size: 14px; }
+.search-item {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.search-item.is-active { background: var(--ikb-soft); }
+.search-num { font-family: var(--mono); font-size: 12px; color: var(--ikb); }
+.search-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.search-title { font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.search-star { color: var(--ikb); }
+.search-hook {
+  font-size: 12.5px; color: var(--ink-soft);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.search-bridge { font-family: var(--mono); font-size: 11.5px; color: var(--ikb); white-space: nowrap; }
+.search-foot {
+  display: flex; gap: 16px; justify-content: center;
+  padding: 9px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--ink-soft);
+}
+.search-foot span { display: inline-flex; align-items: center; gap: 4px; }
+
 @media (max-width: 680px) {
   .hero h1 { font-size: 38px; }
   .how { grid-template-columns: 1fr; gap: 14px; }
   .home { padding: 40px 20px 72px; }
   .ch-row { grid-template-columns: 32px 1fr auto; }
   .row-bridge { display: none; }
+  .search-trigger-text { display: none; }
+  .search-bridge { display: none; }
+  .search-item { grid-template-columns: 26px 1fr; }
+  .topnav { gap: 12px; }
 }

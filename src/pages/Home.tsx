@@ -1,11 +1,13 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { parts, chapterPath, allChapters, firstLiveChapter, type Chapter } from '../chapters'
+import { useProgress } from '../site/progress'
 
-function ChapterRow({ c }: { c: Chapter }) {
+function ChapterRow({ c, done }: { c: Chapter; done: boolean }) {
   const live = c.status === 'live'
   const inner = (
     <>
-      <span className="row-num">{c.num}</span>
+      <span className="row-num">{done ? '✓' : c.num}</span>
       <span className="row-main">
         <span className="row-title">
           {c.title}
@@ -16,18 +18,22 @@ function ChapterRow({ c }: { c: Chapter }) {
       </span>
       <span className="row-bridge">→ {c.bridge}</span>
       <span className={`row-status ${live ? 'is-live' : 'is-planned'}`}>
-        {live ? '可玩' : '规划中'}
+        {live ? (done ? '已读' : '可玩') : '规划中'}
       </span>
     </>
   )
   return live
-    ? <Link to={chapterPath(c)} className="ch-row ch-row--live">{inner}</Link>
+    ? <Link to={chapterPath(c)} className={`ch-row ch-row--live ${done ? 'is-done' : ''}`}>{inner}</Link>
     : <div className="ch-row ch-row--planned">{inner}</div>
 }
 
 export function Home() {
+  const { visited, isVisited, reset } = useProgress()
+  const [coreOnly, setCoreOnly] = useState(false)
   const liveCount = allChapters.filter((c) => c.status === 'live').length
+  const doneCount = allChapters.filter((c) => c.status === 'live' && visited.has(c.slug)).length
   const start = firstLiveChapter()
+  const pct = liveCount ? Math.round((doneCount / liveCount) * 100) : 0
 
   return (
     <div className="home">
@@ -68,17 +74,44 @@ export function Home() {
           <h2>大纲</h2>
           <span className="outline-meta">{allChapters.length} 节 · 已上线 {liveCount} · <span className="row-star">★</span> 通往注意力的主线</span>
         </div>
-        {parts.map((part) => (
-          <div className="part" key={part.name}>
-            <div className="part-head">
-              <h3>{part.name}</h3>
-              <p>{part.blurb}</p>
-            </div>
-            <div className="ch-list">
-              {part.chapters.map((c) => <ChapterRow key={c.slug} c={c} />)}
-            </div>
+
+        <div className="progress-bar-wrap">
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${pct}%` }} />
           </div>
-        ))}
+          <div className="progress-meta">
+            <span>已读 <strong>{doneCount}</strong> / {liveCount}（{pct}%）</span>
+            <span className="progress-actions">
+              <button
+                className={`chip ${coreOnly ? 'is-on' : ''}`}
+                onClick={() => setCoreOnly((v) => !v)}
+              >
+                {coreOnly ? '✓ 只看主线 ★' : '只看主线 ★'}
+              </button>
+              {doneCount > 0 && (
+                <button className="chip chip--ghost" onClick={reset}>清除进度</button>
+              )}
+            </span>
+          </div>
+        </div>
+
+        {parts.map((part) => {
+          const chapters = coreOnly ? part.chapters.filter((c) => c.core) : part.chapters
+          if (chapters.length === 0) return null
+          return (
+            <div className="part" key={part.name}>
+              <div className="part-head">
+                <h3>{part.name}</h3>
+                <p>{part.blurb}</p>
+              </div>
+              <div className="ch-list">
+                {chapters.map((c) => (
+                  <ChapterRow key={c.slug} c={c} done={c.status === 'live' && isVisited(c.slug)} />
+                ))}
+              </div>
+            </div>
+          )
+        })}
       </section>
 
       {start && (
