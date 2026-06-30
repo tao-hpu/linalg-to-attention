@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { allChapters, chapterPath, type Chapter } from '../chapters'
 
@@ -50,16 +51,6 @@ export function SearchPalette() {
 
   useEffect(() => setActive(0), [q])
 
-  if (!open) {
-    return (
-      <button className="search-trigger" onClick={() => setOpen(true)} aria-label="搜索章节">
-        <span className="search-trigger-icon">⌕</span>
-        <span className="search-trigger-text">搜索章节</span>
-        <kbd className="search-kbd">⌘K</kbd>
-      </button>
-    )
-  }
-
   const go = (c?: Chapter) => {
     if (!c) return
     setOpen(false)
@@ -80,8 +71,15 @@ export function SearchPalette() {
   }
 
   return (
-    <div className="search-overlay" onClick={() => setOpen(false)}>
-      <div className="search-box" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="搜索章节">
+    <>
+      <button className="search-trigger" onClick={() => setOpen(true)} aria-label="搜索章节">
+        <span className="search-trigger-icon">⌕</span>
+        <span className="search-trigger-text">搜索章节</span>
+        <kbd className="search-kbd">⌘K</kbd>
+      </button>
+      {open && createPortal(
+        <div className="search-overlay" onClick={() => setOpen(false)}>
+          <div className="search-box" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="搜索章节">
         <input
           ref={inputRef}
           className="search-input"
@@ -112,12 +110,15 @@ export function SearchPalette() {
             </li>
           ))}
         </ul>
-        <div className="search-foot">
-          <span><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
-          <span><kbd>↵</kbd> 打开</span>
-          <span><kbd>esc</kbd> 关闭</span>
+          <div className="search-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
+            <span><kbd>↵</kbd> 打开</span>
+            <span><kbd>esc</kbd> 关闭</span>
+          </div>
         </div>
-      </div>
-    </div>
+      </div>,
+      document.body,
+      )}
+    </>
   )
 }
