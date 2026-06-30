@@ -6,7 +6,7 @@
   "description": "可视化地从向量一路搭到注意力机制 —— 瑞士蓝简约风的线性代数 → LLM 教学项目",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/prerender.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

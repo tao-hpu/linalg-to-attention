@@ -41,5 +41,8 @@ export function useDocMeta() {
     setProperty('og:title', title)
     setProperty('og:description', desc)
     setProperty('og:type', 'website')
+    setProperty('og:url', `https://l2a.fim.ai${c ? `/ch/${slug}` : ''}`)
+    setMeta('twitter:title', title)
+    setMeta('twitter:description', desc)
   }, [pathname])
 }

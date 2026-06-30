@@ -18,6 +18,30 @@
 
 html, body { margin: 0; background: var(--paper); }
 
+/* ── 无障碍 ───────────────────────────────────────────────────────────────── */
+/* 键盘聚焦时给出清晰的 IKB 焦点环（鼠标点击不显示，靠 :focus-visible）。 */
+:focus-visible {
+  outline: 2px solid var(--ikb);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--ikb);
+  outline-offset: 2px;
+}
+/* 尊重「减少动画」系统偏好：关掉过渡/动画，避免前庭不适。 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
   font-family: var(--sans);
   color: var(--ink);
