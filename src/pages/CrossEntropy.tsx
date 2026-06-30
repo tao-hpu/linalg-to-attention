@@ -442,10 +442,10 @@ export function CrossEntropy() {
         <div className="kicker">第 {me.num} 节</div>
         <h1>
           交叉熵与极大似然
-          <span className="zh-sub">LLM 的训练目标，就是你硕士里的 MLE</span>
+          <span className="zh-sub">LLM 的训练目标，就是经典统计里的 MLE</span>
         </h1>
         <p className="lede">
-          你在统计学里推过<strong>极大似然（MLE）</strong>：给定数据，寻找最大化其联合概率的参数。
+          统计里有个核心思想叫<strong>极大似然（MLE）</strong>：给定数据，寻找最大化其联合概率的参数。
           LLM 的训练损失 <code>F.cross_entropy</code>
           ——数学上完全等价，换了件衣服而已。
           这一页把 NLL = CE = −MLE 这个恒等式从纸上拉进可交互的直觉。
@@ -599,7 +599,7 @@ export function CrossEntropy() {
             正是你在上面交互区里操作的每一步。
           </p>
           <p>
-            <strong>它等于极大似然（MLE）：</strong>你在 DSCI 6000 里推过「最大化联合似然」，
+            <strong>它等于极大似然（MLE）：</strong>从「最大化联合似然」出发，
             对两边取 log 再除以 −n，就得到「最小化 cross-entropy」。
             NLL（负对数似然）= CE，统计与深度学习的术语在此完全合流——
             不是巧合，是同一件事换了名字。
@@ -608,7 +608,7 @@ export function CrossEntropy() {
             <strong>困惑度 perplexity = exp(CE)</strong> 是语言模型最常见的评估指标：
             perplexity 越低，模型对真实序列的平均置信度越高。
             GPT-2 在 WebText 上约 18，GPT-4 级别的模型已降至个位数。
-            这里的 CE 就是第 35 节采样的底层概率的分数——Softmax 产出分布，CE 打分，采样取词，三者首尾相接。
+            这里的 CE 就是第 36 节采样的底层概率的分数——Softmax 产出分布，CE 打分，采样取词，三者首尾相接。
           </p>
         </div>
       </section>

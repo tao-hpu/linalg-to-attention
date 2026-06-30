@@ -636,6 +636,22 @@ export function SelfAttention() {
             梯度接近零，训练卡住。开启 √d 缩放，权重分布更均匀，梯度回流更顺畅。
           </div>
         )}
+
+        {/* O(n²) 复杂度 note —— N×N 分数矩阵就是注意力贵的根源 */}
+        <div style={{
+          padding: '12px 16px',
+          background: `rgba(${IKB_RGB},0.05)`,
+          borderLeft: `3px solid ${IKB}`,
+          borderRadius: 4, fontSize: 13.5, color: '#333',
+          maxWidth: 620, lineHeight: 1.6,
+        }}>
+          <strong style={{ color: IKB }}>为什么注意力「贵」？</strong>
+          看这个分数矩阵的形状：<code>QKᵀ</code> 是 <strong>{N}×{N}</strong> ——
+          序列里每个 token 都要和<strong>其余每个 token</strong> 算一次点积。
+          序列长 n 时，光这一个矩阵就是 <strong>n² 个分数</strong>，
+          算力和显存都按 <strong>O(n²)</strong> 增长：上下文翻倍，注意力开销翻<strong>四倍</strong>。
+          这就是长上下文为什么烧钱，也是 FlashAttention、稀疏注意力、线性注意力这些工作要解决的问题。
+        </div>
       </section>
 
       {/* ── Stage 3: 注意力箭头 + 输出 ── */}

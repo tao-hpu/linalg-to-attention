@@ -526,7 +526,7 @@ export function LoraFinetuning() {
         <div className="bridge-body">
           <p>
             LoRA 是今天微调大模型的默认方法（<strong>PEFT</strong> 库的核心）。
-            QLoRA 在它基础上叠加量化（连到第 36 节），
+            QLoRA 在它基础上叠加量化（连到第 37 节），
             把 70B 参数的模型压进一张消费级显卡。
             它能成立，全靠你前面学的两件事：
           </p>

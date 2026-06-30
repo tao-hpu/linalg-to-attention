@@ -41,10 +41,12 @@ const Softmax = L(import('./pages/Softmax'), 'Softmax')
 const CrossEntropy = L(import('./pages/CrossEntropy'), 'CrossEntropy')
 const SelfAttention = L(import('./pages/SelfAttention'), 'SelfAttention')
 const MultiHeadAttention = L(import('./pages/MultiHeadAttention'), 'MultiHeadAttention')
+const Rope = L(import('./pages/Rope'), 'Rope')
 const TransformerBlock = L(import('./pages/TransformerBlock'), 'TransformerBlock')
 const LoraFinetuning = L(import('./pages/LoraFinetuning'), 'LoraFinetuning')
 const SamplingDecoding = L(import('./pages/SamplingDecoding'), 'SamplingDecoding')
 const Quantization = L(import('./pages/Quantization'), 'Quantization')
+const ForwardPass = L(import('./pages/ForwardPass'), 'ForwardPass')
 
 function PageFallback() {
   return <div className="page-loading" role="status" aria-live="polite">加载中…</div>
@@ -93,10 +95,12 @@ export default function App() {
                   <Route path="cross-entropy" element={<CrossEntropy />} />
                   <Route path="self-attention" element={<SelfAttention />} />
                   <Route path="multi-head" element={<MultiHeadAttention />} />
+                  <Route path="rope" element={<Rope />} />
                   <Route path="transformer-block" element={<TransformerBlock />} />
                   <Route path="lora-finetuning" element={<LoraFinetuning />} />
                   <Route path="sampling-decoding" element={<SamplingDecoding />} />
                   <Route path="quantization" element={<Quantization />} />
+                  <Route path="forward-pass" element={<ForwardPass />} />
                 </Routes>
               </Suspense>
             }

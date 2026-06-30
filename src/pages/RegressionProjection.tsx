@@ -408,17 +408,8 @@ export function RegressionProjection() {
           回归 = 投影
           <span className="zh-sub">最小二乘的几何真相</span>
         </h1>
-        {me.prereq && (
-          <div style={{
-            display: 'inline-block', fontSize: 12, color: '#002fa7',
-            background: '#e8edff', padding: '2px 10px', borderRadius: 3,
-            marginBottom: 16,
-          }}>
-            前置：{me.prereq}
-          </div>
-        )}
         <p className="lede">
-          你在硕士课里反复跑的 OLS，几何上就是一次<strong>正交投影</strong>——
+          最小二乘回归（OLS）几何上就是一次<strong>正交投影</strong>——
           把响应向量 <code>y ∈ ℝⁿ</code> 投影到设计矩阵 <code>X</code> 的列空间
           <code>col(X)</code> 上。「最小化 RSS」和「把 y 投到 col(X) 上」
           是<strong>同一件事的两种说法</strong>。
@@ -488,7 +479,7 @@ export function RegressionProjection() {
         <div className="bridge-tag">这就是 LLM 里的什么</div>
         <div className="bridge-body">
           <p>
-            你硕士里反复做的最小二乘，几何上就是 18 节那张「投影 + 垂直残差」图——
+            最小二乘几何上就是 18 节那张「投影 + 垂直残差」图——
             <strong>统计与几何在这里合流</strong>。
             「线性预测 + 正交投影」这套直觉一路延伸下去：
             线性层是线性预测器，把输入映射到输出子空间；

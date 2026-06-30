@@ -387,17 +387,8 @@ export function PCA() {
           PCA 主成分分析
           <span className="zh-sub">最大方差的方向，就是信息最密集的方向</span>
         </h1>
-        {me.prereq && (
-          <div style={{
-            display: 'inline-block', fontSize: 12, color: IKB,
-            background: '#e8edff', padding: '2px 10px', borderRadius: 3,
-            marginBottom: 16,
-          }}>
-            前置：{me.prereq}
-          </div>
-        )}
         <p className="lede">
-          你在硕士课里做过的降维，几何上就是这件事：
+          PCA 是最常用的降维方法，几何上就是这件事：
           把数据<strong>中心化</strong>（减去均值），构造{' '}
           <strong>covariance matrix</strong>{' '}
           <code>C = (1/n) XᵀX</code>，
@@ -591,7 +582,7 @@ export function PCA() {
         <div className="bridge-body">
           <p>
             PCA 是<strong>把 768 维 embedding 拍到 2-D 可视化</strong>的标准工具——
-            你在硕士降维课里学的，在 NLP 里就是这个用法：
+            在 NLP 里最常见的用法就是：
             用前两个 principal component 画散点图，看语义聚类。
             「表征里真正有信息的只有少数几个方向」这一直觉，
             也是 <strong>低秩近似（22 节）</strong>和 <strong>LoRA 微调</strong>的基础：

@@ -14,7 +14,6 @@ function ChapterRow({ c, done }: { c: Chapter; done: boolean }) {
           {c.core && <span className="row-star" title="通往注意力的主线">★</span>}
         </span>
         <span className="row-hook">{c.hook}</span>
-        {c.prereq && <span className="row-prereq">前置 · {c.prereq}</span>}
       </span>
       <span className="row-bridge">→ {c.bridge}</span>
       <span className={`row-status ${live ? 'is-live' : 'is-planned'}`}>

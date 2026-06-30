@@ -491,7 +491,7 @@ export function Rank() {
             {' '}<strong>低秩的</strong>——让模型适应新任务只需要少数几个新方向。
             所以把 <code>ΔW = B·A</code>（B: <code>d×r</code>，A: <code>r×d</code>，r ≪ d），
             只训练这两个瘦矩阵，参数量从 d² 压到 2·r·d。
-            第 21 节 SVD 把 rank 的结构看得更清楚；第 22 节低秩近似、第 34 节 LoRA
+            第 21 节 SVD 把 rank 的结构看得更清楚；第 22 节低秩近似、第 35 节 LoRA
             都是这一页的兑现。也连回第 12 节：<strong>det = 0 ⟺ 降秩</strong>。
           </p>
         </div>

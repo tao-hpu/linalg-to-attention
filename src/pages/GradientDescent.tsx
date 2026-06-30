@@ -174,7 +174,7 @@ export function GradientDescent() {
         <div className="crumb">
           <Link to="/">大纲</Link> · 第六部分 · 学习：模型怎么变聪明
         </div>
-        <div className="kicker">第 {me.num} 节 · 前置：DSCI 6200 · 监督学习</div>
+        <div className="kicker">第 {me.num} 节</div>
         <h1>梯度下降<span className="zh-sub">模型怎么一步步逼近答案？</span></h1>
         <p className="lede">
           训练一个模型，本质上是在 loss 曲面上找最低点。

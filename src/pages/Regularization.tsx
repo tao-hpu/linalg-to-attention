@@ -172,17 +172,8 @@ export function Regularization() {
           正则化：Ridge 与 Lasso
           <span className="zh-sub">约束几何、sparsity 与贝叶斯先验</span>
         </h1>
-        {me.prereq && (
-          <div style={{
-            display: 'inline-block', fontSize: 12, color: '#002fa7',
-            background: '#e8edff', padding: '2px 10px', borderRadius: 3,
-            marginBottom: 16,
-          }}>
-            前置：{me.prereq}
-          </div>
-        )}
         <p className="lede">
-          你在统计课里算过 Ridge 和 Lasso——套公式、调 λ、看交叉验证。
+          Ridge 和 Lasso 是两种最常见的正则化——给损失加一项惩罚，压住参数别乱长。
           这一节换一个视角：在<strong>参数空间</strong>（β₁, β₂）里画出来，
           看清为什么 L1 能让系数<strong>精确为零</strong>（sparsity），
           而 L2 只是均匀收缩。再往深一步：这两种正则化，
@@ -454,7 +445,7 @@ export function Regularization() {
             把接近零的权重直接截断，可大幅缩减模型体积。
           </p>
           <p>
-            再点透你贝叶斯课学过的那层：
+            还有更深的一层——从贝叶斯视角看，正则化其实就是给权重加了个先验：
             <strong>Ridge = 权重 Gaussian 先验下的 MAP 估计</strong>，
             <strong>Lasso = 权重 Laplace 先验下的 MAP 估计</strong>。
             Gaussian 先验把概率质量均匀地堆在零附近，对应圆形约束、L2 惩罚；

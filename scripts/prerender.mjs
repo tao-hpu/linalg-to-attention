@@ -55,3 +55,16 @@ for (const c of chapters) {
   n++
 }
 console.log(`[prerender] 已生成 ${n} 个章节的静态 meta 页 → dist/ch/<slug>/index.html`)
+
+// ── sitemap.xml 也从 chapters.ts 生成，永不与章节清单漂移 ──
+const urls = [
+  `  <url><loc>${BASE}/</loc><priority>1.0</priority></url>`,
+  ...chapters.map((c) => `  <url><loc>${BASE}/ch/${c.slug}</loc><priority>0.8</priority></url>`),
+]
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join('\n')}
+</urlset>
+`
+writeFileSync(join(root, 'dist/sitemap.xml'), sitemap)
+console.log(`[prerender] 已生成 sitemap.xml（${chapters.length + 1} 条 URL）→ dist/sitemap.xml`)

@@ -654,7 +654,7 @@ export function Quantization() {
           <p>
             量化是把大模型塞进小显卡、手机乃至浏览器的关键手段：
             <strong>int8 省一半内存，int4 省到 1/4</strong>。
-            配合 LoRA 就是 <strong>QLoRA</strong>（连回第 34 节）——
+            配合 LoRA 就是 <strong>QLoRA</strong>（连回第 35 节）——
             用量化的基础模型加载进内存，再在其上做低秩微调，
             让普通 GPU 也能 fine-tune 百亿参数的模型。
             量化不改架构，只改「每个数用几个 bit 存」，

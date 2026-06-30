@@ -14,7 +14,6 @@ export interface Chapter {
   bridge: string      // 「这就是 LLM 里的 ___」
   status: ChapterStatus
   core?: boolean      // 是否在「通往注意力」的最短主线上（首页打 ★）
-  prereq?: string     // 对应硕士课程的前置知识（显式接在已学的应用层之下）
 }
 
 export interface Part {
@@ -29,7 +28,7 @@ export const parts: Part[] = [
     blurb: '一串数字怎么就装下了「意义」。',
     chapters: [
       { slug: 'vectors', num: '01', title: '向量与坐标系', hook: '一串数字怎么表示「意义」？', bridge: '词嵌入 embedding', status: 'live', core: true },
-      { slug: 'bow-to-embedding', num: '02', title: '从词袋到词向量', hook: '文本怎么变成向量？从 TF-IDF 到稠密 embedding', bridge: '稠密词向量、one-hot 的进化', status: 'live', prereq: 'DSCI 6700 · 文本向量化' },
+      { slug: 'bow-to-embedding', num: '02', title: '从词袋到词向量', hook: '文本怎么变成向量？从 TF-IDF 到稠密 embedding', bridge: '稠密词向量、one-hot 的进化', status: 'live' },
       { slug: 'vector-arithmetic', num: '03', title: '向量的加减与缩放', hook: '语义能做算术吗？', bridge: 'king − man + woman', status: 'live' },
       { slug: 'dot-product', num: '04', title: '内积', hook: '两个向量「像不像」，怎么用一个数衡量？', bridge: '注意力打分 q·k', status: 'live', core: true },
       { slug: 'projection', num: '05', title: '投影', hook: '一个向量在某方向上「占多少」？', bridge: '信息的读出', status: 'live' },
@@ -65,7 +64,7 @@ export const parts: Part[] = [
       { slug: 'orthogonal-rotation', num: '17', title: '正交矩阵与旋转', hook: '不改变长度的变换长什么样？', bridge: 'RoPE 旋转位置编码', status: 'live' },
       { slug: 'orthogonal-projection', num: '18', title: '正交投影', hook: '把一个向量「拍」到子空间上', bridge: '多头注意力的子空间分工', status: 'live' },
       { slug: 'gram-schmidt', num: '19', title: '格拉姆-施密特与 QR', hook: '怎么造一组互相垂直的基？', bridge: '正交基、数值稳定', status: 'live' },
-      { slug: 'regression-projection', num: '20', title: '回归 = 投影', hook: '「拟合一条线」为什么等价于「投影」？', bridge: '最小二乘的几何（统计与几何合流）', status: 'live', prereq: 'DSCI 6200 · 线性回归' },
+      { slug: 'regression-projection', num: '20', title: '回归 = 投影', hook: '「拟合一条线」为什么等价于「投影」？', bridge: '最小二乘的几何（统计与几何合流）', status: 'live' },
     ],
   },
   {
@@ -74,7 +73,7 @@ export const parts: Part[] = [
     chapters: [
       { slug: 'svd', num: '21', title: 'SVD 奇异值分解', hook: '任意矩阵都能拆成「旋转-拉伸-旋转」？', bridge: '万能分解', status: 'live', core: true },
       { slug: 'low-rank', num: '22', title: '低秩近似', hook: '为什么留几个最大奇异值就够了？', bridge: 'LoRA、压缩', status: 'live', core: true },
-      { slug: 'pca', num: '23', title: 'PCA 主成分分析', hook: '高维数据怎么「拍扁」还不丢信息？', bridge: 'embedding 可视化、降维', status: 'live', prereq: 'DSCI 6300 · 降维' },
+      { slug: 'pca', num: '23', title: 'PCA 主成分分析', hook: '高维数据怎么「拍扁」还不丢信息？', bridge: 'embedding 可视化、降维', status: 'live' },
     ],
   },
   {
@@ -83,8 +82,8 @@ export const parts: Part[] = [
     chapters: [
       { slug: 'gradient', num: '24', title: '梯度', hook: '往哪个方向走 loss 降得最快？', bridge: '训练信号', status: 'live' },
       { slug: 'chain-rule', num: '25', title: '链式法则与 Jacobian', hook: '误差怎么一层层传回去？', bridge: '反向传播', status: 'live' },
-      { slug: 'gradient-descent', num: '26', title: '梯度下降', hook: '怎么一步步逼近答案？', bridge: '训练全过程、Adam', status: 'live', prereq: 'DSCI 6200 · 监督学习' },
-      { slug: 'regularization', num: '27', title: '正则化：Ridge 与 Lasso', hook: 'L2 给参数加弹簧、L1 逼出稀疏——为什么有用？', bridge: 'weight decay；Ridge/Lasso = 高斯/拉普拉斯先验下的 MAP', status: 'live', prereq: 'DSCI 6200 · LASSO/Ridge｜6000 · 贝叶斯' },
+      { slug: 'gradient-descent', num: '26', title: '梯度下降', hook: '怎么一步步逼近答案？', bridge: '训练全过程、Adam', status: 'live' },
+      { slug: 'regularization', num: '27', title: '正则化：Ridge 与 Lasso', hook: 'L2 给参数加弹簧、L1 逼出稀疏——为什么有用？', bridge: 'weight decay；Ridge/Lasso = 高斯/拉普拉斯先验下的 MAP', status: 'live' },
       { slug: 'normalization', num: '28', title: '归一化', hook: '为什么每层后面都要「拉平」一下？', bridge: 'LayerNorm / RMSNorm', status: 'live' },
     ],
   },
@@ -93,7 +92,7 @@ export const parts: Part[] = [
     blurb: '把分数变概率，把训练变成极大似然。',
     chapters: [
       { slug: 'softmax', num: '29', title: 'Softmax 与概率分布', hook: '怎么把一堆分数变成一组「权重」？', bridge: '注意力权重、输出分布', status: 'live', core: true },
-      { slug: 'cross-entropy', num: '30', title: '交叉熵与极大似然', hook: 'LLM 的训练目标到底在最小化什么？', bridge: '交叉熵 loss = MLE（统计的主场）', status: 'live', prereq: 'DSCI 6000 · 极大似然' },
+      { slug: 'cross-entropy', num: '30', title: '交叉熵与极大似然', hook: 'LLM 的训练目标到底在最小化什么？', bridge: '交叉熵 loss = MLE（统计的主场）', status: 'live' },
     ],
   },
   {
@@ -102,16 +101,24 @@ export const parts: Part[] = [
     chapters: [
       { slug: 'self-attention', num: '31', title: '自注意力', hook: '吓人的注意力公式，到底在算什么？', bridge: '这就是 attention 的全部', status: 'live', core: true },
       { slug: 'multi-head', num: '32', title: '多头注意力', hook: '为什么要「分头」看？', bridge: 'multi-head', status: 'live' },
-      { slug: 'transformer-block', num: '33', title: '一个 Transformer Block', hook: '残差 + 归一化 + MLP 怎么组装成一层？', bridge: '完整的一层', status: 'live' },
+      { slug: 'rope', num: '33', title: '位置编码与 RoPE', hook: '注意力本身分不清词序，位置信息怎么加进去？', bridge: 'RoPE 旋转位置编码（旋转矩阵的回归）', status: 'live' },
+      { slug: 'transformer-block', num: '34', title: '一个 Transformer Block', hook: '残差 + 归一化 + MLP 怎么组装成一层？', bridge: '完整的一层', status: 'live' },
     ],
   },
   {
     name: '第九部分 · 尾声：接到 LLM 工程',
     blurb: '地基打完，落到你的真实目标：训练、微调、推理。',
     chapters: [
-      { slug: 'lora-finetuning', num: '34', title: 'LoRA 与高效微调', hook: '为什么改一个低秩的小矩阵就能微调大模型？', bridge: '微调 / PEFT（低秩在这集大成）', status: 'live', prereq: 'DSCI 6800 · 迁移学习' },
-      { slug: 'sampling-decoding', num: '35', title: '采样与解码', hook: '模型怎么从概率分布里「选词」生成？', bridge: '推理：temperature / top-k / top-p', status: 'live' },
-      { slug: 'quantization', num: '36', title: '量化与数值', hook: '为什么权重能从 float 压到 int8/int4 还能用？', bridge: '推理效率、数值精度', status: 'live' },
+      { slug: 'lora-finetuning', num: '35', title: 'LoRA 与高效微调', hook: '为什么改一个低秩的小矩阵就能微调大模型？', bridge: '微调 / PEFT（低秩在这集大成）', status: 'live' },
+      { slug: 'sampling-decoding', num: '36', title: '采样与解码', hook: '模型怎么从概率分布里「选词」生成？', bridge: '推理：temperature / top-k / top-p', status: 'live' },
+      { slug: 'quantization', num: '37', title: '量化与数值', hook: '为什么权重能从 float 压到 int8/int4 还能用？', bridge: '推理效率、数值精度', status: 'live' },
+    ],
+  },
+  {
+    name: '第十部分 · 终点：完整的前向传播',
+    blurb: '把前面所有零件串成一次完整的前向传播，然后交棒给正课。',
+    chapters: [
+      { slug: 'forward-pass', num: '38', title: '跑通一次前向传播', hook: '一句话喂进模型，从 token 到下一个词，到底流过哪些矩阵？', bridge: '完整的 forward pass；接下来去哪', status: 'live', core: true },
     ],
   },
 ]

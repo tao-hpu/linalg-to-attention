@@ -100,8 +100,8 @@ export function BowEmbedding() {
       part="第一部分 · 向量：意义的载体"
       lede={
         <>
-          在 NLP 课上你已经把文本变成过向量：one-hot、词袋（bag-of-words）、TF-IDF。
-          它们都能用，但有个躲不开的毛病——<strong>任意两个不同的词都「互相垂直」</strong>，
+          要让模型读文本，第一步得把词变成向量。最朴素的几种办法——one-hot、词袋（bag-of-words）、TF-IDF——
+          都能用，但有个躲不开的毛病：<strong>任意两个不同的词都「互相垂直」</strong>，
           cosine 永远是 0，模型没法表达「猫 和 狗 相似」。
           这一节我们换成<strong>稠密 embedding</strong>：把每个词放进一个连续空间里，
           让<strong>意思相近的词，向量也相近</strong>。下面的词点都能<strong>拖动</strong>——
