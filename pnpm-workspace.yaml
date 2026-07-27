@@ -1,0 +1,19 @@
+# 声明本项目自己就是 pnpm 根。
+# $HOME 下存在 pnpm-workspace.yaml + package.json，不声明的话 pnpm 会一路向上把 ~ 当成
+# workspace 根：install 时枚举整个 home 目录（readdir 能把 node 堆撑爆），并把依赖写进
+# ~/node_modules。
+packages:
+  - .
+
+# esbuild 要跑 install 脚本才能落地平台原生二进制。pnpm 10+ 默认拦截依赖的构建脚本，
+# 不显式放行的话每次依赖检查都会以 ERR_PNPM_IGNORED_BUILDS 失败，连带 pnpm build 起不来。
+allowBuilds:
+  esbuild: true
+
+# 供应链基线
+blockExoticSubdeps: true      # 传递依赖不许来自 git/tarball 等非 registry 源
+minimumReleaseAge: 10080      # 新版本发布满 7 天才允许装
+
+# trustPolicy: no-downgrade 暂不开启：vite@5.4.21 会被判定为 trust downgrade
+# （早期版本是 trusted publisher，这版只有 provenance attestation），开了直接装不上。
+# 要开的话得先把 vite 升到满足该策略的大版本，属于单独的升级任务。

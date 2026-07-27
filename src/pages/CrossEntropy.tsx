@@ -230,6 +230,56 @@ function ProbBars({
   )
 }
 
+// ─── ChainStep：链条上的一环 ──────────────────────────────────────────────────
+
+function ChainStep({
+  step,
+  name,
+  formula,
+  value,
+  note,
+  accent,
+}: {
+  step: string
+  name: string
+  formula: string
+  value: string
+  note: string
+  accent: string
+}) {
+  return (
+    <div
+      style={{
+        flex: '1 1 190px',
+        minWidth: 176,
+        background: '#fff',
+        border: '1px solid var(--line)',
+        borderTop: `3px solid ${accent}`,
+        padding: '12px 14px 14px',
+      }}
+    >
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-soft)', marginBottom: 6 }}>
+        {step}
+      </div>
+      <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink)' }}>{name}</div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--ink-soft)', margin: '2px 0 8px' }}>
+        {formula}
+      </div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 19, fontWeight: 700, color: accent }}>{value}</div>
+      <div style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--ink-soft)', marginTop: 7 }}>{note}</div>
+    </div>
+  )
+}
+
+function ChainArrow({ label }: { label: string }) {
+  return (
+    <div className="chain-arrow">
+      <span className="chain-arrow-glyph" aria-hidden="true">→</span>
+      <span className="chain-arrow-label">{label}</span>
+    </div>
+  )
+}
+
 // ─── MultiSection component ───────────────────────────────────────────────────
 
 function MultiSection() {
@@ -248,10 +298,11 @@ function MultiSection() {
 
   return (
     <section style={{ margin: '40px 0' }}>
-      <h2 className="sec-h">多样本视角：likelihood → log-likelihood → CE</h2>
+      <h2 className="sec-h" style={{ color: '#002fa7' }}>② 一整句话：把每个位置的 −log p 攒起来</h2>
       <p style={{ color: 'var(--ink-soft)', fontSize: 15.5, marginBottom: 24, maxWidth: '62ch' }}>
-        将模型应用于一段 4-token 序列。在每个位置，模型预测下一个词，真实词获得概率 p_i。
-        拖动滑块改变各位置的 p_i，观察 likelihood / log-likelihood / cross-entropy 三者如何联动。
+        换成一段 4 个词的句子。每个位置模型都要猜下一个词，真实那个词拿到概率 pᵢ，
+        于是也各有一份 <code>CE_i = −log pᵢ</code>。拖动滑块把某个位置调差一点，
+        看它怎么顺着下面的链条一路影响到最终的 loss。
       </p>
 
       {/* Token cards */}
@@ -312,68 +363,89 @@ function MultiSection() {
         ))}
       </div>
 
-      {/* Summary box */}
+      {/* 三步链条：同一个量的三种写法 */}
       <div style={{ background: '#fafbfc', border: '1px solid var(--line)', padding: '20px 24px' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-          gap: 20,
-          marginBottom: 20,
-          fontFamily: 'var(--mono)',
-        }}>
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 4 }}>likelihood = Π pᵢ</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>
-              {likelihood < 1e-4 ? likelihood.toExponential(2) : likelihood.toFixed(4)}
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginTop: 4 }}>（极小，易下溢）</div>
-          </div>
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 4 }}>log-likelihood = Σ log pᵢ</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>
-              {logLikelihood.toFixed(3)}
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginTop: 4 }}>= −n × CE</div>
-          </div>
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 4 }}>cross-entropy CE</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: '#c75b39' }}>
-              {totalCE.toFixed(3)}
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginTop: 4 }}>= −log-likelihood / n</div>
-          </div>
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginBottom: 4 }}>perplexity = exp(CE)</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>
-              {perplexity.toFixed(2)}
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--ink-soft)', marginTop: 4 }}>exp(CE)</div>
-          </div>
+        <p style={{ margin: '0 0 16px', fontSize: 13.5, color: 'var(--ink-soft)', maxWidth: '64ch' }}>
+          下面不是三个新概念，是<strong style={{ color: 'var(--ink)' }}>同一个量的三种写法</strong>。
+          顺着箭头看，每一步只做一次变形。
+        </p>
+
+        <div className="chain">
+          <ChainStep
+            step="第 1 步"
+            name="似然 likelihood"
+            formula="Π pᵢ"
+            value={likelihood < 1e-4 ? likelihood.toExponential(2) : likelihood.toFixed(4)}
+            note="四个概率连乘，衡量「这句话在模型眼里有多可能」。问题是小数越乘越小，词一多就小到浮点数存不下。"
+            accent="#002fa7"
+          />
+          <ChainArrow label="取 log" />
+          <ChainStep
+            step="第 2 步"
+            name="对数似然 log-likelihood"
+            formula="Σ log pᵢ"
+            value={logLikelihood.toFixed(3)}
+            note="取对数后连乘变连加，数值一下就稳了。log 是单调的，所以谁大谁小的排序没变。"
+            accent="#002fa7"
+          />
+          <ChainArrow label="取负、除以 n" />
+          <ChainStep
+            step="第 3 步"
+            name="交叉熵 CE"
+            formula="−(1/n) Σ log pᵢ"
+            value={totalCE.toFixed(3)}
+            note="翻个符号，让「越小越好」符合 loss 的习惯；再除以词数，长句短句才能比。这就是 F.cross_entropy 返回的数。"
+            accent="#c75b39"
+          />
         </div>
 
-        {/* Identity strip */}
-        <div style={{
-          borderTop: '1px solid var(--line)',
-          paddingTop: 16,
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: 10,
-          fontSize: 14,
-        }}>
-          <span style={{ background: 'var(--ikb-soft)', color: 'var(--ikb)', padding: '4px 10px', borderRadius: 3, fontWeight: 600 }}>
-            最大化 likelihood
-          </span>
-          <span style={{ color: 'var(--ink-soft)', fontSize: 16 }}>⟺</span>
-          <span style={{ background: 'var(--ikb-soft)', color: 'var(--ikb)', padding: '4px 10px', borderRadius: 3, fontWeight: 600 }}>
-            最大化 log-likelihood
-          </span>
-          <span style={{ color: 'var(--ink-soft)', fontSize: 16 }}>⟺</span>
-          <span style={{ background: '#fff0ec', color: '#c75b39', padding: '4px 10px', borderRadius: 3, fontWeight: 700 }}>
-            最小化 cross-entropy
-          </span>
-          <span style={{ color: 'var(--ink-soft)', fontSize: 12, marginLeft: 4 }}>← LLM 训练目标</span>
-        </div>
+        {/* perplexity：换算出来的评估指标，不在主链上 */}
+        <p style={{ borderTop: '1px solid var(--line)', margin: '16px 0 0', paddingTop: 14, fontSize: 13, lineHeight: 1.6, color: 'var(--ink-soft)' }}>
+          顺带一提：把 CE 放回指数上，就是常听到的<strong style={{ color: 'var(--ink)' }}>困惑度 perplexity = exp(CE) = </strong>
+          <span style={{ fontFamily: 'var(--mono)', fontWeight: 700, color: '#c75b39' }}>{perplexity.toFixed(2)}</span>
+          ，可以读成「模型平均在 {perplexity.toFixed(1)} 个词之间犹豫」。它是评估时看的指标，不参与训练，
+          和 CE 之间只隔一次换算，不是第四个概念。
+        </p>
+      </div>
+    </section>
+  )
+}
+
+// ─── ③ 恒等式：MLE 与 CE 对上号 ───────────────────────────────────────────────
+
+function IdentitySection() {
+  return (
+    <section style={{ margin: '40px 0' }}>
+      <h2 className="sec-h" style={{ color: '#002fa7' }}>③ 对上号：最大化似然，就是最小化交叉熵</h2>
+      <p style={{ color: 'var(--ink-soft)', fontSize: 15.5, marginBottom: 20, maxWidth: '64ch' }}>
+        回头看那条链子：取 log 不改变大小顺序，乘 −1/n 只是翻个面再等比缩放。
+        既然每一步都不会打乱「哪组参数更好」的排名，那么让似然最大的参数，必然也让交叉熵最小。
+        统计学家说「做极大似然估计」，深度学习工程师说「把 cross-entropy 降下去」，
+        说的是同一次训练。
+      </p>
+
+      <div style={{
+        background: '#fafbfc',
+        border: '1px solid var(--line)',
+        padding: '18px 22px',
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: 10,
+        fontSize: 14,
+      }}>
+        <span style={{ background: 'var(--ikb-soft)', color: 'var(--ikb)', padding: '4px 10px', borderRadius: 3, fontWeight: 600 }}>
+          最大化 likelihood
+        </span>
+        <span style={{ color: 'var(--ink-soft)', fontSize: 16 }}>⟺</span>
+        <span style={{ background: 'var(--ikb-soft)', color: 'var(--ikb)', padding: '4px 10px', borderRadius: 3, fontWeight: 600 }}>
+          最大化 log-likelihood
+        </span>
+        <span style={{ color: 'var(--ink-soft)', fontSize: 16 }}>⟺</span>
+        <span style={{ background: '#fff0ec', color: '#c75b39', padding: '4px 10px', borderRadius: 3, fontWeight: 700 }}>
+          最小化 cross-entropy
+        </span>
+        <span style={{ color: 'var(--ink-soft)', fontSize: 12, marginLeft: 4 }}>← LLM 训练目标</span>
       </div>
     </section>
   )
@@ -423,10 +495,10 @@ export function CrossEntropy() {
   const verdictGood = ce < 0.5
 
   const verdictMsg = (() => {
-    if (pTrue > 0.85) return `模型把 ${(pTrue * 100).toFixed(0)}% 的概率压在正确词上，loss 趋近零 —— 这正是训练收敛时的样子。`
+    if (pTrue > 0.85) return `模型把 ${(pTrue * 100).toFixed(0)}% 的概率压在正确词上，loss 趋近零：这正是训练收敛时的样子。`
     if (pTrue > 0.5)  return `模型给正确词 ${(pTrue * 100).toFixed(0)}% 的概率，loss 适中但仍有提升空间。`
     if (pTrue > 0.1)  return `正确词只拿到 ${(pTrue * 100).toFixed(0)}%，大部分概率押在了其它词上，loss 偏高。`
-    return `模型几乎把所有概率给了错误词，正确词仅 ${(pTrue * 100).toFixed(0)}%，loss 趋向无穷 —— 越自信地犯错，惩罚越重。`
+    return `模型几乎把所有概率给了错误词，正确词仅 ${(pTrue * 100).toFixed(0)}%，loss 趋向无穷：越自信地犯错，惩罚越重。`
   })()
 
   function updateLogit(i: number, val: number) {
@@ -445,12 +517,22 @@ export function CrossEntropy() {
           <span className="zh-sub">LLM 的训练目标，就是经典统计里的 MLE</span>
         </h1>
         <p className="lede">
-          统计里有个核心思想叫<strong>极大似然（MLE）</strong>：给定数据，寻找最大化其联合概率的参数。
-          LLM 的训练损失 <code>F.cross_entropy</code>
-          ——数学上完全等价，换了件衣服而已。
-          这一页把 NLL = CE = −MLE 这个恒等式从纸上拉进可交互的直觉。
+          统计里有个核心思想叫<strong>极大似然（MLE）</strong>：给定手上这份数据，去找让它最可能发生的那组参数。
+          LLM 训练时用的 <code>F.cross_entropy</code>，数学上就是同一件事，只是换了个名字。
+          这一页分三级台阶：先算清<strong>一个词</strong>的损失，再看<strong>一整句话</strong>怎么累加，
+          最后才把「最大化似然」和「最小化交叉熵」这两句话对上号。
         </p>
       </header>
+
+      {/* ── ① 一个词 ────────────────────────────────────────────────────── */}
+      <section style={{ marginTop: 36 }}>
+        <h2 className="sec-h" style={{ color: '#002fa7' }}>① 一个词：损失就是 −log p</h2>
+        <p style={{ margin: 0, maxWidth: '62ch', fontSize: 15.5, color: 'var(--ink-soft)' }}>
+          模型在每个位置先吐出一组分数（logits），softmax 把它们压成一组概率（第 29 节）。
+          真实的下一个词拿到的那份概率记作 <code>p</code>，这个位置的损失就只是 <code>−log p</code>。
+          p 越接近 1，损失越接近 0；p 越接近 0，损失冲向无穷。拖动下面的滑块，看这两个数怎么联动。
+        </p>
+      </section>
 
       {/* ── Controls ────────────────────────────────────────────────────── */}
       <section className="controls">
@@ -585,8 +667,19 @@ export function CrossEntropy() {
         <p>{verdictMsg}</p>
       </section>
 
-      {/* ── Multi-example section ────────────────────────────────────────── */}
+      {/* ── 台阶之间的过渡 ──────────────────────────────────────────────── */}
+      <section className="note">
+        <p>
+          一个位置的账到这里就算清了。可训练时模型面对的是<strong>一整句话</strong>：
+          每个位置都有自己的 p，也都有自己的 −log p。下一级台阶只做一件事，把它们攒起来。
+        </p>
+      </section>
+
+      {/* ── ② 一整句话 ──────────────────────────────────────────────────── */}
       <MultiSection />
+
+      {/* ── ③ 对上 MLE ──────────────────────────────────────────────────── */}
+      <IdentitySection />
 
       {/* ── Bridge ──────────────────────────────────────────────────────── */}
       <section className="bridge">
@@ -595,20 +688,18 @@ export function CrossEntropy() {
           <p>
             <code>F.cross_entropy(logits, targets)</code> 是 LLM 预训练的损失函数。
             每个 token 位置，模型先用 softmax 把 logits 变成概率分布（第 29 节），
-            再取真实下一个词的概率算 −log p，最后全序列平均——
-            正是你在上面交互区里操作的每一步。
+            再取真实下一个词的概率算 −log p，最后全序列平均。
+            这三步，正是你在上面三级台阶里亲手拨过的每一步。
           </p>
           <p>
             <strong>它等于极大似然（MLE）：</strong>从「最大化联合似然」出发，
             对两边取 log 再除以 −n，就得到「最小化 cross-entropy」。
-            NLL（负对数似然）= CE，统计与深度学习的术语在此完全合流——
-            不是巧合，是同一件事换了名字。
+            NLL（负对数似然）= CE，统计与深度学习的术语在此合流，不是巧合，是同一件事换了名字。
           </p>
           <p>
-            <strong>困惑度 perplexity = exp(CE)</strong> 是语言模型最常见的评估指标：
-            perplexity 越低，模型对真实序列的平均置信度越高。
-            GPT-2 在 WebText 上约 18，GPT-4 级别的模型已降至个位数。
-            这里的 CE 就是第 36 节采样的底层概率的分数——Softmax 产出分布，CE 打分，采样取词，三者首尾相接。
+            <strong>评估时看的是困惑度 perplexity = exp(CE)</strong>，越低说明模型对真实文本越有把握
+            （GPT-2 在 WebText 上约 18）。再往后，第 36 节的采样就是从这里的概率分布里挑词：
+            Softmax 产出分布，CE 打分，采样取词，三者首尾相接。
           </p>
         </div>
       </section>

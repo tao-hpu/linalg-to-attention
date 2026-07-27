@@ -377,9 +377,40 @@ h1 {
   color: var(--ink-soft);
 }
 
+/* ---- 三步链条：likelihood → log-likelihood → CE ---- */
+/* 箭头在这里是内容（每一步做了什么变形），不能像 .arrow-sep 那样在窄屏直接藏掉，
+   所以走独立 class：宽屏横排，窄屏竖排 + 箭头转 90°。 */
+.chain {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chain-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 2px;
+}
+.chain-arrow-glyph {
+  font-size: 22px;
+  line-height: 1;
+  color: var(--line-strong);
+}
+.chain-arrow-label {
+  font-size: 11px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
 @media (max-width: 680px) {
   h1 { font-size: 30px; }
   .controls { grid-template-columns: 1fr; }
   .arrow-sep { display: none; }
   .page { padding: 40px 20px 72px; }
+  .chain { flex-direction: column; }
+  .chain-arrow { flex-direction: row; gap: 8px; padding: 2px 0; }
+  .chain-arrow-glyph { transform: rotate(90deg); }
 }
