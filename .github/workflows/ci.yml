@@ -11,8 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 版本由 package.json 的 packageManager 字段决定，别在这里再写死一个
+      # 与 Dockerfile 钉的版本保持一致：CI 过了，镜像里的 --frozen-lockfile 就也过得了
       - uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - uses: actions/setup-node@v4
         with:

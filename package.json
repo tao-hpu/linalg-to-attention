@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "packageManager": "pnpm@11.9.0",
   "description": "可视化地从向量一路搭到注意力机制 —— 瑞士蓝简约风的线性代数 → LLM 教学项目",
   "scripts": {
     "dev": "vite",
