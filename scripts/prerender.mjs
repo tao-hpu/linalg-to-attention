@@ -26,6 +26,27 @@ if (chapters.length === 0) {
   process.exit(0)
 }
 
+// ── 分享卡一致性校验 ──
+// og.png 的右下角印着章节数。它是二进制产物，改 chapters.ts 时不会自动跟着变，
+// 之前就这么漂过：卡面停在「36 节」，而实际已经 38 节。这里在构建期挡住。
+{
+  const stampPath = join(root, 'scripts/og.stamp.json')
+  let stamped = null
+  try {
+    stamped = JSON.parse(readFileSync(stampPath, 'utf8')).chapters
+  } catch {
+    /* 没有戳记文件，按不一致处理 */
+  }
+  if (stamped !== chapters.length) {
+    console.error(
+      `\n[prerender] ✗ 分享卡与章节清单不一致：` +
+      `og.png 上印的是 ${stamped ?? '（无戳记）'} 节，chapters.ts 里是 ${chapters.length} 节。\n` +
+      `            跑一次 \`pnpm og\` 重新生成分享卡，再构建。\n`,
+    )
+    process.exit(1)
+  }
+}
+
 const escAttr = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 const escText = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 

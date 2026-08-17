@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && node scripts/prerender.mjs",
+    "og": "node scripts/og.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

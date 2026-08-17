@@ -1,0 +1,4 @@
+{
+  "chapters": 38,
+  "note": "由 pnpm og 写入；prerender.mjs 校验它与 chapters.ts 是否一致"
+}
