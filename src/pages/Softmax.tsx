@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── 颜色常量 ──────────────────────────────────────────────────────────────────
 const IKB = '#002fa7'   // International Klein Blue — 概率柱
@@ -76,9 +75,6 @@ export function Softmax() {
   const { exps, Z, probs } = computeSoftmax(logits, temp)
   const argmax = probs.indexOf(Math.max(...probs))
 
-  const me               = findChapter('softmax')!
-  const { prev, next }   = neighbors('softmax')
-
   const argmaxZh  = TOKEN_DEFS[argmax].zh
   const argmaxZ   = logits[argmax]
 
@@ -91,28 +87,23 @@ export function Softmax() {
   }
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="softmax"
+        part="第七部分 · 概率视角：模型在「猜下一个词」"
+        sub="把一排分数变成「权重」，让模型开口猜"
+        lede={
+          <>
+        模型内部跑完一层层线性代数，最终得到一排<strong>分数（logits）</strong>——
+        一个给「猫」，一个给「狗」……但分数可以是负数、可以很大，彼此之间没有可比基准。
+        <strong> Softmax</strong> 把这排任意实数变成一个真正的
+        <strong>概率分布（probability distribution）</strong>：
+        全部非负、加起来等于 1、最大的分数对应最大的概率。
+        公式：<code>softmax(z)ᵢ = exp(zᵢ / T) / Σⱼ exp(zⱼ / T)</code>。
+        这个操作出现在注意力权重和输出词表两个最核心的位置。
+          </>
+        }
+      >
 
-      {/* ── 页头 ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第七部分 · 概率视角：模型在「猜下一个词」
-        </div>
-        <div className="kicker">第 {me.num} 节 ★</div>
-        <h1>
-          Softmax 与概率分布
-          <span className="zh-sub">把一排分数变成「权重」，让模型开口猜</span>
-        </h1>
-        <p className="lede">
-          模型内部跑完一层层线性代数，最终得到一排<strong>分数（logits）</strong>——
-          一个给「猫」，一个给「狗」……但分数可以是负数、可以很大，彼此之间没有可比基准。
-          <strong> Softmax</strong> 把这排任意实数变成一个真正的
-          <strong>概率分布（probability distribution）</strong>：
-          全部非负、加起来等于 1、最大的分数对应最大的概率。
-          公式：<code>softmax(z)ᵢ = exp(zᵢ / T) / Σⱼ exp(zⱼ / T)</code>。
-          这个操作出现在注意力权重和输出词表两个最核心的位置。
-        </p>
-      </header>
 
       {/* ── 控制区：logit 滑块 + temperature 滑块 ── */}
       <section className="controls">
@@ -408,34 +399,6 @@ export function Softmax() {
       </section>
 
       {/* ── 翻页 ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { multiply, format, nearlyEqual, type Mat2, IDENTITY } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { TransformPanel } from '../TransformPanel'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 // ── 品牌色 ──────────────────────────────────────────────────────────────────
 const IKB    = '#002fa7'
@@ -125,9 +124,6 @@ export function Inverse() {
   const composed: Mat2 | null = inv ? multiply(inv, M) : null
   const isIdentity: boolean = composed !== null && nearlyEqual(composed, IDENTITY)
 
-  const me = findChapter('inverse')!
-  const { prev, next } = neighbors('inverse')
-
   const sliders: SliderRow[] = [
     { key: 'a', val: a, set: setA, label: 'a  （行 1 列 1）' },
     { key: 'b', val: b, set: setB, label: 'b  （行 1 列 2）' },
@@ -136,26 +132,21 @@ export function Inverse() {
   ]
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="inverse"
+        part="第三部分 · 方阵的秘密"
+        sub={<>变换能"撤销"吗？</>}
+        lede={
+          <>
+        inverse M⁻¹ 是那个<strong>把 M 的效果完全撤销</strong>的变换——先做 M、再做 M⁻¹，
+        等于什么都没做：<code>M⁻¹M = I</code>（identity）。
+        关键约束：inverse <strong>只在 det ≠ 0 时存在</strong>。
+        一旦 M 把整个平面压扁成一条线（det = 0，rank 下降），
+        那条被"吞掉"的维度再也找不回来——所以没有任何矩阵能把它还原。
+          </>
+        }
+      >
 
-      {/* ── 头部 ─────────────────────────────────────────────────────────── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第三部分 · 方阵的秘密
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          逆矩阵
-          <span className="zh-sub">变换能"撤销"吗？</span>
-        </h1>
-        <p className="lede">
-          inverse M⁻¹ 是那个<strong>把 M 的效果完全撤销</strong>的变换——先做 M、再做 M⁻¹，
-          等于什么都没做：<code>M⁻¹M = I</code>（identity）。
-          关键约束：inverse <strong>只在 det ≠ 0 时存在</strong>。
-          一旦 M 把整个平面压扁成一条线（det = 0，rank 下降），
-          那条被"吞掉"的维度再也找不回来——所以没有任何矩阵能把它还原。
-        </p>
-      </header>
 
       {/* ── 控制区 ───────────────────────────────────────────────────────── */}
       <section className="controls">
@@ -354,28 +345,6 @@ export function Inverse() {
       </section>
 
       {/* ── 翻页 ─────────────────────────────────────────────────────────── */}
-      <nav className="pager">
-        {prev
-          ? (
-            <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          )
-          : <span />}
-        {next
-          ? (
-            <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">
-                {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-              </span>
-            </Link>
-          )
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

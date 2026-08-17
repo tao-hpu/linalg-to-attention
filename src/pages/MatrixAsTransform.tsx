@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { apply, type Mat2, type Vec2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { TransformPanel } from '../TransformPanel'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 // F 字形顶点（与 TransformPanel 一致，平移到原点附近）
 const F_RAW: Vec2[] = [
@@ -281,30 +280,23 @@ export function MatrixAsTransform() {
 
   const M: Mat2 = [iHat[0], jHat[0], iHat[1], jHat[1]]
 
-  const me = findChapter('matrix-as-transform')!
-  const { prev, next } = neighbors('matrix-as-transform')
-
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第二部分 · 矩阵：一个动作
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          矩阵是变换
-          <span className="zh-sub">矩阵到底"做"了什么？</span>
-        </h1>
-        <p className="lede">
-          2×2 矩阵不是一张枯燥的"数表"——它是一次把整个平面
-          <strong>拉伸、旋转或切变</strong>的动作。
-          关键在于：矩阵的
-          <span style={{ color: RUST }}>第一列</span>就是 î=(1,0) 的落点，
-          <span style={{ color: IKB }}>第二列</span>就是 ĵ=(0,1) 的落点。
-          知道这两个落点，<strong>平面上每一个向量的去向就全定了</strong>——因为任何向量都是
-          î 和 ĵ 的线性组合。下面亲手拖动两根箭头，看"数表"怎么从中长出来。
-        </p>
-      </header>
+      <ChapterShell
+        slug="matrix-as-transform"
+        part="第二部分 · 矩阵：一个动作"
+        sub={<>矩阵到底"做"了什么？</>}
+        lede={
+          <>
+        2×2 矩阵不是一张枯燥的"数表"——它是一次把整个平面
+        <strong>拉伸、旋转或切变</strong>的动作。
+        关键在于：矩阵的
+        <span style={{ color: RUST }}>第一列</span>就是 î=(1,0) 的落点，
+        <span style={{ color: IKB }}>第二列</span>就是 ĵ=(0,1) 的落点。
+        知道这两个落点，<strong>平面上每一个向量的去向就全定了</strong>——因为任何向量都是
+        î 和 ĵ 的线性组合。下面亲手拖动两根箭头，看"数表"怎么从中长出来。
+          </>
+        }
+      >
 
       <section className="controls">
         <div className="control">
@@ -403,34 +395,6 @@ export function MatrixAsTransform() {
         <CodeBlock code={SNIPPET} language="tsx" title="matrix-as-transform.ts" />
       </section>
 
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

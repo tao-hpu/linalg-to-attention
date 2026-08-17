@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── Visual constants ──────────────────────────────────────────────
 const D = 4        // input dim (fixed visual)
@@ -367,28 +366,23 @@ export function Batching() {
   // Clamp activeRow when T shrinks so W/Y don't stay highlighted for a phantom row
   const effectiveRow = activeRow !== null && activeRow < T ? activeRow : null
 
-  const me = findChapter('batching')!
-  const { prev, next } = neighbors('batching')
-
   return (
-    <article className="page">
+      <ChapterShell
+        slug="batching"
+        part="第二部分 · 矩阵：一个动作"
+        sub="一次处理一整句话怎么算？"
+        lede={
+          <>
+        神经网络不是逐词处理的——它把一整句话的所有 token <strong>堆成一个矩阵</strong>，
+        然后用<strong>一次</strong> matmul 把所有行一起算完。
+        同一组权重 W 乘以每一行 token，输出也是同样多的行。
+        再加一个 batch 维，三维张量 <code>(B, T, d)</code> 就诞生了：
+        B 句话、每句 T 个 token、每个 token 是 d 维向量。
+        这就是 GPU 高效工作的核心逻辑。
+          </>
+        }
+      >
 
-      {/* ── Masthead ─────────────────────────────────────────────── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第二部分 · 矩阵：一个动作
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>批量与张量<span className="zh-sub">一次处理一整句话怎么算？</span></h1>
-        <p className="lede">
-          神经网络不是逐词处理的——它把一整句话的所有 token <strong>堆成一个矩阵</strong>，
-          然后用<strong>一次</strong> matmul 把所有行一起算完。
-          同一组权重 W 乘以每一行 token，输出也是同样多的行。
-          再加一个 batch 维，三维张量 <code>(B, T, d)</code> 就诞生了：
-          B 句话、每句 T 个 token、每个 token 是 d 维向量。
-          这就是 GPU 高效工作的核心逻辑。
-        </p>
-      </header>
 
       {/* ── Controls ─────────────────────────────────────────────── */}
       <section className="controls">
@@ -576,34 +570,6 @@ export function Batching() {
       </section>
 
       {/* ── Pager ────────────────────────────────────────────────── */}
-      <nav className="pager">
-        {prev
-          ? (
-            <Link
-              className="pager-link prev"
-              to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-            >
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          )
-          : <span />}
-        {next
-          ? (
-            <Link
-              className="pager-link next"
-              to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-            >
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">
-                {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-              </span>
-            </Link>
-          )
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

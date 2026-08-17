@@ -1,7 +1,6 @@
 import { useState, type CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { findChapter, neighbors, allChapters } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── colour palette ────────────────────────────────────────────────
 const IKB = '#002fa7'   // International Klein Blue — normalised bars
@@ -242,34 +241,27 @@ export function Normalization() {
     activeNormed.reduce((s, x) => s + x * x, 0) / activeNormed.length,
   )
 
-  const me = findChapter('normalization')!
-  const { prev, next } = neighbors('normalization')
-
   function randomize() {
     setValues(Array.from({ length: 8 }, () => +(Math.random() * 14 - 5).toFixed(1)))
   }
 
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第六部分 · 学习：模型怎么变聪明
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          归一化
-          <span className="zh-sub">为什么每层后面都要「拉平」一下？</span>
-        </h1>
-        <p className="lede">
-          训练过程中，激活值会漂移到悬殊的尺度——均值偏大、方差极宽，
-          导致梯度爆炸或消失。<strong>LayerNorm</strong> 把一层的激活向量
-          减均值、除标准差，强制拉到 mean 0、variance 1，
-          再用可学习的 γ scale 和 β shift 恢复灵活性。
-          <strong>RMSNorm</strong> 是更省的现代变体：跳过均值对中，
-          只除 root-mean-square。两者核心目标相同——把数字圈回安全范围，
-          让梯度稳稳流过几十上百层。
-        </p>
-      </header>
+      <ChapterShell
+        slug="normalization"
+        part="第六部分 · 学习：模型怎么变聪明"
+        sub="为什么每层后面都要「拉平」一下？"
+        lede={
+          <>
+        训练过程中，激活值会漂移到悬殊的尺度——均值偏大、方差极宽，
+        导致梯度爆炸或消失。<strong>LayerNorm</strong> 把一层的激活向量
+        减均值、除标准差，强制拉到 mean 0、variance 1，
+        再用可学习的 γ scale 和 β shift 恢复灵活性。
+        <strong>RMSNorm</strong> 是更省的现代变体：跳过均值对中，
+        只除 root-mean-square。两者核心目标相同——把数字圈回安全范围，
+        让梯度稳稳流过几十上百层。
+          </>
+        }
+      >
 
       {/* ── 控制区 ── */}
       <section className="controls">
@@ -533,39 +525,6 @@ export function Normalization() {
         <CodeBlock code={SNIPPET} language="python" title="normalization.py" />
       </section>
 
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">
-              {prev.num} {prev.title}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}
-              {next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">
-        共 {allChapters.length} 节 · 你在第 {me.num} 节
-      </p>
-    </article>
+      </ChapterShell>
   )
 }

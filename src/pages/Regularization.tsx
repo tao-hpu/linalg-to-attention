@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── SVG layout (square plot area → equal px/unit on both axes) ──────────────
 const SVG_W = 480
@@ -118,9 +117,6 @@ export function Regularization() {
   const [mode, setMode] = useState<Mode>('L1')
   const [t, setT] = useState(1.2)
 
-  const me = findChapter('regularization')!
-  const { prev, next } = neighbors('regularization')
-
   const [s1, s2] = findSolution(t, mode)
   const isSparse1 = Math.abs(s1) < SPARSE_EPS
   const isSparse2 = Math.abs(s2) < SPARSE_EPS
@@ -160,26 +156,21 @@ export function Regularization() {
   const badgeText = isSparse1 ? '稀疏! β₁=0' : '稀疏! β₂=0'
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="regularization"
+        part="第六部分 · 学习：模型怎么变聪明"
+        sub="约束几何、sparsity 与贝叶斯先验"
+        lede={
+          <>
+        Ridge 和 Lasso 是两种最常见的正则化——给损失加一项惩罚，压住参数别乱长。
+        这一节换一个视角：在<strong>参数空间</strong>（β₁, β₂）里画出来，
+        看清为什么 L1 能让系数<strong>精确为零</strong>（sparsity），
+        而 L2 只是均匀收缩。再往深一步：这两种正则化，
+        恰好是两种<strong>贝叶斯先验</strong>下的 MAP 估计。
+          </>
+        }
+      >
 
-      {/* ── Masthead ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第六部分 · 学习：模型怎么变聪明
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          正则化：Ridge 与 Lasso
-          <span className="zh-sub">约束几何、sparsity 与贝叶斯先验</span>
-        </h1>
-        <p className="lede">
-          Ridge 和 Lasso 是两种最常见的正则化——给损失加一项惩罚，压住参数别乱长。
-          这一节换一个视角：在<strong>参数空间</strong>（β₁, β₂）里画出来，
-          看清为什么 L1 能让系数<strong>精确为零</strong>（sparsity），
-          而 L2 只是均匀收缩。再往深一步：这两种正则化，
-          恰好是两种<strong>贝叶斯先验</strong>下的 MAP 估计。
-        </p>
-      </header>
 
       {/* ── Core concept ── */}
       <section style={{ marginBottom: 28 }}>
@@ -464,30 +455,6 @@ export function Regularization() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

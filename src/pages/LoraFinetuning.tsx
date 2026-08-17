@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const IKB  = '#002fa7'
@@ -240,34 +239,26 @@ export function LoraFinetuning() {
   const hasGain    = loraParams < fullParams
   const savingsX   = hasGain ? fullParams / loraParams : 0
 
-  const me           = findChapter('lora-finetuning')!
-  const { prev, next } = neighbors('lora-finetuning')
-
   return (
-    <article className="page">
+      <ChapterShell
+        slug="lora-finetuning"
+        part="第九部分 · 尾声：接到 LLM 工程"
+        sub="冻结大矩阵，只学一个低秩的小更新"
+        lede={
+          <>
+        全量 fine-tuning 要更新权重矩阵里的每一个数——
+        一张消费级显卡根本放不下几十亿参数。
+        <strong>LoRA</strong>（Low-Rank Adaptation）的答案很优雅：
+        把大矩阵 <code>W</code> 冻结（frozen），只让两个小矩阵{' '}
+        <code>B</code>（d×r）和 <code>A</code>（r×d）参与训练；
+        它们的乘积 <code>ΔW = B·A</code> 是 rank ≤ r 的低秩更新——
+        这正是你在第 13 节（矩阵的秩）和第 22 节（低秩近似）学到的数学，
+        在这里<strong>兑现</strong>。
+        拖动下面的 rank r 滑块，亲手看节省效果和低秩结构如何随 r 变化。
+          </>
+        }
+      >
 
-      {/* ── Header ──────────────────────────────────────────────────────── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第九部分 · 尾声：接到 LLM 工程
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          LoRA 与高效微调
-          <span className="zh-sub">冻结大矩阵，只学一个低秩的小更新</span>
-        </h1>
-        <p className="lede">
-          全量 fine-tuning 要更新权重矩阵里的每一个数——
-          一张消费级显卡根本放不下几十亿参数。
-          <strong>LoRA</strong>（Low-Rank Adaptation）的答案很优雅：
-          把大矩阵 <code>W</code> 冻结（frozen），只让两个小矩阵{' '}
-          <code>B</code>（d×r）和 <code>A</code>（r×d）参与训练；
-          它们的乘积 <code>ΔW = B·A</code> 是 rank ≤ r 的低秩更新——
-          这正是你在第 13 节（矩阵的秩）和第 22 节（低秩近似）学到的数学，
-          在这里<strong>兑现</strong>。
-          拖动下面的 rank r 滑块，亲手看节省效果和低秩结构如何随 r 变化。
-        </p>
-      </header>
 
       {/* ── Slider ──────────────────────────────────────────────────────── */}
       <section className="controls">
@@ -557,25 +548,6 @@ export function LoraFinetuning() {
       </section>
 
       {/* ── Pager ───────────────────────────────────────────────────────── */}
-      <nav className="pager">
-        {prev ? (
-          <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-
-    </article>
+      </ChapterShell>
   )
 }

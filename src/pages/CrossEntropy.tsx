@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ─── Math helpers ────────────────────────────────────────────────────────────
 
@@ -486,9 +485,6 @@ export function CrossEntropy() {
   const [logits, setLogits] = useState<number[]>([2.0, 1.0, 0.5, -0.5, -1.0])
   const [trueClass, setTrueClass] = useState<number>(0)
 
-  const me = findChapter('cross-entropy')!
-  const { prev, next } = neighbors('cross-entropy')
-
   const probs = softmax(logits)
   const pTrue = clamp(probs[trueClass], 1e-10, 1)
   const ce = -Math.log(pTrue)
@@ -506,23 +502,19 @@ export function CrossEntropy() {
   }
 
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第七部分 · 概率视角：模型在「猜下一个词」
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          交叉熵与极大似然
-          <span className="zh-sub">LLM 的训练目标，就是经典统计里的 MLE</span>
-        </h1>
-        <p className="lede">
-          统计里有个核心思想叫<strong>极大似然（MLE）</strong>：给定手上这份数据，去找让它最可能发生的那组参数。
-          LLM 训练时用的 <code>F.cross_entropy</code>，数学上就是同一件事，只是换了个名字。
-          这一页分三级台阶：先算清<strong>一个词</strong>的损失，再看<strong>一整句话</strong>怎么累加，
-          最后才把「最大化似然」和「最小化交叉熵」这两句话对上号。
-        </p>
-      </header>
+      <ChapterShell
+        slug="cross-entropy"
+        part="第七部分 · 概率视角：模型在「猜下一个词」"
+        sub="LLM 的训练目标，就是经典统计里的 MLE"
+        lede={
+          <>
+        统计里有个核心思想叫<strong>极大似然（MLE）</strong>：给定手上这份数据，去找让它最可能发生的那组参数。
+        LLM 训练时用的 <code>F.cross_entropy</code>，数学上就是同一件事，只是换了个名字。
+        这一页分三级台阶：先算清<strong>一个词</strong>的损失，再看<strong>一整句话</strong>怎么累加，
+        最后才把「最大化似然」和「最小化交叉熵」这两句话对上号。
+          </>
+        }
+      >
 
       {/* ── ① 一个词 ────────────────────────────────────────────────────── */}
       <section style={{ marginTop: 36 }}>
@@ -711,22 +703,6 @@ export function CrossEntropy() {
       </section>
 
       {/* ── Pager ───────────────────────────────────────────────────────── */}
-      <nav className="pager">
-        {prev
-          ? <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          : <span />}
-        {next
-          ? <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">{next.num} {next.title}{next.status !== 'live' && ' · 规划中'}</span>
-            </Link>
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

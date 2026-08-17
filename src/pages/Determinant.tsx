@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { apply, type Mat2, type Vec2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 // ── Canvas constants ──────────────────────────────────────────────────
 const SIZE = 360
@@ -277,9 +276,6 @@ export function Determinant() {
   const isSingular = absDet < SINGULAR_EPS
   const isFlipped  = det < -SINGULAR_EPS
 
-  const me = findChapter('determinant')!
-  const { prev, next } = neighbors('determinant')
-
   const verdictClass = isSingular || isFlipped ? 'verdict--neq' : 'verdict--eq'
 
   const areaDesc = absDet >= 1
@@ -308,27 +304,23 @@ export function Determinant() {
   )
 
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第三部分 · 方阵的秘密
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          行列式
-          <span className="zh-sub">一个变换会不会把信息「压扁」？</span>
-        </h1>
-        <p className="lede">
-          determinant（行列式）只有一个含义：这个变换把面积
-          <strong>缩放了多少倍</strong>？单位正方形（面积 1）经过变换，
-          落成一个平行四边形——那个平行四边形的面积恰好等于{' '}
-          <code>|det|</code>。符号告诉你 orientation：
-          det &gt; 0 朝向不变，det &lt; 0 平面被
-          <strong>翻转（mirrored）</strong>，det = 0 整个平面
-          <strong>塌缩进一条线——信息丢了，not invertible</strong>。
-          拖动下面两根箭头，亲眼看行列式怎么从形状里长出来。
-        </p>
-      </header>
+      <ChapterShell
+        slug="determinant"
+        part="第三部分 · 方阵的秘密"
+        sub="一个变换会不会把信息「压扁」？"
+        lede={
+          <>
+        determinant（行列式）只有一个含义：这个变换把面积
+        <strong>缩放了多少倍</strong>？单位正方形（面积 1）经过变换，
+        落成一个平行四边形——那个平行四边形的面积恰好等于{' '}
+        <code>|det|</code>。符号告诉你 orientation：
+        det &gt; 0 朝向不变，det &lt; 0 平面被
+        <strong>翻转（mirrored）</strong>，det = 0 整个平面
+        <strong>塌缩进一条线——信息丢了，not invertible</strong>。
+        拖动下面两根箭头，亲眼看行列式怎么从形状里长出来。
+          </>
+        }
+      >
 
       <section className="controls">
         <div className="control">
@@ -442,35 +434,6 @@ export function Determinant() {
         <CodeBlock code={SNIPPET} language="tsx" title="determinant.ts" />
       </section>
 
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}
-              {next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

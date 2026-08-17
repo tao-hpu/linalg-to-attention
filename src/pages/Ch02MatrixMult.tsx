@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { multiply, format, nearlyEqual, transforms, type Mat2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { TransformPanel } from '../TransformPanel'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 type Kind = 'rotate' | 'scaleX' | 'shear' | 'projectX'
 
@@ -99,21 +98,19 @@ export function Ch02MatrixMult() {
   const aName = KINDS.find((k) => k.kind === aKind)!.name
   const bName = KINDS.find((k) => k.kind === bKind)!.name
 
-  const me = findChapter('matrix-mult')!
-  const { prev, next } = neighbors('matrix-mult')
-
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb"><Link to="/">大纲</Link> · 第二部分 · 矩阵：一个动作</div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>矩阵乘法的几何<span className="zh-sub">为什么换了顺序结果就不一样？</span></h1>
-        <p className="lede">
-          矩阵不是一堆数字，而是一个<strong>动作</strong>——旋转、拉伸、切变、投影。
-          两个矩阵相乘 <code>AB</code>，意思是<strong>先做 B、再做 A</strong>。
-          既然是按顺序做的动作，换顺序当然可能得到完全不同的结果。下面亲手试一下。
-        </p>
-      </header>
+      <ChapterShell
+        slug="matrix-mult"
+        part="第二部分 · 矩阵：一个动作"
+        sub="为什么换了顺序结果就不一样？"
+        lede={
+          <>
+        矩阵不是一堆数字，而是一个<strong>动作</strong>——旋转、拉伸、切变、投影。
+        两个矩阵相乘 <code>AB</code>，意思是<strong>先做 B、再做 A</strong>。
+        既然是按顺序做的动作，换顺序当然可能得到完全不同的结果。下面亲手试一下。
+          </>
+        }
+      >
 
       <section className="controls">
         <TransformControl slot="A" kind={aKind} param={aParam}
@@ -168,22 +165,6 @@ export function Ch02MatrixMult() {
         <CodeBlock code={SNIPPET} language="tsx" title="multiply.ts" />
       </section>
 
-      <nav className="pager">
-        {prev
-          ? <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          : <span />}
-        {next
-          ? <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">{next.num} {next.title}{next.status !== 'live' && ' · 规划中'}</span>
-            </Link>
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

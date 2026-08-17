@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // 前 15 个权重固定。第 16 个（w15）是可拖动的「离群值」——
 // 拖大它就会迫使 scale 变大，让小权重大量塌缩到 0，
@@ -364,9 +363,6 @@ export function Quantization() {
 
   const weights = buildWeights(outlier)
   const result  = runQuant(weights, bits, perChannel)
-  const me      = findChapter('quantization')!
-  const { prev, next } = neighbors('quantization')
-
   const n           = weights.length
   const fp32Bytes   = n * 4
   const curBytes    = n * result.bytesPerWeight
@@ -377,26 +373,22 @@ export function Quantization() {
   const smallScale   = result.scales.length ? result.scales[0]! : 0
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="quantization"
+        part="第九部分 · 尾声：接到 LLM 工程"
+        sub="把大模型塞进小显卡"
+        lede={
+          <>
+        一个典型 LLM 里每个权重都是 <code>float32</code>，占 4 字节。
+        <strong>量化（quantization）</strong>的思路是：选一个 <strong>scale</strong>，
+        把浮点值域映射到整数格点，只存整数；用时乘回 scale 还原（<strong>dequantize</strong>）。
+        代价是轻微的 <strong>rounding error</strong>，收益是内存和速度的 4×–8× 提升。
+        拨动下方的位宽，看精度与内存如何此消彼长。
+          </>
+        }
+      >
 
       {/* ── 页眉 ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第九部分 · 尾声：接到 LLM 工程
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          量化与数值
-          <span className="zh-sub">把大模型塞进小显卡</span>
-        </h1>
-        <p className="lede">
-          一个典型 LLM 里每个权重都是 <code>float32</code>，占 4 字节。
-          <strong>量化（quantization）</strong>的思路是：选一个 <strong>scale</strong>，
-          把浮点值域映射到整数格点，只存整数；用时乘回 scale 还原（<strong>dequantize</strong>）。
-          代价是轻微的 <strong>rounding error</strong>，收益是内存和速度的 4×–8× 提升。
-          拨动下方的位宽，看精度与内存如何此消彼长。
-        </p>
-      </header>
 
       {/* ── 位宽选择器 ── */}
       <section className="controls">
@@ -682,35 +674,6 @@ export function Quantization() {
       </section>
 
       {/* ── 翻页导航 ── */}
-      <nav className="pager">
-        {prev
-          ? <Link
-              className="pager-link prev"
-              to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-            >
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">
-                {prev.num} {prev.title}{prev.status !== 'live' && ' · 规划中'}
-              </span>
-            </Link>
-          : <span />}
-        {next
-          ? <Link
-              className="pager-link next"
-              to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-            >
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">
-                {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-              </span>
-            </Link>
-          : <span />}
-      </nav>
-
-      <p className="page-foot">
-        共 {allChapters.length} 节 · 你在第 {me.num} 节
-      </p>
-
-    </article>
+      </ChapterShell>
   )
 }

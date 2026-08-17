@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, type CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── SVG layout ─────────────────────────────────────────────────────────────
 const SVG_W = 420
@@ -148,9 +147,6 @@ export function GradientDescent() {
     setPlaying(false)
   }, [])
 
-  const me = findChapter('gradient-descent')!
-  const { prev, next } = neighbors('gradient-descent')
-
   // Per-step math
   const gx   = curPt !== undefined ? gradFx(curPt.x) : 0
   const gy   = curPt !== undefined ? gradFy(curPt.y) : 0
@@ -169,22 +165,21 @@ export function GradientDescent() {
   const isConverged = !isDiverged && gMag < 1e-3 && safeStep > 0
 
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第六部分 · 学习：模型怎么变聪明
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>梯度下降<span className="zh-sub">模型怎么一步步逼近答案？</span></h1>
-        <p className="lede">
-          训练一个模型，本质上是在 loss 曲面上找最低点。
-          <strong>梯度下降（gradient descent）</strong>只有一条规则：
-          <code>θ ← θ − η·∇f(θ)</code>——沿最陡下坡方向迈一步。
-          <strong>Learning rate η</strong> 控制步长：η 太小走得慢；
-          η 刚好则稳稳 converge；η 太大就会 overshoot，甚至 diverge。
-          在下面的等高线图上点一个起点，看轨迹怎么走。
-        </p>
-      </header>
+      <ChapterShell
+        slug="gradient-descent"
+        part="第六部分 · 学习：模型怎么变聪明"
+        sub="模型怎么一步步逼近答案？"
+        lede={
+          <>
+        训练一个模型，本质上是在 loss 曲面上找最低点。
+        <strong>梯度下降（gradient descent）</strong>只有一条规则：
+        <code>θ ← θ − η·∇f(θ)</code>——沿最陡下坡方向迈一步。
+        <strong>Learning rate η</strong> 控制步长：η 太小走得慢；
+        η 刚好则稳稳 converge；η 太大就会 overshoot，甚至 diverge。
+        在下面的等高线图上点一个起点，看轨迹怎么走。
+          </>
+        }
+      >
 
       {/* ── learning-rate slider + presets ── */}
       <section className="controls">
@@ -459,22 +454,6 @@ export function GradientDescent() {
       </section>
 
       {/* ── pager ── */}
-      <nav className="pager">
-        {prev !== undefined
-          ? <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          : <span />}
-        {next !== undefined
-          ? <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">{next.num} {next.title}{next.status !== 'live' && ' · 规划中'}</span>
-            </Link>
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }
