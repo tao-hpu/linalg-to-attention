@@ -42,21 +42,21 @@ const colHeadStyle: CSSProperties = {
 }
 
 // ── math helpers ──────────────────────────────────────────────────
-function mean(xs: number[]): number {
+export function mean(xs: number[]): number {
   return xs.reduce((s, x) => s + x, 0) / xs.length
 }
 
-function variance(xs: number[], mu: number): number {
+export function variance(xs: number[], mu: number): number {
   return xs.reduce((s, x) => s + (x - mu) ** 2, 0) / xs.length
 }
 
-function layerNorm(xs: number[], gamma: number, beta: number): number[] {
+export function layerNorm(xs: number[], gamma: number, beta: number): number[] {
   const mu = mean(xs)
   const v = variance(xs, mu)
   return xs.map((x) => ((x - mu) / Math.sqrt(v + EPS)) * gamma + beta)
 }
 
-function rmsNorm(xs: number[], gamma: number): number[] {
+export function rmsNorm(xs: number[], gamma: number): number[] {
   const r = Math.sqrt(xs.reduce((s, x) => s + x * x, 0) / xs.length + EPS)
   return xs.map((x) => (x / r) * gamma)
 }

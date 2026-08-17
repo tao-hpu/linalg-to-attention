@@ -29,7 +29,7 @@ type PresetKey = 'strong' | 'weak' | 'iso'
 // A draggable data point lives in raw data coordinates (NOT pre-centered).
 type DataPoint = { id: number; x: number; y: number }
 
-const toDataPoints = (raw: readonly [number, number][]): DataPoint[] =>
+export const toDataPoints = (raw: readonly [number, number][]): DataPoint[] =>
   raw.map(([x, y], id) => ({ id, x, y }))
 
 const CLOUDS: Record<PresetKey, [number, number][]> = {
@@ -72,7 +72,7 @@ interface PCAResult {
   v2: [number, number]   // unit eigenvector for lam2 (PC2, ⊥ PC1)
 }
 
-function computePCA(pts: readonly DataPoint[]): PCAResult {
+export function computePCA(pts: readonly DataPoint[]): PCAResult {
   const n  = pts.length
   const mx = pts.reduce((s, p) => s + p.x, 0) / n
   const my = pts.reduce((s, p) => s + p.y, 0) / n

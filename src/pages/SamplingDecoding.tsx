@@ -36,7 +36,7 @@ type DecodingMode = 'greedy' | 'pure' | 'top-k' | 'top-p'
 // ── Math helpers ───────────────────────────────────────────────────────────────
 
 /** Softmax with temperature. Numerically stable (subtract max). */
-function computeSoftmax(logits: readonly number[], T: number): number[] {
+export function computeSoftmax(logits: readonly number[], T: number): number[] {
   const maxZ = Math.max(...logits)
   const exps  = logits.map((z) => Math.exp((z - maxZ) / T))
   const Z     = exps.reduce((a, b) => a + b, 0)
@@ -44,14 +44,14 @@ function computeSoftmax(logits: readonly number[], T: number): number[] {
 }
 
 /** Renormalize a non-negative array so its entries sum to 1. */
-function renormalize(probs: readonly number[]): number[] {
+export function renormalize(probs: readonly number[]): number[] {
   const sum = probs.reduce((a, b) => a + b, 0)
   if (sum < 1e-12) return probs.map(() => 0)
   return probs.map((p) => p / sum)
 }
 
 /** Boolean mask: the top-k highest-probability tokens are true. */
-function topKMask(probs: readonly number[], k: number): boolean[] {
+export function topKMask(probs: readonly number[], k: number): boolean[] {
   const indexed = probs.map((p, i) => ({ p, i })).sort((a, b) => b.p - a.p)
   const keepSet = new Set(indexed.slice(0, k).map(({ i }) => i))
   return probs.map((_, i) => keepSet.has(i))
@@ -63,7 +63,7 @@ function topKMask(probs: readonly number[], k: number): boolean[] {
  * Returns the mask and the original-array index of the last token added
  * (the nucleus boundary, marked visually in rust).
  */
-function topPMask(
+export function topPMask(
   probs: readonly number[],
   p: number,
 ): { mask: boolean[]; boundaryIdx: number } {
@@ -95,7 +95,7 @@ function topPMask(
  */
 const GOLDEN = 0.6180339887498949
 
-function deterministicSample(probs: readonly number[], step: number): number {
+export function deterministicSample(probs: readonly number[], step: number): number {
   const threshold = (step * GOLDEN) % 1
   let cumsum = 0
   for (let i = 0; i < probs.length; i++) {

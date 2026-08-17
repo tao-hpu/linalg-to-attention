@@ -5,7 +5,7 @@ import { ChapterShell } from '../components/ChapterShell'
 
 // ─── Math helpers ────────────────────────────────────────────────────────────
 
-function softmax(logits: number[]): number[] {
+export function softmax(logits: number[]): number[] {
   const m = Math.max(...logits)
   const exps = logits.map((l) => Math.exp(l - m))
   const s = exps.reduce((a, b) => a + b, 0)

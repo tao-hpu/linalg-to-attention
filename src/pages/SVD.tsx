@@ -44,7 +44,7 @@ interface SVDResult {
   V:   Mat2   // columns v1, v2
 }
 
-function computeSVD(M: Mat2): SVDResult {
+export function computeSVD(M: Mat2): SVDResult {
   const [a, b, c, d] = M
 
   // S = MᵀM

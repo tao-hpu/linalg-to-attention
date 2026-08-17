@@ -50,7 +50,7 @@ function eigenvecFor(M: Mat2, λ: number): Vec2 {
   return [1, 0]
 }
 
-function computeEigen(M: Mat2): EigenResult {
+export function computeEigen(M: Mat2): EigenResult {
   const [a, b, c, d] = M
   const t = a + d               // trace  = λ₁ + λ₂
   const D = a * d - b * c       // det    = λ₁ · λ₂

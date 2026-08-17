@@ -18,7 +18,7 @@ const OUTLIER_DEFAULT = 5.60
 // 离群值落在第 2 通道，于是第 1 通道（全是小权重）能用很细的 scale 恢复精度。
 const CHANNEL_SIZE = 8
 
-function buildWeights(outlier: number): number[] {
+export function buildWeights(outlier: number): number[] {
   return [...FIXED_WEIGHTS, outlier]
 }
 
@@ -47,7 +47,7 @@ interface QuantResult {
 }
 
 // 对单个通道做对称量化：scale = max|w| / (2^(bits-1) - 1)
-function quantChannel(
+export function quantChannel(
   weights: readonly number[],
   maxInt:  number,
   minInt:  number,
@@ -67,7 +67,7 @@ function quantChannel(
 
 // 对称量化。perChannel = false → 整组共用一个 scale；
 // perChannel = true → 按 CHANNEL_SIZE 切分通道，每通道单独定 scale。
-function runQuant(
+export function runQuant(
   weights:    readonly number[],
   bits:       BitWidth,
   perChannel: boolean,

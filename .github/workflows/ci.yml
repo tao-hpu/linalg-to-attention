@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 版本由 package.json 的 packageManager 字段决定，别在这里再写死一个
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: 类型检查
+        run: pnpm typecheck
+
+      # 单测同时覆盖两件事：各页交互的数值算得对不对，
+      # 以及章节清单与路由 / 分享卡 / README / 正文交叉引用是否还对得上。
+      - name: 单元测试
+        run: pnpm test
+
+      # build 里的 prerender 会校验分享卡戳记与章节数一致，改章节忘了跑 pnpm og 会在这里拦下。
+      - name: 构建
+        run: pnpm build

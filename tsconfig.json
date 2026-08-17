@@ -17,5 +17,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  // 测试单独用 tsconfig.test.json：它们要 node 类型和 ES2022 的 lib，
+  // 应用代码不该因此被放宽。
+  "include": ["src"],
+  "exclude": ["src/__tests__"]
 }

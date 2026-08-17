@@ -34,7 +34,7 @@ interface SoftmaxResult {
   probs: readonly number[]
 }
 
-function computeSoftmax(logits: readonly number[], T: number): SoftmaxResult {
+export function computeSoftmax(logits: readonly number[], T: number): SoftmaxResult {
   const maxZ = Math.max(...logits)
   const exps = logits.map((z) => Math.exp((z - maxZ) / T))
   const Z = exps.reduce((a, b) => a + b, 0)

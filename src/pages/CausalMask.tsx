@@ -58,11 +58,11 @@ const K = matmul(X, W_K)
 const SQRT_D = Math.sqrt(D)
 
 /** 缩放点积分数 S = QKᵀ/√d，(n×n)。第 i 行 = query i 对所有 key 的打分。 */
-const SCORES: number[][] = Q.map((qi) =>
+export const SCORES: number[][] = Q.map((qi) =>
   K.map((kj) => qi.reduce((s, v, t) => s + v * kj[t], 0) / SQRT_D),
 )
 
-function softmaxRow(row: readonly number[]): number[] {
+export function softmaxRow(row: readonly number[]): number[] {
   const finite = row.filter((v) => Number.isFinite(v))
   const mx = finite.length ? Math.max(...finite) : 0
   const exps = row.map((v) => (Number.isFinite(v) ? Math.exp(v - mx) : 0))
@@ -83,14 +83,14 @@ const MODE_LABEL: Record<Mode, string> = {
 }
 
 /** 掩码后的分数矩阵：causal 模式下上三角为 −Infinity。 */
-function maskedScores(mode: Mode): number[][] {
+export function maskedScores(mode: Mode): number[][] {
   return SCORES.map((row, i) =>
     row.map((v, j) => (mode === 'causal' && j > i ? -Infinity : v)),
   )
 }
 
 /** 最终权重矩阵。after 模式先正常 softmax 再抹零，所以行和会掉下来。 */
-function weightsOf(mode: Mode): number[][] {
+export function weightsOf(mode: Mode): number[][] {
   const s = maskedScores(mode)
   const w = s.map(softmaxRow)
   if (mode !== 'after') return w

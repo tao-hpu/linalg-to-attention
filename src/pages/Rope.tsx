@@ -16,7 +16,7 @@ const K0: V = { x: 1.4, y: 1.6 }
 
 const D2R = Math.PI / 180
 
-// 2D 旋转：R(α)·p，α 为弧度。这正是第 17 节的旋转矩阵 [[cosα,−sinα],[sinα,cosα]]。
+// 2D 旋转：R(α)·p，α 为弧度。这正是「正交矩阵与旋转」那一节的旋转矩阵 [[cosα,−sinα],[sinα,cosα]]。
 function rot(p: V, aRad: number): V {
   const c = Math.cos(aRad)
   const s = Math.sin(aRad)

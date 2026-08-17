@@ -41,9 +41,17 @@ Vite + React 18 + TypeScript，可视化全部用 SVG 手绘（轻量、无重�
 
 ```bash
 pnpm install
-pnpm dev      # http://localhost:5191
-pnpm build    # 产物在 dist/
+pnpm dev        # http://localhost:5191
+pnpm test       # 单元测试（vitest）
+pnpm typecheck  # tsc -b
+pnpm build      # 产物在 dist/
+pnpm og         # 重新生成分享卡 public/og.png —— 增删章节后必跑
 ```
+
+`pnpm test` 覆盖两类东西：各页交互里的数值计算（softmax、LayerNorm/RMSNorm、
+采样、量化、SVD、特征值、PCA、因果掩码），以及章节清单与其下游的一致性
+（路由是否齐、正文交叉引用的 slug 是否存在、分享卡与 README 的节数是否对得上）。
+push 与 PR 都会在 GitHub Actions 里跑一遍 typecheck + test + build。
 
 ## 部署（aws-hk · Docker + nginx）
 
