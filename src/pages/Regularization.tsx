@@ -101,8 +101,8 @@ def soft_threshold(beta_ols: np.ndarray, lam: float) -> np.ndarray:
     return np.sign(beta_ols) * np.maximum(np.abs(beta_ols) - lam / 2, 0)
 
 # 约束式 ↔ 惩罚式等价 (t = g(λ), 单调递减):
-# min ‖y−Xβ‖² + λ‖β‖²   ⟺   min ‖y−Xβ‖² s.t. ‖β‖²  ≤ t
-# min ‖y−Xβ‖² + λ‖β‖₁   ⟺   min ‖y−Xβ‖² s.t. ‖β‖₁  ≤ t
+# min ‖y−Xβ‖² + λ‖β‖²   ⟺   min ‖y−Xβ‖² s.t. ‖β‖₂ ≤ t   ← 页面滑块的 t 就是这个半径
+# min ‖y−Xβ‖² + λ‖β‖₁   ⟺   min ‖y−Xβ‖² s.t. ‖β‖₁ ≤ t
 
 # Bayesian MAP 解读:
 # Ridge ≡ MAP,  β ~ N(0, σ²/λ · I)      → Gaussian prior  → L2 惩罚
@@ -470,7 +470,7 @@ export function Regularization() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : <span />}
@@ -479,7 +479,7 @@ export function Regularization() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

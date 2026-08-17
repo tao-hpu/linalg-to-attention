@@ -409,7 +409,7 @@ export function MatrixAsTransform() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : (
@@ -420,7 +420,7 @@ export function MatrixAsTransform() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

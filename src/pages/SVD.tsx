@@ -238,7 +238,7 @@ const PRESETS: Preset[] = [
   { name: '对角拉伸',        a: 3,   b: 0,   c: 0,   d: 2   },
   { name: '对称含剪切',      a: 2,   b: 1,   c: 1,   d: 2   },
   { name: '一般切变',        a: 1,   b: 1,   c: 0,   d: 1   },
-  { name: '接近降秩 σ₂→0',  a: 2,   b: 1,   c: 4,   d: 2   },
+  { name: '几乎降秩 σ₂≈0',  a: 2,   b: 1,   c: 4,   d: 2.1 },
 ]
 
 // ── Code snippet ──────────────────────────────────────────────────────────────
@@ -259,7 +259,10 @@ print("重建误差:", np.abs(M_rec - M).max())  # ≈ 0.0
 
 # 秩-1 近似（只保留最大奇异值）
 M_rank1 = S[0] * np.outer(U[:, 0], Vt[0, :])
-print("秩-1 误差:", np.abs(M_rank1 - M).max())  # = σ₂ = 1.0`
+
+# Eckart–Young：丢掉的那部分，谱范数恰好等于第一个被丢掉的奇异值
+print("秩-1 误差:", np.linalg.norm(M_rank1 - M, 2))  # = σ₂ = 1.0
+# 换成 np.abs(...).max() 得到的是逐元素最大值 0.5，不是范数，别混用`
 
 // ── Main component ────────────────────────────────────────────────────────────
 export function SVD() {
@@ -466,7 +469,8 @@ export function SVD() {
           U 把拉伸结果送到输出空间的最终朝向（left singular vector u₁, u₂）。
           验证：对角阵 [[3,0],[0,2]] → σ = 3, 2，U = V = I；
           对称阵 [[2,1],[1,2]] → σ = 3, 1，U = V（即特征向量矩阵）；
-          接近秩 1 的矩阵 [[2,1],[4,2]] → σ₂ = 0，变换把整个平面「压成一条线」。
+          几乎降秩的矩阵 [[2,1],[4,2.1]] → σ₂ ≈ 0.04，椭圆被压成一根细长条，
+          离「压成一条线」只差一点点——把 d 从 2.1 拨到 2.0，σ₂ 就精确归零了。
         </p>
       </section>
 
@@ -501,14 +505,14 @@ export function SVD() {
         {prev ? (
           <Link className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : <span />}
         {next ? (
           <Link className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

@@ -392,7 +392,7 @@ export function Rope() {
           <strong>RoPE 是当今主流 LLM 的标配位置编码</strong>——LLaMA、Qwen、GPT-NeoX
           等几乎都用它。原因正是这一页演示的：旋转是正交变换（第 17 节），
           <strong>不改 Q/K 的范数、只改相位</strong>，是一种「干净」的位置注入；
-          det = +1（第 14 节）保证它只转不翻、数值无损可逆。
+          det = +1（第 12 节）保证它只转不翻、数值无损可逆。
         </p>
         <p>
           相对位置 <code>n − m</code> 直接落在点积里，这是 RoPE 能较好<strong>外推到更长上下文</strong>

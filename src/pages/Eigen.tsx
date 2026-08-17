@@ -176,8 +176,12 @@ function EigenCanvas({
   const handleMove = (clientX: number, clientY: number) => {
     if (!svgRef.current) return
     const rect = svgRef.current.getBoundingClientRect()
-    const mx = clampVec(toMx(clientX - rect.left))
-    const my = clampVec(toMy(clientY - rect.top))
+    if (rect.width === 0 || rect.height === 0) return
+    // 窄屏下 SVG 被 CSS 等比缩小，先换算回 viewBox 内坐标再除以 UNIT。
+    const px = (clientX - rect.left) * (SIZE / rect.width)
+    const py = (clientY - rect.top) * (SIZE / rect.height)
+    const mx = clampVec(toMx(px))
+    const my = clampVec(toMy(py))
     if (Math.hypot(mx, my) > 0.15) onProbe([mx, my])
   }
 
@@ -572,7 +576,7 @@ export function Eigen() {
               className="pager-link prev"
               to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
             >
-              <span className="pager-dir">← 上一章</span>
+              <span className="pager-dir">← 上一节</span>
               <span className="pager-title">{prev.num} {prev.title}</span>
             </Link>
           )
@@ -583,7 +587,7 @@ export function Eigen() {
               className="pager-link next"
               to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
             >
-              <span className="pager-dir">下一章 →</span>
+              <span className="pager-dir">下一节 →</span>
               <span className="pager-title">
                 {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
               </span>

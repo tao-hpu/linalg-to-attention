@@ -11,6 +11,8 @@ interface BoxMeta {
   label: string
   shape: string
   desc: string
+  /** pre-norm 与 post-norm 下说明不同的方块，在这里给出 post-norm 版本。 */
+  descPost?: string
   isAdd: boolean
 }
 
@@ -27,6 +29,10 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
       '对每个 token 独立做归一化：减均值、除标准差，再乘可学习参数 γ 和 β，' +
       '让各维度尺度归一。pre-norm 把它放在子层之前——梯度从残差相加处直通底层，' +
       '不受归一化阻断，深层训练更稳定（连接第 28 节）。',
+    descPost:
+      '对每个 token 独立做归一化：减均值、除标准差，再乘可学习参数 γ 和 β。' +
+      'post-norm 把它放在残差相加「之后」——梯度回传时必须先穿过 LayerNorm 才能' +
+      '回到底层，路径没有 pre-norm 干净，所以原始论文那套深层网络需要 warm-up 才稳（连接第 28 节）。',
     isAdd: false,
   },
   attn: {
@@ -46,6 +52,10 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
       '把注意力输出加回输入流：x ← x + Attn(LN₁(x))。⊕ 是残差流的汇入点——' +
       '子层只贡献一个增量，原始信息不会被覆盖。' +
       '反向传播时梯度直穿 ⊕，不经过注意力矩阵，有效防止梯度消失（连接第 25 节链式法则）。',
+    descPost:
+      '把注意力输出加回输入流：x ← x + Attn(x)，随后才轮到 LN₁——' +
+      '整层写作 x ← LN₁(x + Attn(x))。⊕ 依然是残差流的汇入点，' +
+      '但梯度穿过 ⊕ 之后还要再过一层归一化，不像 pre-norm 那样一路直通（连接第 25 节链式法则）。',
     isAdd: true,
   },
   ln2: {
@@ -55,6 +65,9 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
       '第二个 LayerNorm，放在 MLP 之前。原理与 LN₁ 完全相同，' +
       '只是作用在第一次残差相加之后的流上，保证 MLP 拿到尺度归一的输入，' +
       '让深层训练不崩（连接第 28 节）。',
+    descPost:
+      '第二个 LayerNorm，post-norm 里它排在 MLP 的残差相加之后：x ← LN₂(x + MLP(x))。' +
+      '原理与 LN₁ 完全相同，只是归一化的是已经汇入增量的残差流本身（连接第 28 节）。',
     isAdd: false,
   },
   mlp: {
@@ -74,6 +87,10 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
       '整个 block 只是在输入 x 上叠加了两个增量。' +
       'N 层堆叠 = N 次叠加，表征从词面逐渐演变为深层语义。' +
       '残差流是信息的高速公路，每一层悄悄修改它，从不覆盖。',
+    descPost:
+      '将 MLP 输出加回流：x ← x + MLP(x)，再交给 LN₂ 归一化。' +
+      '两次残差相加后，整个 block 同样只是在输入 x 上叠加了两个增量；' +
+      '差别只在于归一化夹在相加的哪一侧。',
     isAdd: true,
   },
 }
@@ -299,7 +316,9 @@ export function TransformerBlock() {
                         <code style={{ display: 'block', marginBottom: '6px', color: RUST, fontWeight: 600, fontSize: '0.79rem' }}>
                           {meta.shape}
                         </code>
-                        <p style={{ margin: 0 }}>{meta.desc}</p>
+                        <p style={{ margin: 0 }}>
+                          {preNorm ? meta.desc : (meta.descPost ?? meta.desc)}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -400,7 +419,7 @@ export function TransformerBlock() {
         {prev
           ? (
             <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一章</span>
+              <span className="pager-dir">← 上一节</span>
               <span className="pager-title">{prev.num} {prev.title}</span>
             </Link>
           )
@@ -408,7 +427,7 @@ export function TransformerBlock() {
         {next
           ? (
             <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一章 →</span>
+              <span className="pager-dir">下一节 →</span>
               <span className="pager-title">
                 {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
               </span>

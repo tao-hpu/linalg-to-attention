@@ -168,8 +168,13 @@ function DetCanvas({
       onPointerMove={(e) => {
         if (!dragging.current || !svgRef.current) return
         const rect = svgRef.current.getBoundingClientRect()
-        const mx = snapClamp(toMx(e.clientX - rect.left))
-        const my = snapClamp(toMy(e.clientY - rect.top))
+        if (rect.width === 0 || rect.height === 0) return
+        // 窄屏下 .page svg { max-width:100% } 会把 SVG 等比缩小，
+        // 先把屏幕像素换算回 viewBox 内坐标，否则除以写死的 UNIT 会让拖动偏移。
+        const px = (e.clientX - rect.left) * (SIZE / rect.width)
+        const py = (e.clientY - rect.top) * (SIZE / rect.height)
+        const mx = snapClamp(toMx(px))
+        const my = snapClamp(toMy(py))
         if (dragging.current === 'i') onIHat([mx, my])
         else onJHat([mx, my])
       }}
@@ -426,7 +431,8 @@ export function Determinant() {
             后面三节都从这里长出来：第 13 节「矩阵的秩」讲变换
             <em>留下了几维</em>；第 14 节「逆矩阵」讲 det ≠ 0 时才能还原；
             第 21 节 SVD 把奇异值和行列式联系起来
-            （det = 所有奇异值之积）。行列式是整条线索的关键岔路口。
+            （<code>|det| = 所有奇异值之积</code>——奇异值恒非负，符号另由朝向决定，
+            正好对应本节的 det &lt; 0）。行列式是整条线索的关键岔路口。
           </p>
         </div>
       </section>
@@ -442,7 +448,7 @@ export function Determinant() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : (
@@ -453,7 +459,7 @@ export function Determinant() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}
               {next.status !== 'live' && ' · 规划中'}

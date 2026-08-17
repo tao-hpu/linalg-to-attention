@@ -66,13 +66,6 @@ const STEPS: readonly Step[] = [
     zone: 'in',
   },
   {
-    label: 'RoPE 位置编码',
-    shape: `X (${N}×${D})  →  按位置旋转 Q/K  →  (${N}×${D})`,
-    role: '注意力本身分不清词序，靠按位置旋转给每个 token 注入「它在第几位」。',
-    links: [{ slug: 'rope', label: '第 33 节 · 位置编码与 RoPE' }],
-    zone: 'in',
-  },
-  {
     label: 'RMSNorm（进 block）',
     shape: `(${N}×${D})  →  RMSNorm  →  (${N}×${D})`,
     role: '进子层前先把每个 token 的向量尺度拉平，深层训练才稳。',
@@ -87,6 +80,15 @@ const STEPS: readonly Step[] = [
       { slug: 'matrix-as-transform', label: '第 07 节 · 矩阵是变换' },
       { slug: 'matrix-mult', label: '第 08 节 · 矩阵乘法的几何' },
     ],
+    zone: 'block',
+  },
+  {
+    label: 'RoPE 位置编码',
+    shape: `Q, K (${N}×${D})  →  R(mθ)·Q, R(nθ)·K  →  (${N}×${D})`,
+    role:
+      '注意力本身分不清词序，靠按位置旋转注入「它在第几位」。注意两点：RoPE 只转 Q 和 K，不碰 V；' +
+      '而且它在每一层的注意力里都做一次，不是在输入端一次性加完——那是正弦绝对位置编码的做法。',
+    links: [{ slug: 'rope', label: '第 33 节 · 位置编码与 RoPE' }],
     zone: 'block',
   },
   {
@@ -153,8 +155,8 @@ const STEPS: readonly Step[] = [
   },
 ]
 
-const IN_IDX = [0, 1, 2]
-const BLOCK_IDX = [3, 4, 5, 6, 7, 8, 9]
+const IN_IDX = [0, 1]
+const BLOCK_IDX = [2, 3, 4, 5, 6, 7, 8, 9]
 const OUT_IDX = [10, 11, 12]
 const LAST = STEPS.length - 1
 
@@ -169,26 +171,24 @@ def forward(ids, W_E, blocks):
     # 1) embedding 查表：one-hot @ W_E，等价于按行取
     X = W_E[ids]                       # (n, d)
 
-    # 2) 位置编码 RoPE：按位置旋转（在每个 block 的 Q/K 上）
-    #    —— 略，注入"第几个 token"的信息
-
-    # 3) 堆叠 N 个 Transformer block
+    # 2) 堆叠 N 个 Transformer block
     for blk in blocks:                 # 每个 block 形状不变：(n, d) → (n, d)
         h = rmsnorm(X)                 # (n, d)            第 28 节
         Q, K, Vv = h @ blk.Wq, h @ blk.Wk, h @ blk.Wv   # (n, d) 第 07/08 节
+        Q, K = rope(Q), rope(K)        # 每层都转一次，只转 Q/K   第 33 节
         A = softmax(Q @ K.T / d**0.5)  # (n, n)            第 31/10/29 节
         X = X + A @ Vv                 # ⊕ 残差            第 34 节
         h = rmsnorm(X)                 # (n, d)            第 28 节
         h = gelu(h @ blk.W1) @ blk.W2  # (n, d)→(n,4d)→(n,d)
         X = X + h                      # ⊕ 残差
 
-    # 4) 末位归一化 + unembedding（权重绑定 W_Eᵀ）
+    # 3) 末位归一化 + unembedding（权重绑定 W_Eᵀ）
     logits = rmsnorm(X)[-1] @ W_E.T    # (1, vocab)        第 02 节
 
-    # 5) softmax → 下一词分布
+    # 4) softmax → 下一词分布
     probs = softmax(logits)            # (1, vocab)        第 29 节
 
-    # 6) 采样取词
+    # 5) 采样取词
     next_id = sample(probs)            # temperature/top-k 第 36 节
     return next_id
 

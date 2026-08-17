@@ -569,7 +569,7 @@ export function Spectral() {
             orthogonal eigenvector。
           </p>
           <p>
-            Spectral decomposition = <strong>PCA 的引擎</strong>（第 22–23 节）：
+            Spectral decomposition = <strong>PCA 的引擎</strong>（第 23 节）：
             主成分分析就是在求协方差矩阵的特征向量，把数据投影到方差最大的方向上。
             它也是理解 <strong>SVD</strong>（第 21 节）的台阶——SVD 把谱分解推广到任意非方阵：
             <code> M = U Σ Vᵀ</code>，U、V 的列都 orthogonal，Σ 是奇异值对角阵。
@@ -591,7 +591,7 @@ export function Spectral() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : (
@@ -602,7 +602,7 @@ export function Spectral() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

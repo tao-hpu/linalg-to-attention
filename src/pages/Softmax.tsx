@@ -272,7 +272,7 @@ export function Softmax() {
             <tr style={{ borderBottom: `2px solid ${IKB}` }}>
               <th style={{ textAlign: 'left',  padding: '4px 8px', color: IKB }}>token</th>
               <th style={{ textAlign: 'right', padding: '4px 8px', color: IKB }}>logit z</th>
-              <th style={{ textAlign: 'right', padding: '4px 8px', color: IKB }}>exp(z / T)</th>
+              <th style={{ textAlign: 'right', padding: '4px 8px', color: IKB }}>exp((z−z_max) / T)</th>
               <th style={{ textAlign: 'right', padding: '4px 8px', color: IKB }}>prob</th>
               <th style={{ textAlign: 'right', padding: '4px 8px', color: IKB }}>%</th>
             </tr>
@@ -316,7 +316,7 @@ export function Softmax() {
                 colSpan={2}
                 style={{ padding: '4px 8px', color: '#666', fontSize: '0.74rem' }}
               >
-                Z（partition function = Σ exp(z / T)）
+                Z（归一化分母 = Σ exp((z−z_max) / T)）
               </td>
               <td
                 style={{
@@ -362,6 +362,9 @@ export function Softmax() {
           <em>完全不变</em>。因为分子分母都乘了同一个 <code>e^(c/T)</code>，直接消掉。
           代码里减去 <code>max(z)</code> 正是利用这一性质防止 <code>exp</code> 上溢——
           最大那项变成 <code>exp(0) = 1</code>，其余都 ≤ 1。
+          <strong>上面表格第三列和 Z 显示的就是减完 max 之后的值</strong>，
+          所以最大那行永远是 1.0000；换成不减 max 的写法，这两列会整体乘上
+          <code> e^(z_max/T)</code>，而最右边的概率一个都不会变。
         </p>
         <p>
           <strong>Soft argmax：</strong>softmax 是可微的 argmax。
@@ -390,7 +393,7 @@ export function Softmax() {
             分母的 <code>√d</code> 本质上就是在调 temperature（d 越大，内积越大，除以 √d 降回合理范围），
             与第 06 节讲的范数缩放直接相连。
             <strong>② 输出层</strong>——把最后一层 logits 变成词表上的概率分布，
-            模型从中采样或取 argmax 生成下一个词（采样细节见第 35 节）。
+            模型从中采样或取 argmax 生成下一个词（采样细节见第 36 节）。
           </p>
           <p>
             推理时你看到的 temperature 参数就是这里的 T：
@@ -413,7 +416,7 @@ export function Softmax() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : (
@@ -424,7 +427,7 @@ export function Softmax() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

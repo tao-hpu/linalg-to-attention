@@ -16,12 +16,15 @@ const D = 4   // head_dim; sqrt(D) = 2 — intentionally clean
 const TOKENS: readonly string[] = ['猫', '坐', '在', '垫子', '上']
 
 // ── token embeddings X (N×D) ──────────────────────────────────────────────────
+// 量级刻意取得比「好看的小数」大一些：点积随向量长度平方增长，embedding 太小的话
+// QKᵀ 只在 0~2 之间晃，除不除 √d 看不出任何区别，本页的缩放开关就成了摆设。
+// 现在原始分数跨度约 14，关掉缩放后「猫」「垫子」两行的最大权重会冲到 0.83~0.91。
 const X_BASE: number[][] = [
-  [ 1.2,  0.5, -0.3,  0.8],   // 猫   animate noun
-  [ 0.2,  1.0,  0.6, -0.4],   // 坐   action verb
-  [-0.1,  0.3,  0.8,  0.2],   // 在   preposition
-  [ 0.9,  0.4,  0.0,  0.7],   // 垫子 inanimate noun
-  [-0.2,  0.0,  0.5,  0.4],   // 上   spatial
+  [ 3.6,  1.5, -0.9,  2.4],   // 猫   animate noun
+  [ 0.6,  3.0,  1.8, -1.2],   // 坐   action verb
+  [-0.3,  0.9,  2.4,  0.6],   // 在   preposition
+  [ 2.7,  1.2,  0.0,  2.1],   // 垫子 inanimate noun
+  [-0.6,  0.0,  1.5,  1.2],   // 上   spatial
 ]
 
 // ── projection weight matrices (D×D) ─────────────────────────────────────────
@@ -481,7 +484,7 @@ export function SelfAttention() {
           </div>
           {!useScaling && (
             <p style={{ fontSize: 12, color: RUST, margin: '6px 0 0', fontWeight: 600 }}>
-              分数变大 → softmax 趋向 one-hot（饱和），梯度接近零。
+              分数变大 → 分布变尖，权重往少数几个 token 上挤，梯度随之变小。
               这就是为什么要除以 √d（第 06 节）。
             </p>
           )}
@@ -500,7 +503,7 @@ export function SelfAttention() {
           </div>
           <label className="slider-row" style={{ marginTop: 8 }}>
             <input
-              type="range" min={-1.5} max={1.5} step={0.05}
+              type="range" min={-4.5} max={4.5} step={0.1}
               value={nudgeVal}
               onChange={(e) => setNudgeVal(Number(e.target.value))}
             />
@@ -630,10 +633,16 @@ export function SelfAttention() {
             borderRadius: 6, fontSize: 13, color: '#444',
             maxWidth: 560,
           }}>
-            <strong style={{ color: RUST }}>饱和示例：</strong>
-            当前所选 Query 行最大权重 = <strong style={{ color: RUST }}>{fmt3(maxW)}</strong>。
-            未缩放时分数偏大，softmax 趋向 one-hot（注意力集中在某一个 token 上），
-            梯度接近零，训练卡住。开启 √d 缩放，权重分布更均匀，梯度回流更顺畅。
+            <strong style={{ color: RUST }}>关掉缩放后：</strong>
+            当前所选 Query「{TOKENS[selectedQuery]}」行的最大权重 ={' '}
+            <strong style={{ color: RUST }}>{fmt3(maxW)}</strong>
+            （均匀分布应是 {fmt3(1 / N)}）。分数越大，softmax 越尖，注意力越往少数几个
+            token 上挤——挤到极限就是 one-hot，那时梯度接近零、训练卡住。
+            切回 ÷√{D} 看这个数字掉下来。
+            <br /><br />
+            这里 d 只有 {D}，所以差别看得见但不夸张。真实模型每个头 d = 64~128，
+            点积方差按 d 增长、标准差按 √d 增长，不缩放的话分数动辄上百，
+            softmax 是真的会锁死在某一个 token 上——这才是必须除 √d 的原因。
           </div>
         )}
 
@@ -813,8 +822,8 @@ export function SelfAttention() {
             {fmt3(maxW)}
           </strong>
           {useScaling
-            ? '（正常：权重分散，梯度健康）。'
-            : `（偏大：softmax 已趋向 one-hot，梯度接近零）。切回 ÷√${D} 观察差异。`}
+            ? `（÷√${D} 之后，分布更铺得开，梯度健康）。`
+            : `（比缩放后更尖——分数被放大了 √${D} 倍，softmax 随之收紧）。切回 ÷√${D} 观察差异。`}
         </p>
       </section>
 
@@ -836,7 +845,8 @@ export function SelfAttention() {
             <strong>看懂这一页 = 看懂注意力。</strong>
             GPT、BERT、LLaMA 的每一层，每一个 attention head，都在重复上面的六行。
             下面第 32 节把它分成<em>多头</em>（把 d 拆成 h 份并行运行），
-            第 33 节把它装进完整的 Transformer block（加 残差 + LayerNorm + MLP）。
+            第 33 节给它补上位置信息（RoPE），
+            第 34 节把它装进完整的 Transformer block（加 残差 + LayerNorm + MLP）。
             地基在这里；一切后续都是在这个公式上加砖。
           </p>
         </div>
@@ -855,7 +865,7 @@ export function SelfAttention() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : (
@@ -866,7 +876,7 @@ export function SelfAttention() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

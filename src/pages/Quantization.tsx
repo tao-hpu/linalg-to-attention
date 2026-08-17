@@ -384,7 +384,7 @@ export function Quantization() {
         <div className="crumb">
           <Link to="/">大纲</Link> · 第九部分 · 尾声：接到 LLM 工程
         </div>
-        <div className="kicker">第 {me.num} 节 · 终章</div>
+        <div className="kicker">第 {me.num} 节</div>
         <h1>
           量化与数值
           <span className="zh-sub">把大模型塞进小显卡</span>
@@ -661,18 +661,16 @@ export function Quantization() {
             在精度和资源之间找到工程上的最优平衡。
           </p>
           <p>
-            到这里，你从一个向量一路搭到了完整的 LLM 工程。
+            到这里，工程三件套就齐了：<strong>LoRA 管微调、采样管生成、量化管部署</strong>。
             几何那条线（向量 → 矩阵 → SVD → 注意力）
             和概率那条线（softmax → 交叉熵 → MLE）
-            在 Transformer 里合流，又落到训练、微调、推理——
-            量化是工程链上最后一块拼图。
+            在 Transformer 里合流，又各自落到了训练、微调、推理上。
           </p>
           <p>
-            <strong>恭喜——这门预科课你修完了。</strong>
-            从第 01 节的「一个向量是什么」到这里的「把模型压进内存」，
-            你走完了一条从线性代数几何直觉到 LLM 工程实践的完整路径。
-            这不是终点，而是你真正读懂 Transformer 论文、
-            动手跑 fine-tune 的起点。
+            零件到此全部见过。<strong>下一节把它们首尾相接</strong>——
+            一句话喂进模型，从 token id 一路流到「下一个词」的概率分布，
+            每一步都标着矩阵形状，也标着是哪一节教的。
+            那是这门课真正的终点。
           </p>
         </div>
       </section>
@@ -690,7 +688,7 @@ export function Quantization() {
               className="pager-link prev"
               to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
             >
-              <span className="pager-dir">← 上一章</span>
+              <span className="pager-dir">← 上一节</span>
               <span className="pager-title">
                 {prev.num} {prev.title}{prev.status !== 'live' && ' · 规划中'}
               </span>
@@ -701,7 +699,7 @@ export function Quantization() {
               className="pager-link next"
               to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
             >
-              <span className="pager-dir">下一章 →</span>
+              <span className="pager-dir">下一节 →</span>
               <span className="pager-title">
                 {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
               </span>
@@ -710,7 +708,7 @@ export function Quantization() {
       </nav>
 
       <p className="page-foot">
-        共 {allChapters.length} 节 · 你在第 {me.num} 节 · 全课完结
+        共 {allChapters.length} 节 · 你在第 {me.num} 节
       </p>
 
     </article>

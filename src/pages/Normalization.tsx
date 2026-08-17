@@ -237,6 +237,10 @@ export function Normalization() {
   const activeNormed = mode === 'layernorm' ? lnValues : rmsValues
   const activeMu = mode === 'layernorm' ? lnMu : rmsMu
   const activeSigma = mode === 'layernorm' ? lnSigma : rmsSigma
+  // RMSNorm 的承诺是「输出 RMS = γ」，不是「输出 σ = γ」——μ≠0 时两者不等。
+  const activeRms = Math.sqrt(
+    activeNormed.reduce((s, x) => s + x * x, 0) / activeNormed.length,
+  )
 
   const me = findChapter('normalization')!
   const { prev, next } = neighbors('normalization')
@@ -456,17 +460,32 @@ export function Normalization() {
             <span>标准差 σ</span>
             <code
               style={{
-                color: Math.abs(activeSigma - gamma) < 0.01 ? '#0a7d52' : undefined,
+                // 只有 LayerNorm 承诺 σ = γ；RMSNorm 不承诺，就别打绿勾。
+                color:
+                  mode === 'layernorm' && Math.abs(activeSigma - gamma) < 0.01
+                    ? '#0a7d52'
+                    : undefined,
               }}
             >
               {fmt(activeSigma, 4)}
             </code>
           </div>
           <div style={readoutRowStyle}>
-            <span>{mode === 'layernorm' ? 'μ 应 ≈ β' : 'μ 未归零'}</span>
-            <code style={{ color: '#5b6168' }}>
-              {mode === 'layernorm' ? fmt(beta, 2) : '预期行为'}
+            <span>RMS</span>
+            <code
+              style={{
+                color:
+                  mode === 'rmsnorm' && Math.abs(activeRms - gamma) < 0.01
+                    ? '#0a7d52'
+                    : undefined,
+              }}
+            >
+              {fmt(activeRms, 4)}
             </code>
+          </div>
+          <div style={readoutRowStyle}>
+            <span>{mode === 'layernorm' ? 'σ 应 ≈ γ' : 'RMS 应 ≈ γ'}</span>
+            <code style={{ color: '#5b6168' }}>{fmt(gamma, 2)}</code>
           </div>
         </div>
       </section>
@@ -481,9 +500,13 @@ export function Normalization() {
           </p>
         ) : (
           <p>
-            RMSNorm 后：<strong>μ = {fmt(rmsMu, 4)}</strong>（未归零，符合预期），
-            <strong> σ = {fmt(rmsSigma, 4)}</strong>（≈ γ = {fmt(gamma, 2)}）。
-            RMSNorm 只管尺度、不管均值——少一步减法，更快，在实践中效果与 LayerNorm 相当。
+            RMSNorm 后：<strong>RMS = {fmt(gamma, 4)}</strong>（被精确拉到 γ，这才是它的承诺），
+            <strong> μ = {fmt(rmsMu, 4)}</strong>（未归零），
+            <strong> σ = {fmt(rmsSigma, 4)}</strong>。
+            注意 <strong>σ 一般不等于 γ</strong>：RMSNorm 除的是均方根而不是标准差，
+            两者只在 μ = 0 时相等。点「偏移（大均值）」看得最清楚——
+            μ 越远离 0，RMS 就越被均值撑大，σ 被压得越小。
+            少一步减法换来更快的速度，代价就是这点：它只保证尺度，不保证分布居中。
           </p>
         )}
       </section>
@@ -516,7 +539,7 @@ export function Normalization() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">
               {prev.num} {prev.title}
             </span>
@@ -529,7 +552,7 @@ export function Normalization() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}
               {next.status !== 'live' && ' · 规划中'}

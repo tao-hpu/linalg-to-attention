@@ -85,14 +85,18 @@ function topPMask(
 }
 
 /**
- * Deterministic pseudo-sample — no Math.random / Date.now.
- * Maps step to a threshold via (step % 97) / 97 and walks the CDF in array
- * order (TOKEN_DEFS is sorted descending by logit, so probs are roughly
- * descending too). This approximates inverse-CDF sampling and produces
- * varying results across successive button clicks.
+ * Deterministic pseudo-sample — no Math.random / Date.now，保证可复现。
+ *
+ * 阈值取黄金比例的低差异序列 frac(step · φ⁻¹)：它在 [0,1) 上均匀跳跃，
+ * 长期频率正好收敛到各 token 的概率。注意不能用 (step % N) / N 这类
+ * 单调递增的阈值——那样前若干次点击会全部落在概率最大的那个 token 上
+ * （默认 p(the)≈0.66，要连点 60 多次才会出现第二个词），
+ * 而这一页的全部意义就是让读者看到采样是有随机性的。
  */
+const GOLDEN = 0.6180339887498949
+
 function deterministicSample(probs: readonly number[], step: number): number {
-  const threshold = (step % 97) / 97
+  const threshold = (step * GOLDEN) % 1
   let cumsum = 0
   for (let i = 0; i < probs.length; i++) {
     cumsum += probs[i]
@@ -698,7 +702,7 @@ export function SamplingDecoding() {
             className="pager-link prev"
             to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
           >
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">
               {prev.num} {prev.title}{prev.status !== 'live' && ' · 规划中'}
             </span>
@@ -711,7 +715,7 @@ export function SamplingDecoding() {
             className="pager-link next"
             to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
           >
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

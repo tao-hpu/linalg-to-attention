@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="线性代数到注意力">
+  <rect width="64" height="64" rx="10" fill="#002fa7"/>
+  <!-- 一个向量箭头：从原点指向右上，正是第 01 节那张图 -->
+  <g stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none">
+    <path d="M16 48 L42 22"/>
+  </g>
+  <path d="M46 18 L46 33 L31 18 Z" fill="#ffffff"/>
+  <!-- 原点 -->
+  <circle cx="16" cy="48" r="4" fill="#ffffff"/>
+</svg>

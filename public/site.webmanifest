@@ -1,0 +1,14 @@
+{
+  "name": "线性代数 → 注意力",
+  "short_name": "L2A",
+  "description": "可视化地，从一个向量一路搭到 Transformer 的注意力机制。",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#002fa7",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}

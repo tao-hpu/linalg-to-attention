@@ -196,8 +196,10 @@ class LoRALayer(nn.Module):
     def __init__(self, d: int, r: int):
         super().__init__()
         self.W = nn.Parameter(torch.randn(d, d), requires_grad=False)  # frozen
-        self.A = nn.Parameter(torch.zeros(r, d))   # shape (r, d)，初始化为 0
-        self.B = nn.Parameter(torch.randn(d, r))   # shape (d, r)，randn 初始化
+        # 论文与 PEFT 的约定：A 随机初始化、B 全零
+        self.A = nn.Parameter(torch.randn(r, d) * 0.01)  # shape (r, d)
+        self.B = nn.Parameter(torch.zeros(d, r))         # shape (d, r)
+        # B = 0 ⇒ 训练开始时 ΔW = B@A = 0，模型行为与预训练权重完全一致
         # 可训练参数: 2·d·r  vs  全量微调 d·d
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -558,13 +560,13 @@ export function LoraFinetuning() {
       <nav className="pager">
         {prev ? (
           <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : <span />}
         {next ? (
           <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

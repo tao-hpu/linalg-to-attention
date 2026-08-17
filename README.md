@@ -16,7 +16,7 @@
 
 两者在「注意力」里合流，在「训练 / 微调 / 推理」里落地。
 
-## 大纲（共 36 节 · 9 部分） — ✅ 全部上线
+## 大纲（共 38 节 · 10 部分） — ✅ 全部上线
 
 1. **向量：意义的载体** — 向量与坐标系 · 从词袋到词向量 · 加减与缩放 · **内积** · 投影 · 范数
 2. **矩阵：一个动作** — 矩阵是变换 · **矩阵乘法的几何** · 四种视角 · 转置与形状 · 批量与张量
@@ -25,8 +25,11 @@
 5. **降维** — SVD · 低秩近似（LoRA）· PCA
 6. **学习** — 梯度 · 链式法则与 Jacobian · 梯度下降 · 正则化（Ridge/Lasso）· 归一化
 7. **概率视角** — Softmax · 交叉熵与极大似然
-8. **合成：拼出注意力** — 自注意力 · 多头注意力 · Transformer Block
+8. **合成：拼出注意力** — 自注意力 · 多头注意力 · 位置编码与 RoPE · Transformer Block
 9. **尾声：接到 LLM 工程** — LoRA 微调 · 采样与解码 · 量化
+10. **终点：完整的前向传播** — 跑通一次前向传播
+
+> 章节清单的唯一事实来源是 `src/chapters.ts`，首页大纲、侧栏、翻页、sitemap 都从它生成。
 
 > ★ 标记的是"通往注意力的最短主线"。每节一个交互可视化 + 一段「这就是 LLM 里的什么」。
 
@@ -50,10 +53,11 @@ pnpm build    # 产物在 dist/
 ssh aws-hk
 git clone git@github.com:tao-hpu/linalg-to-attention.git ~/linalg-to-attention
 cd ~/linalg-to-attention
-bash deploy.sh        # build 镜像 + 起容器，监听 127.0.0.1:5191
+docker compose up -d --build    # build 镜像 + 起容器，监听 127.0.0.1:5191
 ```
 
-容器只监听本地端口，公网流量由服务器上的 nginx 反代到对应域名。`deploy.sh` 会 `git reset --hard origin/master` 后重建，后续更新只需再跑一次。
+容器只监听本地端口，公网流量由服务器上的 nginx 反代到对应域名。
+更新时在服务器上 `git pull && docker compose up -d --build` 即可。
 
 ## 许可
 

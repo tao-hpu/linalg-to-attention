@@ -266,7 +266,7 @@ export function OrthogonalRotation() {
             </span>
             <input
               type="range" min={-180} max={180} step={1} value={theta}
-              onChange={(e) => { setTheta(Number(e.target.value)); setMode('rotate') }}
+              onChange={(e) => setTheta(Number(e.target.value))}
             />
             <span className="param-val">{theta}°</span>
           </label>
@@ -279,6 +279,11 @@ export function OrthogonalRotation() {
             />
             <span>reflection 模式（det = −1）——镜像，不是旋转</span>
           </label>
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem', color: '#888', lineHeight: 1.6 }}>
+            {mode === 'rotate'
+              ? 'θ = 逆时针旋转的角度。'
+              : 'θ = 镜像轴与 x 轴的夹角（Q 的元素里是 2θ）。拖动 θ 看镜面转起来，F 字跟着换边。'}
+          </p>
         </div>
       </section>
 
@@ -395,7 +400,7 @@ export function OrthogonalRotation() {
       <nav className="pager">
         {prev ? (
           <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一章</span>
+            <span className="pager-dir">← 上一节</span>
             <span className="pager-title">{prev.num} {prev.title}</span>
           </Link>
         ) : (
@@ -403,7 +408,7 @@ export function OrthogonalRotation() {
         )}
         {next ? (
           <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一章 →</span>
+            <span className="pager-dir">下一节 →</span>
             <span className="pager-title">
               {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
             </span>

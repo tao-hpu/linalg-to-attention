@@ -7,7 +7,12 @@ function load(): string[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = window.localStorage.getItem(KEY)
-    return raw ? (JSON.parse(raw) as string[]) : []
+    if (!raw) return []
+    const parsed: unknown = JSON.parse(raw)
+    // 必须校验形状：这个返回值会直接喂给 new Set()，而它在 useState 初始化器里跑。
+    // 若存进来的是 `5` 这类合法但不可迭代的 JSON，new Set(5) 会抛错、整站白屏且刷新不自愈。
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter((x): x is string => typeof x === 'string')
   } catch {
     return []
   }

@@ -83,11 +83,12 @@ function MatCell({ value, bg, borderCol, color }: {
 }
 
 // ── XBlock: T×D matrix with token row labels ──────────────────────
-function XBlock({ T, activeRow, onEnter, onLeave }: {
+function XBlock({ T, activeRow, onEnter, onLeave, onToggle }: {
   T: number
   activeRow: number | null
   onEnter: (r: number) => void
   onLeave: () => void
+  onToggle: (r: number) => void
 }) {
   return (
     <div style={{ userSelect: 'none' }}>
@@ -100,19 +101,30 @@ function XBlock({ T, activeRow, onEnter, onLeave }: {
       {Array.from({ length: T }, (_, r) => {
         const hot = activeRow === r
         return (
-          <div
+          // 用 button 而不是 div：桌面悬停、触屏点选、键盘 Tab+Enter 三种方式都能触发。
+          <button
             key={r}
+            type="button"
+            aria-pressed={hot}
+            aria-label={`第 ${r + 1} 行 token「${TOKENS[r]}」`}
             style={{
               display: 'flex',
               alignItems: 'center',
+              width: '100%',
+              font: 'inherit',
+              textAlign: 'left',
+              border: 'none',
               background: hot ? 'rgba(0,47,167,0.08)' : 'transparent',
               borderRadius: 4,
               padding: '1px 2px',
-              cursor: 'default',
+              cursor: 'pointer',
               transition: 'background 0.15s',
             }}
-            onMouseEnter={() => onEnter(r)}
-            onMouseLeave={onLeave}
+            onPointerEnter={(e) => { if (e.pointerType === 'mouse') onEnter(r) }}
+            onPointerLeave={(e) => { if (e.pointerType === 'mouse') onLeave() }}
+            onClick={() => onToggle(r)}
+            onFocus={() => onEnter(r)}
+            onBlur={onLeave}
           >
             <span style={{
               width: LABEL_W,
@@ -134,7 +146,7 @@ function XBlock({ T, activeRow, onEnter, onLeave }: {
                 color={IKB}
               />
             ))}
-          </div>
+          </button>
         )
       })}
     </div>
@@ -484,6 +496,7 @@ export function Batching() {
               activeRow={effectiveRow}
               onEnter={(r) => setActiveRow(r)}
               onLeave={() => setActiveRow(null)}
+              onToggle={(r) => setActiveRow((cur) => (cur === r ? null : r))}
             />
             <div style={{
               fontSize: 22, color: '#aab5c8', fontWeight: 300,
@@ -506,7 +519,7 @@ export function Batching() {
           fontSize: 12, color: '#9aa1a9', margin: '0 24px 0',
           fontStyle: 'italic',
         }}>
-          把鼠标悬停在某一行 token 上——看 W 如何整体亮起，说明同一个 W 在处理这一行。
+          点一行 token（用鼠标的话悬停也行）——看 W 如何整体亮起，说明同一个 W 在处理这一行。
         </p>
 
         {/* Batch diagram */}
@@ -570,7 +583,7 @@ export function Batching() {
               className="pager-link prev"
               to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
             >
-              <span className="pager-dir">← 上一章</span>
+              <span className="pager-dir">← 上一节</span>
               <span className="pager-title">{prev.num} {prev.title}</span>
             </Link>
           )
@@ -581,7 +594,7 @@ export function Batching() {
               className="pager-link next"
               to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
             >
-              <span className="pager-dir">下一章 →</span>
+              <span className="pager-dir">下一节 →</span>
               <span className="pager-title">
                 {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
               </span>
