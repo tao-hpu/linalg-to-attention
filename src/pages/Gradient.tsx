@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { findChapter, neighbors, allChapters } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
 const IKB = '#002fa7'
@@ -176,9 +175,6 @@ export function Gradient() {
   const pox = sx(mx)
   const poy = sy(my)
 
-  const me = findChapter('gradient')!
-  const { prev, next } = neighbors('gradient')
-
   const verdictClass = mag < 0.15 ? 'verdict--eq' : 'verdict--neq'
   const verdictMsg = mag < 0.15
     ? '|∇f| ≈ 0：接近最小值，gradient 趋于零，已无可用的「下坡方向」。'
@@ -187,22 +183,21 @@ export function Gradient() {
     : `坡度很陡：|∇f| = ${d3(mag)}，训练信号强，参数更新幅度大。`
 
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第六部分 · 学习：模型怎么变聪明
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>梯度<span className="zh-sub">往哪走，loss 降得最快？</span></h1>
-        <p className="lede">
-          对多变量函数 <code>f(x,y)</code>，<strong>梯度 ∇f</strong> 是一个<strong>向量</strong>——
-          指向 <em>f</em> 上升最快的方向，长度等于那个方向的坡度，且总是
-          <strong>垂直于 contour（等高线/level set）</strong>。
-          朝 <code>+∇f</code> 走，<em>f</em> 升得最快；朝 <strong>−∇f</strong> 走，
-          <em>f</em> 降得最快——这就是训练时每个参数收到的全部信号。
-          <strong>在图上点击并拖动圆点</strong>，看两个箭头如何随地形变化。
-        </p>
-      </header>
+      <ChapterShell
+        slug="gradient"
+        part="第六部分 · 学习：模型怎么变聪明"
+        sub="往哪走，loss 降得最快？"
+        lede={
+          <>
+        对多变量函数 <code>f(x,y)</code>，<strong>梯度 ∇f</strong> 是一个<strong>向量</strong>——
+        指向 <em>f</em> 上升最快的方向，长度等于那个方向的坡度，且总是
+        <strong>垂直于 contour（等高线/level set）</strong>。
+        朝 <code>+∇f</code> 走，<em>f</em> 升得最快；朝 <strong>−∇f</strong> 走，
+        <em>f</em> 降得最快——这就是训练时每个参数收到的全部信号。
+        <strong>在图上点击并拖动圆点</strong>，看两个箭头如何随地形变化。
+          </>
+        }
+      >
 
       {/* ── Interactive contour plot ── */}
       <section className="stage" style={{ flexDirection: 'column', alignItems: 'center', gap: 20 }}>
@@ -374,24 +369,6 @@ export function Gradient() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── design tokens ─────────────────────────────────────────────────────────────
 const IKB  = '#002fa7'
@@ -349,9 +348,6 @@ export function SelfAttention() {
   const [useScaling, setUseScaling]       = useState(true)
   const [nudgeVal, setNudgeVal]           = useState(0)
 
-  const me             = findChapter('self-attention')!
-  const { prev, next } = neighbors('self-attention')
-
   // Build X with optional nudge on token 0 (猫), dimension 0
   const X: number[][] = X_BASE.map((row, i) =>
     i === 0
@@ -386,30 +382,25 @@ export function SelfAttention() {
   const maxW = Math.max(...selWeights)
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="self-attention"
+        part="第八部分 · 合成：亲手拼出注意力"
+        sub="Attention(Q, K, V) = softmax(QKᵀ/√d) · V"
+        lede={
+          <>
+        这是整门课的高潮。自注意力（self-attention）让序列里的每个 token
+        都能<strong>看见每一个其他 token，并按相关性把它们的信息加权汇入自己</strong>。
+        整个过程就一个公式：把每个 token 的 embedding 投影成
+        <strong> Query、Key、Value</strong>（<code>Q=XW_Q</code>,
+        {' '}<code>K=XW_K</code>, <code>V=XW_V</code>）；
+        用点积打分（第 04 节），除以 √d 缩放（第 06 节）；
+        softmax 归一化成权重（第 29 节）；
+        最后做加权和 <code>output = softmax(QKᵀ/√d)·V</code>（第 10 节的形状逻辑在此收口）。
+        下面你亲手跑完整个 pipeline，每一步都有实数。
+          </>
+        }
+      >
 
-      {/* ── 页头 ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第八部分 · 合成：亲手拼出注意力
-        </div>
-        <div className="kicker">第 {me.num} 节 ★</div>
-        <h1>
-          自注意力
-          <span className="zh-sub">Attention(Q, K, V) = softmax(QKᵀ/√d) · V</span>
-        </h1>
-        <p className="lede">
-          这是整门课的高潮。自注意力（self-attention）让序列里的每个 token
-          都能<strong>看见每一个其他 token，并按相关性把它们的信息加权汇入自己</strong>。
-          整个过程就一个公式：把每个 token 的 embedding 投影成
-          <strong> Query、Key、Value</strong>（<code>Q=XW_Q</code>,
-          {' '}<code>K=XW_K</code>, <code>V=XW_V</code>）；
-          用点积打分（第 04 节），除以 √d 缩放（第 06 节）；
-          softmax 归一化成权重（第 29 节）；
-          最后做加权和 <code>output = softmax(QKᵀ/√d)·V</code>（第 10 节的形状逻辑在此收口）。
-          下面你亲手跑完整个 pipeline，每一步都有实数。
-        </p>
-      </header>
 
       {/* ── 控制区 ── */}
       <section className="controls">
@@ -859,34 +850,6 @@ export function SelfAttention() {
       </section>
 
       {/* ── pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

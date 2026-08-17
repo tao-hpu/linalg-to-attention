@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
@@ -130,27 +129,19 @@ export function TransformerBlock() {
   const [preNorm, setPreNorm] = useState(true)
 
   const order = preNorm ? PRE_NORM_SEQ : POST_NORM_SEQ
-  const me = findChapter('transformer-block')!
-  const { prev, next } = neighbors('transformer-block')
-
   return (
-    <article className="page">
-      {/* ── masthead ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第八部分 · 合成：亲手拼出注意力
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          一个 Transformer Block
-          <span className="zh-sub">残差流、LayerNorm、MLP——完整的一层</span>
-        </h1>
-        <p className="lede">
-          注意力知道了，MLP 知道了，LayerNorm 知道了——现在把它们焊在一起。
-          一个 Transformer block 是两个子层的叠加，两条 residual connection
-          把它们串成整体；重复 N 次，就是一台完整的 GPT。
-        </p>
-      </header>
+      <ChapterShell
+        slug="transformer-block"
+        part="第八部分 · 合成：亲手拼出注意力"
+        sub="残差流、LayerNorm、MLP——完整的一层"
+        lede={
+          <>
+        注意力知道了，MLP 知道了，LayerNorm 知道了——现在把它们焊在一起。
+        一个 Transformer block 是两个子层的叠加，两条 residual connection
+        把它们串成整体；重复 N 次，就是一台完整的 GPT。
+          </>
+        }
+      >
 
       {/* ── pre/post-norm toggle ── */}
       <section className="controls">
@@ -415,28 +406,6 @@ export function TransformerBlock() {
       </section>
 
       {/* ── pager ── */}
-      <nav className="pager">
-        {prev
-          ? (
-            <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          )
-          : <span />}
-        {next
-          ? (
-            <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">
-                {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-              </span>
-            </Link>
-          )
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

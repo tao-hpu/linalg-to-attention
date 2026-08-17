@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── design tokens ──────────────────────────────────────────────────
 const CELL = 22                // px per unit dim — boxes scale proportionally
@@ -478,28 +477,21 @@ function QKAttentionExample() {
 // ── main exported page ─────────────────────────────────────────────
 
 export function TransposeShape() {
-  const me = findChapter('transpose-shape')!
-  const { prev, next } = neighbors('transpose-shape')
-
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第二部分 · 矩阵：一个动作
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          转置与形状
-          <span className="zh-sub">QKᵀ 的那个 ᵀ 为什么必须有？</span>
-        </h1>
-        <p className="lede">
-          矩阵乘法 (m×k)·(k×n) = (m×n) 有一条铁律：
-          <strong>内维必须相等</strong>。Transpose（转置）把形状 n×d 翻转成 d×n——整个{' '}
-          <code>QKᵀ</code> 里那个 ᵀ，不是装饰，是为了让内维 d 对齐、让乘法合法、
-          让结果恰好是 n×n 的「每个 token 对每个 token 打分」矩阵。
-          弄懂了维度对账，任何 attention 实现你都能一眼读懂。
-        </p>
-      </header>
+      <ChapterShell
+        slug="transpose-shape"
+        part="第二部分 · 矩阵：一个动作"
+        sub="QKᵀ 的那个 ᵀ 为什么必须有？"
+        lede={
+          <>
+        矩阵乘法 (m×k)·(k×n) = (m×n) 有一条铁律：
+        <strong>内维必须相等</strong>。Transpose（转置）把形状 n×d 翻转成 d×n——整个{' '}
+        <code>QKᵀ</code> 里那个 ᵀ，不是装饰，是为了让内维 d 对齐、让乘法合法、
+        让结果恰好是 n×n 的「每个 token 对每个 token 打分」矩阵。
+        弄懂了维度对账，任何 attention 实现你都能一眼读懂。
+          </>
+        }
+      >
 
       {/* Section: shape playground */}
       <section>
@@ -547,39 +539,6 @@ export function TransposeShape() {
       </section>
 
       {/* Pager */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">
-              {prev.num} {prev.title}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}
-              {next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">
-        共 {allChapters.length} 节 · 你在第 {me.num} 节
-      </p>
-    </article>
+      </ChapterShell>
   )
 }

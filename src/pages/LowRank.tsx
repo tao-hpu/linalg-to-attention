@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── Brand tokens ───────────────────────────────────────────────────────────────
 const IKB  = '#002fa7'
@@ -232,31 +231,23 @@ export function LowRank() {
   const rankKStorage     = 2 * N * k             // (m+n)·k numbers
   const compressionRatio = fullStorage / rankKStorage
 
-  const me           = findChapter('low-rank')!
-  const { prev, next } = neighbors('low-rank')
-
   return (
-    <article className="page">
+      <ChapterShell
+        slug="low-rank"
+        part="第五部分 · 降维：抓住主要矛盾"
+        sub="几层 singular value 就够了"
+        lede={
+          <>
+        SVD 把任意矩阵写成一叠 <strong>rank-1 层</strong>，按重要性排好：
+        <code>M = σ₁u₁v₁ᵀ + σ₂u₂v₂ᵀ + ⋯</code>。
+        只留前 k 层——丢掉小 σ 的部分——就得到最优的 <strong>rank-k 近似</strong>（<em>Eckart–Young 定理</em>）：
+        在所有 rank-k 矩阵里，截断 SVD 的 Frobenius 误差最小。
+        这是矩阵压缩的数学根基，也是 <strong>LoRA</strong> 的底层逻辑。
+        拖动下面的滑块，亲眼看「扔掉小 σ 几乎不丢信息」。
+          </>
+        }
+      >
 
-      {/* ── Header ────────────────────────────────────────────────────────── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第五部分 · 降维：抓住主要矛盾
-        </div>
-        <div className="kicker">第 {me.num} 节 ★ 核心</div>
-        <h1>
-          低秩近似
-          <span className="zh-sub">几层 singular value 就够了</span>
-        </h1>
-        <p className="lede">
-          SVD 把任意矩阵写成一叠 <strong>rank-1 层</strong>，按重要性排好：
-          <code>M = σ₁u₁v₁ᵀ + σ₂u₂v₂ᵀ + ⋯</code>。
-          只留前 k 层——丢掉小 σ 的部分——就得到最优的 <strong>rank-k 近似</strong>（<em>Eckart–Young 定理</em>）：
-          在所有 rank-k 矩阵里，截断 SVD 的 Frobenius 误差最小。
-          这是矩阵压缩的数学根基，也是 <strong>LoRA</strong> 的底层逻辑。
-          拖动下面的滑块，亲眼看「扔掉小 σ 几乎不丢信息」。
-        </p>
-      </header>
 
       {/* ── Slider control ────────────────────────────────────────────────── */}
       <section className="controls">
@@ -407,25 +398,6 @@ export function LowRank() {
       </section>
 
       {/* ── Pager ────────────────────────────────────────────────────────────── */}
-      <nav className="pager">
-        {prev ? (
-          <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-
-    </article>
+      </ChapterShell>
   )
 }

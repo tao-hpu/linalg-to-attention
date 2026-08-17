@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── Colors ────────────────────────────────────────────────────────────────────
 const IKB  = '#002fa7'
@@ -383,9 +382,6 @@ export function MultiHeadAttention() {
   const [selectedQuery, setSelectedQuery] = useState(0)
   const [scale, setScale]                 = useState(SQRT_DHEAD)   // 缩放因子 τ，默认 √d_head
 
-  const me             = findChapter('multi-head')!
-  const { prev, next } = neighbors('multi-head')
-
   // 拖动滑块时实时重算三张热图（÷τ → softmax）
   const ATTN = attnAtScale(scale)
 
@@ -399,27 +395,22 @@ export function MultiHeadAttention() {
   const nearUnscaled = Math.abs(scale - 1) < 0.05
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="multi-head"
+        part="第八部分 · 合成：亲手拼出注意力"
+        sub="为什么要「分头」看，每个 head 关注什么？"
+        lede={
+          <>
+        单头注意力每次只能从一个角度「看」序列——所有 token 的 Q/K/V 投影共享同一个子空间。
+        <strong>多头注意力（multi-head attention）</strong>并行运行 <code>{H}</code> 个独立的
+        attention head，每个 head 拥有自己的 <code>W_Q</code>/<code>W_K</code>/<code>W_V</code>，
+        在各自的低维 <strong>subspace</strong>（第 17/18 节）里独立计算注意力。
+        最后，各 head 的输出沿特征维 <strong>concat</strong>，再乘输出投影 <code>W_O</code> 融合。
+        计算量与单头大致相同，能同时捕捉的关系种类却成倍增加。
+          </>
+        }
+      >
 
-      {/* ── 页头 ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第八部分 · 合成：亲手拼出注意力
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          多头注意力
-          <span className="zh-sub">为什么要「分头」看，每个 head 关注什么？</span>
-        </h1>
-        <p className="lede">
-          单头注意力每次只能从一个角度「看」序列——所有 token 的 Q/K/V 投影共享同一个子空间。
-          <strong>多头注意力（multi-head attention）</strong>并行运行 <code>{H}</code> 个独立的
-          attention head，每个 head 拥有自己的 <code>W_Q</code>/<code>W_K</code>/<code>W_V</code>，
-          在各自的低维 <strong>subspace</strong>（第 17/18 节）里独立计算注意力。
-          最后，各 head 的输出沿特征维 <strong>concat</strong>，再乘输出投影 <code>W_O</code> 融合。
-          计算量与单头大致相同，能同时捕捉的关系种类却成倍增加。
-        </p>
-      </header>
 
       {/* ── 控制区：Query 选择 + ÷τ 缩放滑块 ── */}
       <section className="controls">
@@ -633,28 +624,6 @@ export function MultiHeadAttention() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

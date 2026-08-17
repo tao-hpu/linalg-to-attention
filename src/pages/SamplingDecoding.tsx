@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── Color constants ────────────────────────────────────────────────────────────
 const IKB  = '#002fa7'  // International Klein Blue — surviving bars
@@ -153,9 +152,6 @@ export function SamplingDecoding() {
   const [mode, setMode] = useState<DecodingMode>('top-p')
   const [step, setStep] = useState(0)
 
-  const me             = findChapter('sampling-decoding')!
-  const { prev, next } = neighbors('sampling-decoding')
-
   // ── Compute pipeline ──────────────────────────────────────────────────────────
   const logits    = TOKEN_DEFS.map((t) => t.logit)
   const baseProbs = computeSoftmax(logits, temp)
@@ -215,29 +211,24 @@ export function SamplingDecoding() {
 
   // ── Render ────────────────────────────────────────────────────────────────────
   return (
-    <article className="page">
+      <ChapterShell
+        slug="sampling-decoding"
+        part="第九部分 · 尾声：接到 LLM 工程"
+        sub="模型怎么从概率分布里选出下一个词？"
+        lede={
+          <>
+        模型前向传播结束，输出词表上一排 logit；经过 softmax（第 29 节）
+        变成<strong>概率分布</strong>。但分布本身不是词——还需要一步
+        「<strong>decoding</strong>」：从分布里<em>挑出</em>下一个 token。
+        <strong> Greedy（argmax）</strong>永远选概率最高的那个，稳定但容易重复；
+        <strong> temperature</strong> 在 softmax 之前重塑分布——低温收窄、高温铺开；
+        <strong> top-k</strong> 只保留最可能的 k 个候选再采样；
+        <strong> top-p（nucleus sampling）</strong>保留累积概率刚好够 p 的最小候选集合，
+        是当前生产环境最常见的折中。下面亲手调参，观察分布如何被过滤和重新归一化。
+          </>
+        }
+      >
 
-      {/* ── Header ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第九部分 · 尾声：接到 LLM 工程
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          采样与解码
-          <span className="zh-sub">模型怎么从概率分布里选出下一个词？</span>
-        </h1>
-        <p className="lede">
-          模型前向传播结束，输出词表上一排 logit；经过 softmax（第 29 节）
-          变成<strong>概率分布</strong>。但分布本身不是词——还需要一步
-          「<strong>decoding</strong>」：从分布里<em>挑出</em>下一个 token。
-          <strong> Greedy（argmax）</strong>永远选概率最高的那个，稳定但容易重复；
-          <strong> temperature</strong> 在 softmax 之前重塑分布——低温收窄、高温铺开；
-          <strong> top-k</strong> 只保留最可能的 k 个候选再采样；
-          <strong> top-p（nucleus sampling）</strong>保留累积概率刚好够 p 的最小候选集合，
-          是当前生产环境最常见的折中。下面亲手调参，观察分布如何被过滤和重新归一化。
-        </p>
-      </header>
 
       {/* ── Controls ── */}
       <section className="controls">
@@ -696,36 +687,6 @@ export function SamplingDecoding() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">
-              {prev.num} {prev.title}{prev.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

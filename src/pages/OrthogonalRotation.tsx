@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
 import { apply, multiply, transforms, format, type Mat2, type Vec2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { TransformPanel } from '../TransformPanel'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 const RUST = '#c75b39'
 const IKB = '#002fa7'
@@ -201,9 +200,6 @@ export function OrthogonalRotation() {
   const qv1 = apply(Q, v1)
   const qv2 = apply(Q, v2)
 
-  const me = findChapter('orthogonal-rotation')!
-  const { prev, next } = neighbors('orthogonal-rotation')
-
   const applyPreset = (p: Preset) => { setMode(p.mode); setTheta(p.theta) }
   const isActive = (p: Preset) => p.mode === mode && p.theta === theta
 
@@ -218,24 +214,20 @@ export function OrthogonalRotation() {
   }
 
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第四部分 · 正交、回归与投影
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          正交矩阵与旋转
-          <span className="zh-sub">不改变任何长度的变换长什么样？</span>
-        </h1>
-        <p className="lede">
-          旋转一个图形，形状完好、距离不变——这种 rigid motion 背后是
-          <strong> orthogonal matrix</strong> Q。它的两列两两正交且均为单位向量
-          （orthonormal），由此推出 <code>QᵀQ = I</code>，即
-          <code> Q⁻¹ = Qᵀ</code>。det = +1 是 rotation，det = −1 是 reflection。
-          拖动 θ 滑块，亲眼看 F 字形只转不拉、length 永远 1.00。
-        </p>
-      </header>
+      <ChapterShell
+        slug="orthogonal-rotation"
+        part="第四部分 · 正交、回归与投影"
+        sub="不改变任何长度的变换长什么样？"
+        lede={
+          <>
+        旋转一个图形，形状完好、距离不变——这种 rigid motion 背后是
+        <strong> orthogonal matrix</strong> Q。它的两列两两正交且均为单位向量
+        （orthonormal），由此推出 <code>QᵀQ = I</code>，即
+        <code> Q⁻¹ = Qᵀ</code>。det = +1 是 rotation，det = −1 是 reflection。
+        拖动 θ 滑块，亲眼看 F 字形只转不拉、length 永远 1.00。
+          </>
+        }
+      >
 
       <section className="controls">
         <div className="control">
@@ -397,28 +389,6 @@ export function OrthogonalRotation() {
         <CodeBlock code={SNIPPET} language="python" title="orthogonal_rotation.py" />
       </section>
 
-      <nav className="pager">
-        {prev ? (
-          <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

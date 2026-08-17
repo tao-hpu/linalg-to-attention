@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { findChapter, neighbors, allChapters } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ─── colour tokens ────────────────────────────────────────────────
 const IKB        = '#002fa7'  // Swiss-blue: forward-pass values
@@ -92,9 +91,6 @@ export function ChainRule() {
   const dl_da = dl_dh * dh_da
   const dl_dx = dl_da * da_dx
 
-  const me = findChapter('chain-rule')!
-  const { prev, next } = neighbors('chain-rule')
-
   const isBack = phase === 'backward'
 
   // SVG layout constants
@@ -119,30 +115,25 @@ export function ChainRule() {
   ]
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="chain-rule"
+        part="第六部分 · 学习：模型怎么变聪明"
+        sub="backpropagation 就是链式法则走一遍计算图"
+        lede={
+          <>
+        训练神经网络需要知道每个参数对 loss 的贡献。给定
+        {' '}<code>loss = f₃(f₂(f₁(x)))</code>，
+        链式法则 (chain rule) 说：
+        {' '}<code>d loss/dx = f₃' · f₂' · f₁'</code>。
+        Forward pass 从左到右算每个节点的值；
+        backward pass 从右到左把每条边的 local derivative 乘回来——
+        这就是 backpropagation (反向传播) 的全部。
+        当节点是向量时，local derivative 变成 Jacobian 矩阵，
+        backprop 变成一串 Jacobian-vector product。
+          </>
+        }
+      >
 
-      {/* ── masthead ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第六部分 · 学习：模型怎么变聪明
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          链式法则与 Jacobian
-          <span className="zh-sub">backpropagation 就是链式法则走一遍计算图</span>
-        </h1>
-        <p className="lede">
-          训练神经网络需要知道每个参数对 loss 的贡献。给定
-          {' '}<code>loss = f₃(f₂(f₁(x)))</code>，
-          链式法则 (chain rule) 说：
-          {' '}<code>d loss/dx = f₃' · f₂' · f₁'</code>。
-          Forward pass 从左到右算每个节点的值；
-          backward pass 从右到左把每条边的 local derivative 乘回来——
-          这就是 backpropagation (反向传播) 的全部。
-          当节点是向量时，local derivative 变成 Jacobian 矩阵，
-          backprop 变成一串 Jacobian-vector product。
-        </p>
-      </header>
 
       {/* ── controls ── */}
       <section className="controls">
@@ -426,24 +417,6 @@ loss = ½ · y²         = ½ × ${fmt(y)}²  = ${fmt(loss)}`}
       </section>
 
       {/* ── pager ── */}
-      <nav className="pager">
-        {prev
-          ? <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          : <span />}
-        {next
-          ? <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">
-                {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-              </span>
-            </Link>
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

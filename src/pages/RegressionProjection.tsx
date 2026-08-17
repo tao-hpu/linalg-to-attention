@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── Types ─────────────────────────────────────────────────────────────────
 type Point = { id: number; x: number; y: number }
@@ -378,9 +377,6 @@ function VectorDiagram() {
 export function RegressionProjection() {
   const [view, setView] = useState<View>('scatter')
 
-  const me = findChapter('regression-projection')!
-  const { prev, next } = neighbors('regression-projection')
-
   function tabBtn(active: boolean) {
     return {
       padding: '8px 18px',
@@ -396,25 +392,20 @@ export function RegressionProjection() {
   }
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="regression-projection"
+        part="第四部分 · 正交、回归与投影"
+        sub="最小二乘的几何真相"
+        lede={
+          <>
+        最小二乘回归（OLS）几何上就是一次<strong>正交投影</strong>——
+        把响应向量 <code>y ∈ ℝⁿ</code> 投影到设计矩阵 <code>X</code> 的列空间
+        <code>col(X)</code> 上。「最小化 RSS」和「把 y 投到 col(X) 上」
+        是<strong>同一件事的两种说法</strong>。
+          </>
+        }
+      >
 
-      {/* ── Masthead ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第四部分 · 正交、回归与投影
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          回归 = 投影
-          <span className="zh-sub">最小二乘的几何真相</span>
-        </h1>
-        <p className="lede">
-          最小二乘回归（OLS）几何上就是一次<strong>正交投影</strong>——
-          把响应向量 <code>y ∈ ℝⁿ</code> 投影到设计矩阵 <code>X</code> 的列空间
-          <code>col(X)</code> 上。「最小化 RSS」和「把 y 投到 col(X) 上」
-          是<strong>同一件事的两种说法</strong>。
-        </p>
-      </header>
 
       {/* ── Setup ── */}
       <section style={{ marginBottom: 32 }}>
@@ -503,30 +494,6 @@ export function RegressionProjection() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

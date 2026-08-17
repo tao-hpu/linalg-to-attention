@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // Fixed concrete example: A (2×2) · B (2×2) = C (2×2)
 // A = [[1,2],[3,4]], B = [[5,6],[7,8]], C = [[19,22],[43,50]]
@@ -276,22 +275,20 @@ assert np.allclose(C1, C2) and np.allclose(C2, C3) and np.allclose(C3, C4)
 export function MatmulViews() {
   const [view, setView] = useState<View>('dot')
 
-  const me = findChapter('matmul-views')!
-  const { prev, next } = neighbors('matmul-views')
-
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb"><Link to="/">大纲</Link> · 第二部分 · 矩阵：一个动作</div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>矩阵乘法的四种视角<span className="zh-sub">同一个乘法，四种看法</span></h1>
-        <p className="lede">
-          C = A·B 只有一个答案，却可以用<strong>四种完全不同的眼光</strong>去读它：
-          逐格做内积、列的线性组合、行的线性组合、秩-1 outer product 之和。
-          读懂这四种视角，就能在任何论文或代码库里认出同一件事——
-          不管它写成 <code>einsum</code>、<code>torch.matmul</code> 还是手写嵌套循环。
-        </p>
-      </header>
+      <ChapterShell
+        slug="matmul-views"
+        part="第二部分 · 矩阵：一个动作"
+        sub="同一个乘法，四种看法"
+        lede={
+          <>
+        C = A·B 只有一个答案，却可以用<strong>四种完全不同的眼光</strong>去读它：
+        逐格做内积、列的线性组合、行的线性组合、秩-1 outer product 之和。
+        读懂这四种视角，就能在任何论文或代码库里认出同一件事——
+        不管它写成 <code>einsum</code>、<code>torch.matmul</code> 还是手写嵌套循环。
+          </>
+        }
+      >
 
       {/* 切换视角：复用站点 .chip 胶囊，is-on 即 IKB 高亮，自带 hover 与响应式 */}
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '40px 0 4px' }}>
@@ -342,22 +339,6 @@ export function MatmulViews() {
         <CodeBlock code={SNIPPET} language="python" title="matmul_views.py" />
       </section>
 
-      <nav className="pager">
-        {prev
-          ? <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          : <span />}
-        {next
-          ? <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">{next.num} {next.title}{next.status !== 'live' && ' · 规划中'}</span>
-            </Link>
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

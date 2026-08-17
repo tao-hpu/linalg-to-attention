@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { apply, multiply, nearlyEqual, type Mat2, type Vec2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 // ── Canvas constants ──────────────────────────────────────────────────────────
 const SIZE  = 200
@@ -297,32 +296,24 @@ export function SVD() {
     { v: cap([u2[0] * sigma2, u2[1] * sigma2] as Vec2), color: IKB,  label: 'u₂' },
   ]
 
-  const me = findChapter('svd')!
-  const { prev, next } = neighbors('svd')
-
   return (
-    <article className="page">
+      <ChapterShell
+        slug="svd"
+        part="第五部分 · 降维：抓住主要矛盾"
+        sub="旋转 → 拉伸 → 旋转：任意矩阵的万能拆解"
+        lede={
+          <>
+        无论什么矩阵——方阵、长方阵、切变、投影——都能写成
+        {' '}<code>M = U Σ Vᵀ</code>：
+        先用 <code>Vᵀ</code> 旋转输入轴，再用 <code>Σ</code> 按
+        singular value（奇异值）沿各轴拉伸，最后用 <code>U</code> 旋转到输出方向。
+        几何上：M 总是把单位圆变成一个<strong>椭圆</strong>，椭圆的两个半轴长
+        正是 <strong>σ₁ ≥ σ₂ ≥ 0</strong>。
+        拖动滑块，看四步分解如何把圆变成椭圆。
+          </>
+        }
+      >
 
-      {/* ── Header ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第五部分 · 降维：抓住主要矛盾
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          SVD 奇异值分解
-          <span className="zh-sub">旋转 → 拉伸 → 旋转：任意矩阵的万能拆解</span>
-        </h1>
-        <p className="lede">
-          无论什么矩阵——方阵、长方阵、切变、投影——都能写成
-          {' '}<code>M = U Σ Vᵀ</code>：
-          先用 <code>Vᵀ</code> 旋转输入轴，再用 <code>Σ</code> 按
-          singular value（奇异值）沿各轴拉伸，最后用 <code>U</code> 旋转到输出方向。
-          几何上：M 总是把单位圆变成一个<strong>椭圆</strong>，椭圆的两个半轴长
-          正是 <strong>σ₁ ≥ σ₂ ≥ 0</strong>。
-          拖动滑块，看四步分解如何把圆变成椭圆。
-        </p>
-      </header>
 
       {/* ── Controls ── */}
       <section className="controls">
@@ -501,26 +492,6 @@ export function SVD() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

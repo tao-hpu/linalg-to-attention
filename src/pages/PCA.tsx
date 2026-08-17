@@ -1,7 +1,6 @@
 import { useState, useRef, type Dispatch, type SetStateAction } from 'react'
-import { Link } from 'react-router-dom'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
+import { ChapterShell } from '../components/ChapterShell'
 
 // ── Color palette ─────────────────────────────────────────────────────────────
 const RUST = '#c75b39'
@@ -358,9 +357,6 @@ export function PCA() {
   const totalVar  = lam1 + lam2
   const explained = totalVar > 1e-12 ? lam1 / totalVar : 1
 
-  const me = findChapter('pca')!
-  const { prev, next } = neighbors('pca')
-
   // ── Preset button style ──────────────────────────────────────────────────
   const presetStyle = (active: boolean) => ({
     padding: '0.35rem 0.9rem',
@@ -375,31 +371,26 @@ export function PCA() {
   })
 
   return (
-    <article className="page">
+      <ChapterShell
+        slug="pca"
+        part="第五部分 · 降维：抓住主要矛盾"
+        sub="最大方差的方向，就是信息最密集的方向"
+        lede={
+          <>
+        PCA 是最常用的降维方法，几何上就是这件事：
+        把数据<strong>中心化</strong>（减去均值），构造{' '}
+        <strong>covariance matrix</strong>{' '}
+        <code>C = (1/n) XᵀX</code>，
+        对它做<strong>谱分解（16 节）</strong>——
+        eigenvector 就是 <strong>principal component（主成分）</strong>，
+        eigenvalue 就是沿该方向的 <strong>variance（方差）</strong>。
+        PC1 = 数据散布最宽的方向；PC2 ⊥ PC1 且方差次之。
+        <strong>降维</strong>就是只保留 PC1，把点投影上去，
+        用一条轴留住尽可能多的信息。下面亲眼看一下。
+          </>
+        }
+      >
 
-      {/* ── Masthead ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第五部分 · 降维：抓住主要矛盾
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          PCA 主成分分析
-          <span className="zh-sub">最大方差的方向，就是信息最密集的方向</span>
-        </h1>
-        <p className="lede">
-          PCA 是最常用的降维方法，几何上就是这件事：
-          把数据<strong>中心化</strong>（减去均值），构造{' '}
-          <strong>covariance matrix</strong>{' '}
-          <code>C = (1/n) XᵀX</code>，
-          对它做<strong>谱分解（16 节）</strong>——
-          eigenvector 就是 <strong>principal component（主成分）</strong>，
-          eigenvalue 就是沿该方向的 <strong>variance（方差）</strong>。
-          PC1 = 数据散布最宽的方向；PC2 ⊥ PC1 且方差次之。
-          <strong>降维</strong>就是只保留 PC1，把点投影上去，
-          用一条轴留住尽可能多的信息。下面亲眼看一下。
-        </p>
-      </header>
 
       {/* ── Controls ── */}
       <section className="controls">
@@ -605,30 +596,6 @@ export function PCA() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

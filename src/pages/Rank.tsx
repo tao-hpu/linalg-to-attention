@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { type Vec2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 // ── Canvas geometry ──────────────────────────────────────────────────────────
 const SIZE = 360
@@ -334,29 +333,22 @@ export function Rank() {
   const rank = computeRank(c1, c2)
   const d = colDet(c1, c2)
 
-  const me = findChapter('rank')!
-  const { prev, next } = neighbors('rank')
-
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第三部分 · 方阵的秘密
-        </div>
-        <div className="kicker">第 {me.num} 节 ★ 核心</div>
-        <h1>
-          矩阵的秩
-          <span className="zh-sub">一个变换到底「留下」了几维？</span>
-        </h1>
-        <p className="lede">
-          矩阵的 <strong>rank（秩）</strong>= 变换之后输出空间真正用到了几个独立方向——
-          也就是 column space 的维数。对 2×2 矩阵：两列<strong>线性无关</strong>（det ≠ 0）→ rank 2，
-          span 铺满整个平面；两列<strong>共线</strong>（det = 0，但有一列非零）→ rank 1，
-          整个平面坍缩成一条线；两列全零 → rank 0。
-          <strong>rank-1 矩阵恰好是 outer product <code>uvᵀ</code></strong>——这是
-          low-rank 近似和 LoRA 的种子。
-        </p>
-      </header>
+      <ChapterShell
+        slug="rank"
+        part="第三部分 · 方阵的秘密"
+        sub="一个变换到底「留下」了几维？"
+        lede={
+          <>
+        矩阵的 <strong>rank（秩）</strong>= 变换之后输出空间真正用到了几个独立方向——
+        也就是 column space 的维数。对 2×2 矩阵：两列<strong>线性无关</strong>（det ≠ 0）→ rank 2，
+        span 铺满整个平面；两列<strong>共线</strong>（det = 0，但有一列非零）→ rank 1，
+        整个平面坍缩成一条线；两列全零 → rank 0。
+        <strong>rank-1 矩阵恰好是 outer product <code>uvᵀ</code></strong>——这是
+        low-rank 近似和 LoRA 的种子。
+          </>
+        }
+      >
 
       {/* ── Preset controls ── */}
       <section className="controls">
@@ -508,24 +500,6 @@ export function Rank() {
       </section>
 
       {/* ── Pagination ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link className="pager-link prev" to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}>
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link className="pager-link next" to={next.status === 'live' ? `/ch/${next.slug}` : '/'}>
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

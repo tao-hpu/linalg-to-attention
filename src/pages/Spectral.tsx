@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { apply, multiply, nearlyEqual, type Mat2, type Vec2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 // ── Canvas constants ──────────────────────────────────────────────────────────
 const SIZE = 360
@@ -378,31 +377,23 @@ export function Spectral() {
   const recon = multiply(multiply(Q, Lambda), QT)
   const ok    = nearlyEqual(recon, M)
 
-  const me = findChapter('spectral')!
-  const { prev, next } = neighbors('spectral')
-
   return (
-    <article className="page">
+      <ChapterShell
+        slug="spectral"
+        part="第三部分 · 方阵的秘密"
+        sub="最温顺的矩阵，隐藏最美的结构"
+        lede={
+          <>
+        对称矩阵 <code>M = Mᵀ</code>——对角线两侧的数互相镜像——是线性代数里最「规矩」的一类矩阵。
+        它有两个神奇保证：eigenvalue（特征值）永远是<strong>实数</strong>；
+        eigenvector（特征向量）永远<strong>两两 orthogonal（垂直）</strong>。
+        这让它可以被彻底拆开：<code>M = Q Λ Qᵀ</code>——先旋转到特征轴坐标系，
+        按 λ 缩放各轴，再旋转回来。这就是 spectral decomposition（谱分解）。
+        调节下面三个滑块，亲眼看单位圆变成椭圆，主轴始终与特征向量重合。
+          </>
+        }
+      >
 
-      {/* ── Header ── */}
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第三部分 · 方阵的秘密
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          对称矩阵与谱分解
-          <span className="zh-sub">最温顺的矩阵，隐藏最美的结构</span>
-        </h1>
-        <p className="lede">
-          对称矩阵 <code>M = Mᵀ</code>——对角线两侧的数互相镜像——是线性代数里最「规矩」的一类矩阵。
-          它有两个神奇保证：eigenvalue（特征值）永远是<strong>实数</strong>；
-          eigenvector（特征向量）永远<strong>两两 orthogonal（垂直）</strong>。
-          这让它可以被彻底拆开：<code>M = Q Λ Qᵀ</code>——先旋转到特征轴坐标系，
-          按 λ 缩放各轴，再旋转回来。这就是 spectral decomposition（谱分解）。
-          调节下面三个滑块，亲眼看单位圆变成椭圆，主轴始终与特征向量重合。
-        </p>
-      </header>
 
       {/* ── Sliders + Presets ── */}
       <section className="controls">
@@ -585,34 +576,6 @@ export function Spectral() {
       </section>
 
       {/* ── Pager ── */}
-      <nav className="pager">
-        {prev ? (
-          <Link
-            className="pager-link prev"
-            to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-          >
-            <span className="pager-dir">← 上一节</span>
-            <span className="pager-title">{prev.num} {prev.title}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            className="pager-link next"
-            to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-          >
-            <span className="pager-dir">下一节 →</span>
-            <span className="pager-title">
-              {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }

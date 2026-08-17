@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { apply, type Mat2, type Vec2 } from '../linalg'
+import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
-import { neighbors, allChapters, findChapter } from '../chapters'
 
 // ── Canvas constants (same coordinate system as MatrixAsTransform) ────────────
 const SIZE = 360
@@ -396,30 +395,23 @@ export function Eigen() {
     return (Object.is(r, -0) ? 0 : r).toFixed(2)
   }
 
-  const me = findChapter('eigen')!
-  const { prev, next } = neighbors('eigen')
-
   return (
-    <article className="page">
-      <header className="masthead">
-        <div className="crumb">
-          <Link to="/">大纲</Link> · 第三部分 · 方阵的秘密
-        </div>
-        <div className="kicker">第 {me.num} 节</div>
-        <h1>
-          特征值与特征向量
-          <span className="zh-sub">矩阵里「岿然不动」的方向</span>
-        </h1>
-        <p className="lede">
-          对大多数向量，矩阵 M 既<strong>旋转</strong>又<strong>缩放</strong>它——<code>Mv</code>{' '}
-          指向一个全新的方向。但有几个特殊方向，M 对它们<strong>只缩放，不旋转</strong>：
-          {' '}<code>Mv&nbsp;=&nbsp;λv</code>。
-          那些方向叫做 eigenvector（特征向量），那个比例叫做 eigenvalue（特征值 λ）。
-          它们是变换的「纹理」——矩阵沿这些轴行事最简单。
-          纯旋转矩阵没有实 eigenvector：它把每个方向都转走了，discriminant 为负，
-          特征值落入复数域。
-        </p>
-      </header>
+      <ChapterShell
+        slug="eigen"
+        part="第三部分 · 方阵的秘密"
+        sub="矩阵里「岿然不动」的方向"
+        lede={
+          <>
+        对大多数向量，矩阵 M 既<strong>旋转</strong>又<strong>缩放</strong>它——<code>Mv</code>{' '}
+        指向一个全新的方向。但有几个特殊方向，M 对它们<strong>只缩放，不旋转</strong>：
+        {' '}<code>Mv&nbsp;=&nbsp;λv</code>。
+        那些方向叫做 eigenvector（特征向量），那个比例叫做 eigenvalue（特征值 λ）。
+        它们是变换的「纹理」——矩阵沿这些轴行事最简单。
+        纯旋转矩阵没有实 eigenvector：它把每个方向都转走了，discriminant 为负，
+        特征值落入复数域。
+          </>
+        }
+      >
 
       {/* Preset selector */}
       <section className="controls">
@@ -569,34 +561,6 @@ export function Eigen() {
       </section>
 
       {/* Pager */}
-      <nav className="pager">
-        {prev
-          ? (
-            <Link
-              className="pager-link prev"
-              to={prev.status === 'live' ? `/ch/${prev.slug}` : '/'}
-            >
-              <span className="pager-dir">← 上一节</span>
-              <span className="pager-title">{prev.num} {prev.title}</span>
-            </Link>
-          )
-          : <span />}
-        {next
-          ? (
-            <Link
-              className="pager-link next"
-              to={next.status === 'live' ? `/ch/${next.slug}` : '/'}
-            >
-              <span className="pager-dir">下一节 →</span>
-              <span className="pager-title">
-                {next.num} {next.title}{next.status !== 'live' && ' · 规划中'}
-              </span>
-            </Link>
-          )
-          : <span />}
-      </nav>
-
-      <p className="page-foot">共 {allChapters.length} 节 · 你在第 {me.num} 节</p>
-    </article>
+      </ChapterShell>
   )
 }
