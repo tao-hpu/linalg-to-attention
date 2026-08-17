@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { multiply, format, nearlyEqual, type Mat2, IDENTITY } from '../linalg'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 import { TransformPanel } from '../TransformPanel'
 import { CodeBlock } from '../components/CodeBlock'
@@ -325,13 +326,13 @@ export function Inverse() {
           <p>
             Transformer 里有不少操作同样是<strong>有意不可逆</strong>的，只是机制各不相同，
             别都套到「det≈0」上：降维投影 <code>d_model → d_k</code> 是<strong>非方阵</strong>，
-            根本没有行列式，它的不可逆来自<strong>秩不满</strong>（行少于列，连回第 13 节）；
+            根本没有行列式，它的不可逆来自<strong>秩不满</strong>（行少于列，连回<ChRef slug="rank" />）；
             ReLU、softmax 是<strong>非线性</strong>映射，连行列式都谈不上，但 ReLU 把负半轴压成 0、
             softmax 把整条直线压进概率单纯形，照样把信息吞掉。共同点不是某个公式，而是模型在
             <strong>主动做选择</strong>：压缩、聚焦、忽略无关信息。
           </p>
           <p>
-            反例：RoPE 旋转位置编码是<strong>正交变换</strong>（第 17 节），是纯旋转、
+            反例：RoPE 旋转位置编码是<strong>正交变换</strong>（<ChRef slug="orthogonal-rotation" />），是纯旋转、
             det = +1，完全 invertible——位置信息被旋转进去，也可以被精确旋转出来。
             一句话收口：<strong>方阵</strong>可逆 ⟺ det ≠ 0 ⟺ 满秩（连回第 12、13 节）。
           </p>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { chNum } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── Colors ────────────────────────────────────────────────────────────────────
@@ -404,7 +405,7 @@ export function MultiHeadAttention() {
         单头注意力每次只能从一个角度「看」序列——所有 token 的 Q/K/V 投影共享同一个子空间。
         <strong>多头注意力（multi-head attention）</strong>并行运行 <code>{H}</code> 个独立的
         attention head，每个 head 拥有自己的 <code>W_Q</code>/<code>W_K</code>/<code>W_V</code>，
-        在各自的低维 <strong>subspace</strong>（第 17/18 节）里独立计算注意力。
+        在各自的低维 <strong>subspace</strong>（第 {chNum('orthogonal-rotation')}/{chNum('orthogonal-projection')} 节）里独立计算注意力。
         最后，各 head 的输出沿特征维 <strong>concat</strong>，再乘输出投影 <code>W_O</code> 融合。
         计算量与单头大致相同，能同时捕捉的关系种类却成倍增加。
           </>
@@ -603,7 +604,7 @@ export function MultiHeadAttention() {
         <div className="bridge-body">
           <p>
             真实模型动辄 12–128 个 head（GPT-2 small 用 12）。
-            多头 = 让模型在多个 <strong>subspace</strong>（第 17/18 节）里<em>同时</em>看不同关系，
+            多头 = 让模型在多个 <strong>subspace</strong>（第 {chNum('orthogonal-rotation')}/{chNum('orthogonal-projection')} 节）里<em>同时</em>看不同关系，
             再用 <code>W_O</code> 融合。可解释性研究（interpretability）就是在给这些 head 找「它在干嘛」：
             <em>induction head</em>（归纳/复制前文规律）、名词-动词一致性 head、直接翻译 head……
             每个 head 各有分工。

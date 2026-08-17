@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import { VectorCanvas, type CanvasVector } from '../components/VectorCanvas'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 import { sub, dot, norm, normalize, projectOnto, fmt } from '../vec'
@@ -320,7 +321,7 @@ export function GramSchmidt() {
           每个头学一个相对独立的子空间。
           不完全是 Gram-Schmidt 的产物，但想法同根：
           方向不互相干扰，信息读写就更准。
-          连回第 17 节正交矩阵、第 18 节正交投影，接向第 21 节 SVD。
+          连回<ChRef slug="orthogonal-rotation" />正交矩阵、<ChRef slug="orthogonal-projection" />正交投影，接向<ChRef slug="svd" /> SVD。
         </p>
       </Bridge>
 

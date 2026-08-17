@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { VectorCanvas } from '../components/VectorCanvas'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 import {
@@ -183,7 +184,7 @@ export function DotProduct() {
         </p>
         <p>
           所以"<strong>内积 = 相似度</strong>"就是整个注意力机制的心脏。
-          （顺带预告：实际用的是"缩放点积" <code>q·k/√d</code>，为什么要除以 <code>√d</code>，第 06 节会讲。）
+          （顺带预告：实际用的是"缩放点积" <code>q·k/√d</code>，为什么要除以 <code>√d</code>，<ChRef slug="norms" />会讲。）
         </p>
       </Bridge>
 

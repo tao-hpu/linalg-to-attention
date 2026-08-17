@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── colour palette ────────────────────────────────────────────────
@@ -510,7 +511,7 @@ export function Normalization() {
             现代 Transformer 的每个子层（自注意力、MLP）前后都挂着 LayerNorm 或 RMSNorm。
             主流做法是 <strong>pre-norm</strong>：先归一化、再进子层。
             它和<strong>残差连接</strong>配合，让几十上百层能稳稳堆起来——
-            激活值不会滚雪球般放大（梯度不爆），第 25 节链式法则那串乘积也被稳住了（梯度不消）。
+            激活值不会滚雪球般放大（梯度不爆），<ChRef slug="chain-rule" />链式法则那串乘积也被稳住了（梯度不消）。
           </p>
           <p>
             <strong>RMSNorm</strong> 因为更省、效果相当，被 LLaMA、Mistral 等现代模型采用。

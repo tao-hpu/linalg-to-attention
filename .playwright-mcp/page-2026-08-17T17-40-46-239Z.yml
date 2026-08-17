@@ -1,0 +1,946 @@
+- generic [ref=f9e3]:
+  - banner [ref=f9e4]:
+    - generic [ref=f9e5]:
+      - button "切换全局导航" [expanded] [ref=f9e6] [cursor=pointer]:
+        - generic [ref=f9e7]: ✕
+      - link "线性代数 → 注意力" [ref=f9e8] [cursor=pointer]:
+        - /url: /
+    - navigation [ref=f9e9]:
+      - button "搜索章节" [ref=f9e10] [cursor=pointer]:
+        - generic [ref=f9e11]: ⌕
+        - generic [ref=f9e13]: ⌘K
+      - link "大纲" [ref=f9e14] [cursor=pointer]:
+        - /url: /
+      - link "★ GitHub" [ref=f9e15] [cursor=pointer]:
+        - /url: https://github.com/tao-hpu/linalg-to-attention
+  - generic [ref=f9e16]:
+    - navigation "全书导航" [ref=f9e17]:
+      - link "全书大纲" [ref=f9e18] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f9e19]:
+        - generic [ref=f9e20]: 第一部分 · 向量：意义的载体
+        - list [ref=f9e21]:
+          - listitem [ref=f9e22]:
+            - link "01 向量与坐标系 ★" [ref=f9e23] [cursor=pointer]:
+              - /url: /ch/vectors
+              - generic [ref=f9e24]: "01"
+              - generic [ref=f9e25]: 向量与坐标系 ★
+          - listitem [ref=f9e26]:
+            - link "02 从词袋到词向量" [ref=f9e27] [cursor=pointer]:
+              - /url: /ch/bow-to-embedding
+              - generic [ref=f9e28]: "02"
+              - generic [ref=f9e29]: 从词袋到词向量
+          - listitem [ref=f9e30]:
+            - link "03 向量的加减与缩放" [ref=f9e31] [cursor=pointer]:
+              - /url: /ch/vector-arithmetic
+              - generic [ref=f9e32]: "03"
+              - generic [ref=f9e33]: 向量的加减与缩放
+          - listitem [ref=f9e34]:
+            - link "04 内积 ★" [ref=f9e35] [cursor=pointer]:
+              - /url: /ch/dot-product
+              - generic [ref=f9e36]: "04"
+              - generic [ref=f9e37]: 内积 ★
+          - listitem [ref=f9e38]:
+            - link "05 投影" [ref=f9e39] [cursor=pointer]:
+              - /url: /ch/projection
+              - generic [ref=f9e40]: "05"
+              - generic [ref=f9e41]: 投影
+          - listitem [ref=f9e42]:
+            - link "06 范数与单位向量" [ref=f9e43] [cursor=pointer]:
+              - /url: /ch/norms
+              - generic [ref=f9e44]: "06"
+              - generic [ref=f9e45]: 范数与单位向量
+      - generic [ref=f9e46]:
+        - generic [ref=f9e47]: 第二部分 · 矩阵：一个动作
+        - list [ref=f9e48]:
+          - listitem [ref=f9e49]:
+            - link "07 矩阵是变换 ★" [ref=f9e50] [cursor=pointer]:
+              - /url: /ch/matrix-as-transform
+              - generic [ref=f9e51]: "07"
+              - generic [ref=f9e52]: 矩阵是变换 ★
+          - listitem [ref=f9e53]:
+            - link "08 矩阵乘法的几何 ★" [ref=f9e54] [cursor=pointer]:
+              - /url: /ch/matrix-mult
+              - generic [ref=f9e55]: "08"
+              - generic [ref=f9e56]: 矩阵乘法的几何 ★
+          - listitem [ref=f9e57]:
+            - link "09 矩阵乘法的四种视角" [ref=f9e58] [cursor=pointer]:
+              - /url: /ch/matmul-views
+              - generic [ref=f9e59]: "09"
+              - generic [ref=f9e60]: 矩阵乘法的四种视角
+          - listitem [ref=f9e61]:
+            - link "10 转置与形状 ★" [ref=f9e62] [cursor=pointer]:
+              - /url: /ch/transpose-shape
+              - generic [ref=f9e63]: "10"
+              - generic [ref=f9e64]: 转置与形状 ★
+          - listitem [ref=f9e65]:
+            - link "11 批量与张量" [ref=f9e66] [cursor=pointer]:
+              - /url: /ch/batching
+              - generic [ref=f9e67]: "11"
+              - generic [ref=f9e68]: 批量与张量
+      - generic [ref=f9e69]:
+        - generic [ref=f9e70]: 第三部分 · 方阵的秘密
+        - list [ref=f9e71]:
+          - listitem [ref=f9e72]:
+            - link "✓ 行列式" [ref=f9e73] [cursor=pointer]:
+              - /url: /ch/determinant
+              - generic [ref=f9e74]: ✓
+              - generic [ref=f9e75]: 行列式
+          - listitem [ref=f9e76]:
+            - link "13 矩阵的秩 ★" [ref=f9e77] [cursor=pointer]:
+              - /url: /ch/rank
+              - generic [ref=f9e78]: "13"
+              - generic [ref=f9e79]: 矩阵的秩 ★
+          - listitem [ref=f9e80]:
+            - link "14 逆矩阵" [ref=f9e81] [cursor=pointer]:
+              - /url: /ch/inverse
+              - generic [ref=f9e82]: "14"
+              - generic [ref=f9e83]: 逆矩阵
+          - listitem [ref=f9e84]:
+            - link "15 特征值与特征向量" [ref=f9e85] [cursor=pointer]:
+              - /url: /ch/eigen
+              - generic [ref=f9e86]: "15"
+              - generic [ref=f9e87]: 特征值与特征向量
+          - listitem [ref=f9e88]:
+            - link "16 对称矩阵与谱分解" [ref=f9e89] [cursor=pointer]:
+              - /url: /ch/spectral
+              - generic [ref=f9e90]: "16"
+              - generic [ref=f9e91]: 对称矩阵与谱分解
+      - generic [ref=f9e92]:
+        - generic [ref=f9e93]: 第四部分 · 正交、回归与投影
+        - list [ref=f9e94]:
+          - listitem [ref=f9e95]:
+            - link "17 正交矩阵与旋转" [ref=f9e96] [cursor=pointer]:
+              - /url: /ch/orthogonal-rotation
+              - generic [ref=f9e97]: "17"
+              - generic [ref=f9e98]: 正交矩阵与旋转
+          - listitem [ref=f9e99]:
+            - link "18 正交投影" [ref=f9e100] [cursor=pointer]:
+              - /url: /ch/orthogonal-projection
+              - generic [ref=f9e101]: "18"
+              - generic [ref=f9e102]: 正交投影
+          - listitem [ref=f9e103]:
+            - link "19 格拉姆-施密特与 QR" [ref=f9e104] [cursor=pointer]:
+              - /url: /ch/gram-schmidt
+              - generic [ref=f9e105]: "19"
+              - generic [ref=f9e106]: 格拉姆-施密特与 QR
+          - listitem [ref=f9e107]:
+            - link "20 回归 = 投影" [ref=f9e108] [cursor=pointer]:
+              - /url: /ch/regression-projection
+              - generic [ref=f9e109]: "20"
+              - generic [ref=f9e110]: 回归 = 投影
+      - generic [ref=f9e111]:
+        - generic [ref=f9e112]: 第五部分 · 降维：抓住主要矛盾
+        - list [ref=f9e113]:
+          - listitem [ref=f9e114]:
+            - link "21 SVD 奇异值分解 ★" [ref=f9e115] [cursor=pointer]:
+              - /url: /ch/svd
+              - generic [ref=f9e116]: "21"
+              - generic [ref=f9e117]: SVD 奇异值分解 ★
+          - listitem [ref=f9e118]:
+            - link "22 低秩近似 ★" [ref=f9e119] [cursor=pointer]:
+              - /url: /ch/low-rank
+              - generic [ref=f9e120]: "22"
+              - generic [ref=f9e121]: 低秩近似 ★
+          - listitem [ref=f9e122]:
+            - link "23 PCA 主成分分析" [ref=f9e123] [cursor=pointer]:
+              - /url: /ch/pca
+              - generic [ref=f9e124]: "23"
+              - generic [ref=f9e125]: PCA 主成分分析
+      - generic [ref=f9e126]:
+        - generic [ref=f9e127]: 第六部分 · 学习：模型怎么变聪明
+        - list [ref=f9e128]:
+          - listitem [ref=f9e129]:
+            - link "24 梯度" [ref=f9e130] [cursor=pointer]:
+              - /url: /ch/gradient
+              - generic [ref=f9e131]: "24"
+              - generic [ref=f9e132]: 梯度
+          - listitem [ref=f9e133]:
+            - link "25 链式法则与 Jacobian" [ref=f9e134] [cursor=pointer]:
+              - /url: /ch/chain-rule
+              - generic [ref=f9e135]: "25"
+              - generic [ref=f9e136]: 链式法则与 Jacobian
+          - listitem [ref=f9e137]:
+            - link "26 梯度下降" [ref=f9e138] [cursor=pointer]:
+              - /url: /ch/gradient-descent
+              - generic [ref=f9e139]: "26"
+              - generic [ref=f9e140]: 梯度下降
+          - listitem [ref=f9e141]:
+            - link "27 正则化：Ridge 与 Lasso" [ref=f9e142] [cursor=pointer]:
+              - /url: /ch/regularization
+              - generic [ref=f9e143]: "27"
+              - generic [ref=f9e144]: 正则化：Ridge 与 Lasso
+          - listitem [ref=f9e145]:
+            - link "28 归一化" [ref=f9e146] [cursor=pointer]:
+              - /url: /ch/normalization
+              - generic [ref=f9e147]: "28"
+              - generic [ref=f9e148]: 归一化
+      - generic [ref=f9e149]:
+        - generic [ref=f9e150]: 第七部分 · 概率视角：模型在「猜下一个词」
+        - list [ref=f9e151]:
+          - listitem [ref=f9e152]:
+            - link "✓ Softmax 与概率分布 ★" [ref=f9e153] [cursor=pointer]:
+              - /url: /ch/softmax
+              - generic [ref=f9e154]: ✓
+              - generic [ref=f9e155]: Softmax 与概率分布 ★
+          - listitem [ref=f9e156]:
+            - link "30 交叉熵与极大似然" [ref=f9e157] [cursor=pointer]:
+              - /url: /ch/cross-entropy
+              - generic [ref=f9e158]: "30"
+              - generic [ref=f9e159]: 交叉熵与极大似然
+      - generic [ref=f9e160]:
+        - generic [ref=f9e161]: 第八部分 · 合成：亲手拼出注意力
+        - list [ref=f9e162]:
+          - listitem [ref=f9e163]:
+            - link "✓ 自注意力 ★" [ref=f9e164] [cursor=pointer]:
+              - /url: /ch/self-attention
+              - generic [ref=f9e165]: ✓
+              - generic [ref=f9e166]: 自注意力 ★
+          - listitem [ref=f9e167]:
+            - link "32 多头注意力" [ref=f9e168] [cursor=pointer]:
+              - /url: /ch/multi-head
+              - generic [ref=f9e169]: "32"
+              - generic [ref=f9e170]: 多头注意力
+          - listitem [ref=f9e171]:
+            - link "33 位置编码与 RoPE" [ref=f9e172] [cursor=pointer]:
+              - /url: /ch/rope
+              - generic [ref=f9e173]: "33"
+              - generic [ref=f9e174]: 位置编码与 RoPE
+          - listitem [ref=f9e175]:
+            - link "34 一个 Transformer Block" [ref=f9e176] [cursor=pointer]:
+              - /url: /ch/transformer-block
+              - generic [ref=f9e177]: "34"
+              - generic [ref=f9e178]: 一个 Transformer Block
+      - generic [ref=f9e179]:
+        - generic [ref=f9e180]: 第九部分 · 尾声：接到 LLM 工程
+        - list [ref=f9e181]:
+          - listitem [ref=f9e182]:
+            - link "35 LoRA 与高效微调" [ref=f9e183] [cursor=pointer]:
+              - /url: /ch/lora-finetuning
+              - generic [ref=f9e184]: "35"
+              - generic [ref=f9e185]: LoRA 与高效微调
+          - listitem [ref=f9e186]:
+            - link "36 采样与解码" [ref=f9e187] [cursor=pointer]:
+              - /url: /ch/sampling-decoding
+              - generic [ref=f9e188]: "36"
+              - generic [ref=f9e189]: 采样与解码
+          - listitem [ref=f9e190]:
+            - link "✓ 量化与数值" [ref=f9e191] [cursor=pointer]:
+              - /url: /ch/quantization
+              - generic [ref=f9e192]: ✓
+              - generic [ref=f9e193]: 量化与数值
+      - generic [ref=f9e194]:
+        - generic [ref=f9e195]: 第十部分 · 终点：完整的前向传播
+        - list [ref=f9e196]:
+          - listitem [ref=f9e197]:
+            - link "38 跑通一次前向传播 ★" [ref=f9e198] [cursor=pointer]:
+              - /url: /ch/forward-pass
+              - generic [ref=f9e199]: "38"
+              - generic [ref=f9e200]: 跑通一次前向传播 ★
+    - main [ref=f9e201]:
+      - article [ref=f9e202]:
+        - generic [ref=f9e203]:
+          - generic [ref=f9e204]:
+            - link "大纲" [ref=f9e205] [cursor=pointer]:
+              - /url: /
+            - text: · 第八部分 · 合成：亲手拼出注意力
+          - generic [ref=f9e206]: 第 31 节 ★ 核心
+          - heading "自注意力 Attention(Q, K, V) = softmax(QKᵀ/√d) · V" [level=1] [ref=f9e207]:
+            - text: 自注意力
+            - generic [ref=f9e208]: Attention(Q, K, V) = softmax(QKᵀ/√d) · V
+          - paragraph [ref=f9e209]:
+            - text: 这是整门课的高潮。自注意力（self-attention）让序列里的每个 token 都能
+            - strong [ref=f9e210]: 看见每一个其他 token，并按相关性把它们的信息加权汇入自己
+            - text: 。 整个过程就一个公式：把每个 token 的 embedding 投影成
+            - strong [ref=f9e211]: Query、Key、Value
+            - text: （
+            - code [ref=f9e212]: Q=XW_Q
+            - text: ","
+            - code [ref=f9e213]: K=XW_K
+            - text: ","
+            - code [ref=f9e214]: V=XW_V
+            - text: ）； 用点积打分（
+            - link "第 04 节" [ref=f9e215] [cursor=pointer]:
+              - /url: /ch/dot-product
+            - text: ），除以 √d 缩放（
+            - link "第 06 节" [ref=f9e216] [cursor=pointer]:
+              - /url: /ch/norms
+            - text: ）； softmax 归一化成权重（
+            - link "第 29 节" [ref=f9e217] [cursor=pointer]:
+              - /url: /ch/softmax
+            - text: ）； 最后做加权和
+            - code [ref=f9e218]: output = softmax(QKᵀ/√d)·V
+            - text: （
+            - link "第 10 节" [ref=f9e219] [cursor=pointer]:
+              - /url: /ch/transpose-shape
+            - text: 的形状逻辑在此收口）。 下面你亲手跑完整个 pipeline，每一步都有实数。
+        - generic [ref=f9e220]:
+          - generic [ref=f9e221]:
+            - generic [ref=f9e222]:
+              - generic [ref=f9e223]: Query token
+              - generic [ref=f9e224]: 点选一个 token，看它注意哪些位置
+            - generic [ref=f9e225]:
+              - button "猫" [ref=f9e226] [cursor=pointer]
+              - button "坐" [ref=f9e227] [cursor=pointer]
+              - button "在" [ref=f9e228] [cursor=pointer]
+              - button "垫子" [ref=f9e229] [cursor=pointer]
+              - button "上" [ref=f9e230] [cursor=pointer]
+          - generic [ref=f9e231]:
+            - generic [ref=f9e232]:
+              - generic [ref=f9e233]: √d 缩放
+              - generic [ref=f9e234]: 关掉看 softmax 饱和
+            - generic [ref=f9e235]:
+              - button "÷√4 = ÷2 ✓" [ref=f9e236] [cursor=pointer]
+              - button "不缩放（÷1）" [ref=f9e237] [cursor=pointer]
+          - generic [ref=f9e238]:
+            - generic [ref=f9e239]:
+              - generic [ref=f9e240]: 扰动「猫」embedding[0]
+              - generic [ref=f9e241]: nudge X[0][0]，看注意力权重随之变化
+            - generic [ref=f9e242]:
+              - slider "+0.00" [ref=f9e243]: "0"
+              - generic [ref=f9e244]: "+0.00"
+            - paragraph [ref=f9e245]: base = 3.60 → 当前 = 3.60
+        - generic [ref=f9e246]:
+          - heading "第一步：投影 — X 变出 Query、Key、Value" [level=2] [ref=f9e247]
+          - paragraph [ref=f9e248]:
+            - text: 每个 token 的 embedding（X 的行）同时投影到三个子空间：
+            - code [ref=f9e249]: Q = X·W_Q
+            - text: ，
+            - code [ref=f9e250]: K = X·W_K
+            - text: ，
+            - code [ref=f9e251]: V = X·W_V
+            - text: 。 W_Q / W_K / W_V 是网络的可学习参数。下面的 heatmap 是每个矩阵的实际数值（悬停看精确值）。
+          - generic [ref=f9e252]:
+            - generic [ref=f9e253]:
+              - generic [ref=f9e254]:
+                - generic [ref=f9e255]: X (5×4 token embeddings)
+                - generic [ref=f9e256]:
+                  - generic [ref=f9e257]: d₀
+                  - generic [ref=f9e258]: d₁
+                  - generic [ref=f9e259]: d₂
+                  - generic [ref=f9e260]: d₃
+                - generic [ref=f9e261]:
+                  - generic [ref=f9e262]: 猫
+                  - generic "3.600" [ref=f9e263]: "3.60"
+                  - generic "1.500" [ref=f9e264]: "1.50"
+                  - generic "-0.900" [ref=f9e265]: "-0.90"
+                  - generic "2.400" [ref=f9e266]: "2.40"
+                - generic [ref=f9e267]:
+                  - generic [ref=f9e268]: 坐
+                  - generic "0.600" [ref=f9e269]: "0.60"
+                  - generic "3.000" [ref=f9e270]: "3.00"
+                  - generic "1.800" [ref=f9e271]: "1.80"
+                  - generic "-1.200" [ref=f9e272]: "-1.20"
+                - generic [ref=f9e273]:
+                  - generic [ref=f9e274]: 在
+                  - generic "-0.300" [ref=f9e275]: "-0.30"
+                  - generic "0.900" [ref=f9e276]: "0.90"
+                  - generic "2.400" [ref=f9e277]: "2.40"
+                  - generic "0.600" [ref=f9e278]: "0.60"
+                - generic [ref=f9e279]:
+                  - generic [ref=f9e280]: 垫子
+                  - generic "2.700" [ref=f9e281]: "2.70"
+                  - generic "1.200" [ref=f9e282]: "1.20"
+                  - generic "0.000" [ref=f9e283]: "0.00"
+                  - generic "2.100" [ref=f9e284]: "2.10"
+                - generic [ref=f9e285]:
+                  - generic [ref=f9e286]: 上
+                  - generic "-0.600" [ref=f9e287]: "-0.60"
+                  - generic "0.000" [ref=f9e288]: "0.00"
+                  - generic "1.500" [ref=f9e289]: "1.50"
+                  - generic "1.200" [ref=f9e290]: "1.20"
+              - generic [ref=f9e291]: "X : 5×4"
+            - generic [ref=f9e292]:
+              - generic [ref=f9e294]:
+                - generic [ref=f9e295]: W_Q (4×4)
+                - generic [ref=f9e296]:
+                  - generic "0.500" [ref=f9e297]: "0.50"
+                  - generic "-0.200" [ref=f9e298]: "-0.20"
+                  - generic "0.300" [ref=f9e299]: "0.30"
+                  - generic "0.100" [ref=f9e300]: "0.10"
+                - generic [ref=f9e301]:
+                  - generic "0.000" [ref=f9e302]: "0.00"
+                  - generic "0.800" [ref=f9e303]: "0.80"
+                  - generic "-0.100" [ref=f9e304]: "-0.10"
+                  - generic "0.400" [ref=f9e305]: "0.40"
+                - generic [ref=f9e306]:
+                  - generic "-0.300" [ref=f9e307]: "-0.30"
+                  - generic "0.100" [ref=f9e308]: "0.10"
+                  - generic "0.600" [ref=f9e309]: "0.60"
+                  - generic "0.200" [ref=f9e310]: "0.20"
+                - generic [ref=f9e311]:
+                  - generic "0.200" [ref=f9e312]: "0.20"
+                  - generic "0.300" [ref=f9e313]: "0.30"
+                  - generic "0.000" [ref=f9e314]: "0.00"
+                  - generic "0.700" [ref=f9e315]: "0.70"
+              - generic [ref=f9e317]:
+                - generic [ref=f9e318]: W_K (4×4)
+                - generic [ref=f9e319]:
+                  - generic "0.600" [ref=f9e320]: "0.60"
+                  - generic "0.100" [ref=f9e321]: "0.10"
+                  - generic "-0.200" [ref=f9e322]: "-0.20"
+                  - generic "0.300" [ref=f9e323]: "0.30"
+                - generic [ref=f9e324]:
+                  - generic "0.100" [ref=f9e325]: "0.10"
+                  - generic "0.700" [ref=f9e326]: "0.70"
+                  - generic "0.300" [ref=f9e327]: "0.30"
+                  - generic "-0.100" [ref=f9e328]: "-0.10"
+                - generic [ref=f9e329]:
+                  - generic "0.000" [ref=f9e330]: "0.00"
+                  - generic "-0.200" [ref=f9e331]: "-0.20"
+                  - generic "0.500" [ref=f9e332]: "0.50"
+                  - generic "0.400" [ref=f9e333]: "0.40"
+                - generic [ref=f9e334]:
+                  - generic "0.400" [ref=f9e335]: "0.40"
+                  - generic "0.200" [ref=f9e336]: "0.20"
+                  - generic "0.100" [ref=f9e337]: "0.10"
+                  - generic "0.600" [ref=f9e338]: "0.60"
+              - generic [ref=f9e340]:
+                - generic [ref=f9e341]: W_V (4×4)
+                - generic [ref=f9e342]:
+                  - generic "0.800" [ref=f9e343]: "0.80"
+                  - generic "0.000" [ref=f9e344]: "0.00"
+                  - generic "0.100" [ref=f9e345]: "0.10"
+                  - generic "-0.200" [ref=f9e346]: "-0.20"
+                - generic [ref=f9e347]:
+                  - generic "0.000" [ref=f9e348]: "0.00"
+                  - generic "0.600" [ref=f9e349]: "0.60"
+                  - generic "0.300" [ref=f9e350]: "0.30"
+                  - generic "0.100" [ref=f9e351]: "0.10"
+                - generic [ref=f9e352]:
+                  - generic "-0.100" [ref=f9e353]: "-0.10"
+                  - generic "0.200" [ref=f9e354]: "0.20"
+                  - generic "0.700" [ref=f9e355]: "0.70"
+                  - generic "0.000" [ref=f9e356]: "0.00"
+                - generic [ref=f9e357]:
+                  - generic "0.300" [ref=f9e358]: "0.30"
+                  - generic "-0.100" [ref=f9e359]: "-0.10"
+                  - generic "0.000" [ref=f9e360]: "0.00"
+                  - generic "0.500" [ref=f9e361]: "0.50"
+            - generic [ref=f9e362]:
+              - generic [ref=f9e363]: →
+              - generic [ref=f9e364]: →
+              - generic [ref=f9e365]: →
+            - generic [ref=f9e366]:
+              - generic [ref=f9e368]:
+                - generic [ref=f9e369]: Q = X·W_Q (5×4)
+                - generic [ref=f9e370]:
+                  - generic [ref=f9e371]: 猫
+                  - generic "2.550" [ref=f9e372]: "2.55"
+                  - generic "1.110" [ref=f9e373]: "1.11"
+                  - generic "0.390" [ref=f9e374]: "0.39"
+                  - generic "2.460" [ref=f9e375]: "2.46"
+                - generic [ref=f9e376]:
+                  - generic [ref=f9e377]: 坐
+                  - generic "-0.480" [ref=f9e378]: "-0.48"
+                  - generic "2.100" [ref=f9e379]: "2.10"
+                  - generic "0.960" [ref=f9e380]: "0.96"
+                  - generic "0.780" [ref=f9e381]: "0.78"
+                - generic [ref=f9e382]:
+                  - generic [ref=f9e383]: 在
+                  - generic "-0.750" [ref=f9e384]: "-0.75"
+                  - generic "1.200" [ref=f9e385]: "1.20"
+                  - generic "1.260" [ref=f9e386]: "1.26"
+                  - generic "1.230" [ref=f9e387]: "1.23"
+                - generic [ref=f9e388]:
+                  - generic [ref=f9e389]: 垫子
+                  - generic "1.770" [ref=f9e390]: "1.77"
+                  - generic "1.050" [ref=f9e391]: "1.05"
+                  - generic "0.690" [ref=f9e392]: "0.69"
+                  - generic "2.220" [ref=f9e393]: "2.22"
+                - generic [ref=f9e394]:
+                  - generic [ref=f9e395]: 上
+                  - generic "-0.510" [ref=f9e396]: "-0.51"
+                  - generic "0.630" [ref=f9e397]: "0.63"
+                  - generic "0.720" [ref=f9e398]: "0.72"
+                  - generic "1.080" [ref=f9e399]: "1.08"
+              - generic [ref=f9e401]:
+                - generic [ref=f9e402]: K = X·W_K (5×4)
+                - generic [ref=f9e403]:
+                  - generic [ref=f9e404]: 猫
+                  - generic "3.270" [ref=f9e405]: "3.27"
+                  - generic "2.070" [ref=f9e406]: "2.07"
+                  - generic "-0.480" [ref=f9e407]: "-0.48"
+                  - generic "2.010" [ref=f9e408]: "2.01"
+                - generic [ref=f9e409]:
+                  - generic [ref=f9e410]: 坐
+                  - generic "0.180" [ref=f9e411]: "0.18"
+                  - generic "1.560" [ref=f9e412]: "1.56"
+                  - generic "1.560" [ref=f9e413]: "1.56"
+                  - generic "-0.120" [ref=f9e414]: "-0.12"
+                - generic [ref=f9e415]:
+                  - generic [ref=f9e416]: 在
+                  - generic "0.150" [ref=f9e417]: "0.15"
+                  - generic "0.240" [ref=f9e418]: "0.24"
+                  - generic "1.590" [ref=f9e419]: "1.59"
+                  - generic "1.140" [ref=f9e420]: "1.14"
+                - generic [ref=f9e421]:
+                  - generic [ref=f9e422]: 垫子
+                  - generic "2.580" [ref=f9e423]: "2.58"
+                  - generic "1.530" [ref=f9e424]: "1.53"
+                  - generic "0.030" [ref=f9e425]: "0.03"
+                  - generic "1.950" [ref=f9e426]: "1.95"
+                - generic [ref=f9e427]:
+                  - generic [ref=f9e428]: 上
+                  - generic "0.120" [ref=f9e429]: "0.12"
+                  - generic "-0.120" [ref=f9e430]: "-0.12"
+                  - generic "0.990" [ref=f9e431]: "0.99"
+                  - generic "1.140" [ref=f9e432]: "1.14"
+              - generic [ref=f9e434]:
+                - generic [ref=f9e435]: V = X·W_V (5×4)
+                - generic [ref=f9e436]:
+                  - generic [ref=f9e437]: 猫
+                  - generic "3.690" [ref=f9e438]: "3.69"
+                  - generic "0.480" [ref=f9e439]: "0.48"
+                  - generic "0.180" [ref=f9e440]: "0.18"
+                  - generic "0.630" [ref=f9e441]: "0.63"
+                - generic [ref=f9e442]:
+                  - generic [ref=f9e443]: 坐
+                  - generic "-0.060" [ref=f9e444]: "-0.06"
+                  - generic "2.280" [ref=f9e445]: "2.28"
+                  - generic "2.220" [ref=f9e446]: "2.22"
+                  - generic "-0.420" [ref=f9e447]: "-0.42"
+                - generic [ref=f9e448]:
+                  - generic [ref=f9e449]: 在
+                  - generic "-0.300" [ref=f9e450]: "-0.30"
+                  - generic "0.960" [ref=f9e451]: "0.96"
+                  - generic "1.920" [ref=f9e452]: "1.92"
+                  - generic "0.450" [ref=f9e453]: "0.45"
+                - generic [ref=f9e454]:
+                  - generic [ref=f9e455]: 垫子
+                  - generic "2.790" [ref=f9e456]: "2.79"
+                  - generic "0.510" [ref=f9e457]: "0.51"
+                  - generic "0.630" [ref=f9e458]: "0.63"
+                  - generic "0.630" [ref=f9e459]: "0.63"
+                - generic [ref=f9e460]:
+                  - generic [ref=f9e461]: 上
+                  - generic "-0.270" [ref=f9e462]: "-0.27"
+                  - generic "0.180" [ref=f9e463]: "0.18"
+                  - generic "0.990" [ref=f9e464]: "0.99"
+                  - generic "0.720" [ref=f9e465]: "0.72"
+          - generic [ref=f9e466]: (5×4) · (4×4) = (5×4) → Q, K, V 各自 5×4
+        - generic [ref=f9e467]:
+          - heading "第二步：打分 + Softmax — 得到注意力权重" [level=2] [ref=f9e468]
+          - paragraph [ref=f9e469]:
+            - text: Query 与所有 Key 做点积（
+            - link "第 04 节" [ref=f9e470] [cursor=pointer]:
+              - /url: /ch/dot-product
+            - text: ）：
+            - code [ref=f9e471]: QKᵀ
+            - text: 的形状 5×4 · 4×5 = 5×5（
+            - link "第 10 节" [ref=f9e472] [cursor=pointer]:
+              - /url: /ch/transpose-shape
+            - text: 的转置逻辑在此体现）。 除以 √d = √4 = 2 防止梯度消失（
+            - link "第 06 节" [ref=f9e473] [cursor=pointer]:
+              - /url: /ch/norms
+            - text: ）。 再 softmax 每一行 → 权重，每行之和 = 1。
+          - generic [ref=f9e474]:
+            - generic [ref=f9e475]:
+              - generic [ref=f9e476]:
+                - generic [ref=f9e477]: QKᵀ / √4 — 缩放后分数 (5×5)
+                - generic [ref=f9e478]:
+                  - generic [ref=f9e479]: 猫
+                  - generic [ref=f9e480]: 坐
+                  - generic [ref=f9e481]: 在
+                  - generic [ref=f9e482]: 垫子
+                  - generic [ref=f9e483]: 上
+                - generic [ref=f9e484]:
+                  - generic [ref=f9e485]: 猫
+                  - generic "7.697" [ref=f9e486]: "7.70"
+                  - generic "1.252" [ref=f9e487]: "1.25"
+                  - generic "2.037" [ref=f9e488]: "2.04"
+                  - generic "6.543" [ref=f9e489]: "6.54"
+                  - generic "1.682" [ref=f9e490]: "1.68"
+                - generic [ref=f9e491]:
+                  - generic [ref=f9e492]: 坐
+                  - generic "1.942" [ref=f9e493]: "1.94"
+                  - generic "2.297" [ref=f9e494]: "2.30"
+                  - generic "1.424" [ref=f9e495]: "1.42"
+                  - generic "1.762" [ref=f9e496]: "1.76"
+                  - generic "0.765" [ref=f9e497]: "0.77"
+                - generic [ref=f9e498]:
+                  - generic [ref=f9e499]: 在
+                  - generic "0.949" [ref=f9e500]: "0.95"
+                  - generic "1.777" [ref=f9e501]: "1.78"
+                  - generic "1.791" [ref=f9e502]: "1.79"
+                  - generic "1.169" [ref=f9e503]: "1.17"
+                  - generic "1.208" [ref=f9e504]: "1.21"
+                - generic [ref=f9e505]:
+                  - generic [ref=f9e506]: 垫子
+                  - generic "6.046" [ref=f9e507]: "6.05"
+                  - generic "1.383" [ref=f9e508]: "1.38"
+                  - generic "2.073" [ref=f9e509]: "2.07"
+                  - generic "5.261" [ref=f9e510]: "5.26"
+                  - generic "1.650" [ref=f9e511]: "1.65"
+                - generic [ref=f9e512]:
+                  - generic [ref=f9e513]: 上
+                  - generic "0.731" [ref=f9e514]: "0.73"
+                  - generic "0.942" [ref=f9e515]: "0.94"
+                  - generic "1.225" [ref=f9e516]: "1.23"
+                  - generic "0.888" [ref=f9e517]: "0.89"
+                  - generic "0.904" [ref=f9e518]: "0.90"
+              - generic [ref=f9e519]: (5×4) · (4×5) = (5×5)
+            - generic [ref=f9e520]:
+              - generic [ref=f9e521]: softmax
+              - text: →
+            - generic [ref=f9e522]:
+              - generic [ref=f9e523]:
+                - generic [ref=f9e524]: softmax(QKᵀ/√d) — 注意力权重 (5×5)
+                - generic [ref=f9e525]:
+                  - generic [ref=f9e526]: 猫
+                  - generic [ref=f9e527]: 坐
+                  - generic [ref=f9e528]: 在
+                  - generic [ref=f9e529]: 垫子
+                  - generic [ref=f9e530]: 上
+                - generic [ref=f9e531]:
+                  - generic [ref=f9e532]: 猫
+                  - generic "0.756" [ref=f9e533]: "0.76"
+                  - generic "0.001" [ref=f9e534]: "0.00"
+                  - generic "0.003" [ref=f9e535]: "0.00"
+                  - generic "0.238" [ref=f9e536]: "0.24"
+                  - generic "0.002" [ref=f9e537]: "0.00"
+                - generic [ref=f9e538]:
+                  - generic [ref=f9e539]: 坐
+                  - generic "0.240" [ref=f9e540]: "0.24"
+                  - generic "0.342" [ref=f9e541]: "0.34"
+                  - generic "0.143" [ref=f9e542]: "0.14"
+                  - generic "0.201" [ref=f9e543]: "0.20"
+                  - generic "0.074" [ref=f9e544]: "0.07"
+                - generic [ref=f9e545]:
+                  - generic [ref=f9e546]: 在
+                  - generic "0.123" [ref=f9e547]: "0.12"
+                  - generic "0.281" [ref=f9e548]: "0.28"
+                  - generic "0.285" [ref=f9e549]: "0.28"
+                  - generic "0.153" [ref=f9e550]: "0.15"
+                  - generic "0.159" [ref=f9e551]: "0.16"
+                - generic [ref=f9e552]:
+                  - generic [ref=f9e553]: 垫子
+                  - generic "0.668" [ref=f9e554]: "0.67"
+                  - generic "0.006" [ref=f9e555]: "0.01"
+                  - generic "0.013" [ref=f9e556]: "0.01"
+                  - generic "0.305" [ref=f9e557]: "0.30"
+                  - generic "0.008" [ref=f9e558]: "0.01"
+                - generic [ref=f9e559]:
+                  - generic [ref=f9e560]: 上
+                  - generic "0.160" [ref=f9e561]: "0.16"
+                  - generic "0.198" [ref=f9e562]: "0.20"
+                  - generic "0.263" [ref=f9e563]: "0.26"
+                  - generic "0.188" [ref=f9e564]: "0.19"
+                  - generic "0.191" [ref=f9e565]: "0.19"
+              - generic [ref=f9e566]: 每行之和 = 1 · 当前 Query 行和 = 1.0000 ✓
+          - generic [ref=f9e567]:
+            - strong [ref=f9e568]: 为什么注意力「贵」？
+            - text: 看这个分数矩阵的形状：
+            - code [ref=f9e569]: QKᵀ
+            - text: 是
+            - strong [ref=f9e570]: 5×5
+            - text: —— 序列里每个 token 都要和
+            - strong [ref=f9e571]: 其余每个 token
+            - text: 算一次点积。 序列长 n 时，光这一个矩阵就是
+            - strong [ref=f9e572]: n² 个分数
+            - text: ， 算力和显存都按
+            - strong [ref=f9e573]: O(n²)
+            - text: 增长：上下文翻倍，注意力开销翻
+            - strong [ref=f9e574]: 四倍
+            - text: 。 这就是长上下文为什么烧钱，也是 FlashAttention、稀疏注意力、线性注意力这些工作要解决的问题。
+        - generic [ref=f9e575]:
+          - heading "第三步：加权求和 — 用权重读出 Value" [level=2] [ref=f9e576]
+          - paragraph [ref=f9e577]:
+            - strong [ref=f9e578]: 「猫」
+            - text: 这个 token 的输出 = 它对每个 token 的注意力权重（下图弧线粗细）× 对应的 Value 向量之和。弧线越粗 = 越「关注」那个 token。
+          - img "Token 猫 的注意力分布" [ref=f9e580]:
+            - generic [ref=f9e582]: 猫
+            - generic [ref=f9e585]: 坐
+            - generic [ref=f9e588]: 在
+            - generic [ref=f9e591]: 垫子
+            - generic [ref=f9e594]: 上
+            - generic [ref=f9e597]: "0.76"
+            - generic [ref=f9e598]: "0.00"
+            - generic [ref=f9e599]: "0.00"
+            - generic [ref=f9e600]: "0.24"
+            - generic [ref=f9e601]: "0.00"
+            - generic [ref=f9e602]: Query
+          - table [ref=f9e604]:
+            - rowgroup [ref=f9e605]:
+              - row [ref=f9e606]:
+                - columnheader "Key token" [ref=f9e607]
+                - columnheader "attention weight" [ref=f9e608]
+                - columnheader "%" [ref=f9e609]
+                - columnheader "贡献 (weight × V 行)" [ref=f9e610]
+            - rowgroup [ref=f9e611]:
+              - row [ref=f9e612]:
+                - cell "猫" [ref=f9e613]
+                - cell "0.756" [ref=f9e614]
+                - cell "75.6%" [ref=f9e615]
+                - cell "2.79 0.36 0.14 0.48" [ref=f9e616]
+              - row [ref=f9e617]:
+                - cell "坐" [ref=f9e618]
+                - cell "0.001" [ref=f9e619]
+                - cell "0.1%" [ref=f9e620]
+                - cell "-0.00 0.00 0.00 -0.00" [ref=f9e621]
+              - row [ref=f9e622]:
+                - cell "在" [ref=f9e623]
+                - cell "0.003" [ref=f9e624]
+                - cell "0.3%" [ref=f9e625]
+                - cell "-0.00 0.00 0.01 0.00" [ref=f9e626]
+              - row [ref=f9e627]:
+                - cell "垫子" [ref=f9e628]
+                - cell "0.238" [ref=f9e629]
+                - cell "23.8%" [ref=f9e630]
+                - cell "0.67 0.12 0.15 0.15" [ref=f9e631]
+              - row [ref=f9e632]:
+                - cell "上" [ref=f9e633]
+                - cell "0.002" [ref=f9e634]
+                - cell "0.2%" [ref=f9e635]
+                - cell "-0.00 0.00 0.00 0.00" [ref=f9e636]
+            - rowgroup [ref=f9e637]:
+              - row [ref=f9e638]:
+                - cell "输出 out[0]" [ref=f9e639]
+                - cell "Σ = 1.000" [ref=f9e640]
+                - cell "100%" [ref=f9e641]
+                - cell "3.45 0.49 0.30 0.63" [ref=f9e642]
+          - generic [ref=f9e643]:
+            - generic [ref=f9e644]: out[0]「猫」的输出向量 (1×4)
+            - generic [ref=f9e645]:
+              - 'generic "d0: 3.453" [ref=f9e646]':
+                - generic [ref=f9e647]: d0
+                - generic [ref=f9e648]: "3.45"
+              - 'generic "d1: 0.490" [ref=f9e649]':
+                - generic [ref=f9e650]: d1
+                - generic [ref=f9e651]: "0.49"
+              - 'generic "d2: 0.296" [ref=f9e652]':
+                - generic [ref=f9e653]: d2
+                - generic [ref=f9e654]: "0.30"
+              - 'generic "d3: 0.628" [ref=f9e655]':
+                - generic [ref=f9e656]: d3
+                - generic [ref=f9e657]: "0.63"
+          - generic [ref=f9e658]:
+            - generic [ref=f9e659]:
+              - generic [ref=f9e660]: output = softmax(QKᵀ/√d) · V — 输出矩阵 (5×4)
+              - generic [ref=f9e661]:
+                - generic [ref=f9e662]: d₀
+                - generic [ref=f9e663]: d₁
+                - generic [ref=f9e664]: d₂
+                - generic [ref=f9e665]: d₃
+              - generic [ref=f9e666]:
+                - generic [ref=f9e667]: 猫
+                - generic "3.453" [ref=f9e668]: "3.45"
+                - generic "0.490" [ref=f9e669]: "0.49"
+                - generic "0.296" [ref=f9e670]: "0.30"
+                - generic "0.628" [ref=f9e671]: "0.63"
+              - generic [ref=f9e672]:
+                - generic [ref=f9e673]: 坐
+                - generic "1.362" [ref=f9e674]: "1.36"
+                - generic "1.149" [ref=f9e675]: "1.15"
+                - generic "1.277" [ref=f9e676]: "1.28"
+                - generic "0.251" [ref=f9e677]: "0.25"
+              - generic [ref=f9e678]:
+                - generic [ref=f9e679]: 在
+                - generic "0.734" [ref=f9e680]: "0.73"
+                - generic "1.079" [ref=f9e681]: "1.08"
+                - generic "1.446" [ref=f9e682]: "1.45"
+                - generic "0.298" [ref=f9e683]: "0.30"
+              - generic [ref=f9e684]:
+                - generic [ref=f9e685]: 垫子
+                - generic "3.309" [ref=f9e686]: "3.31"
+                - generic "0.504" [ref=f9e687]: "0.50"
+                - generic "0.359" [ref=f9e688]: "0.36"
+                - generic "0.622" [ref=f9e689]: "0.62"
+              - generic [ref=f9e690]:
+                - generic [ref=f9e691]: 上
+                - generic "0.973" [ref=f9e692]: "0.97"
+                - generic "0.911" [ref=f9e693]: "0.91"
+                - generic "1.281" [ref=f9e694]: "1.28"
+                - generic "0.392" [ref=f9e695]: "0.39"
+            - generic [ref=f9e696]: (5×5) · (5×4) = (5×4) ← 和 X 形状相同
+        - generic [ref=f9e697]:
+          - heading "形状总账" [level=2] [ref=f9e698]
+          - generic [ref=f9e699]:
+            - generic [ref=f9e700]: "X : 5×4 — token embeddings，每行一个 token"
+            - generic [ref=f9e701]: "W_Q, W_K, W_V : 4×4 — 投影矩阵（可学习）"
+            - generic [ref=f9e702]: "Q = X·W_Q : 5×4 — Query 矩阵"
+            - generic [ref=f9e703]: "K = X·W_K : 5×4 — Key 矩阵"
+            - generic [ref=f9e704]: "V = X·W_V : 5×4 — Value 矩阵"
+            - generic [ref=f9e705]: "Kᵀ : 4×5 — 转置后内维对齐（第 10 节）"
+            - generic [ref=f9e706]: "QKᵀ : 5×5 — 每个 token 对每个 token 的原始得分"
+            - generic [ref=f9e707]: "QKᵀ/√d : 5×5 — 除以 √4=2 缩放（第 06 节）"
+            - generic [ref=f9e708]: "softmax(…) : 5×5 — 注意力权重，每行 = 概率分布（第 29 节）"
+            - generic [ref=f9e709]: "output : 5×4 — 加权 Value 和，形状等于 X（第 18/22 节）"
+        - generic [ref=f9e710]:
+          - paragraph [ref=f9e711]:
+            - strong [ref=f9e712]: 数学验证：
+            - text: 当前所选 Query「猫」的注意力权重行之和 =
+            - strong [ref=f9e713]: "1.000"
+            - text: （应等于 1.000 ✓）。 输出矩阵形状
+            - code [ref=f9e714]: 5×4
+            - text: ，与输入 X 完全相同—— self-attention 是「形状不变」的操作，token 数和 embedding 维度都保持不变。
+          - paragraph [ref=f9e715]:
+            - text: 切换「不缩放」模式：最大权重
+            - strong [ref=f9e716]: "0.756"
+            - text: （÷√4 之后，分布更铺得开，梯度健康）。
+        - generic [ref=f9e717]:
+          - generic [ref=f9e718]: 这就是 LLM 里的什么
+          - generic [ref=f9e719]:
+            - paragraph [ref=f9e720]:
+              - text: 你刚刚亲手算完了 Transformer 的心脏。
+              - code [ref=f9e721]: Attention(Q, K, V) = softmax(QKᵀ/√d) · V
+              - text: 里的每一块都是前面的章节：
+              - strong [ref=f9e722]: 点积打分
+              - text: （
+              - link "第 04 节" [ref=f9e723] [cursor=pointer]:
+                - /url: /ch/dot-product
+              - text: ）、
+              - strong [ref=f9e724]: √d 缩放
+              - text: （
+              - link "第 06 节" [ref=f9e725] [cursor=pointer]:
+                - /url: /ch/norms
+              - text: ）、
+              - strong [ref=f9e726]: QKᵀ 对齐维度
+              - text: （
+              - link "第 10 节" [ref=f9e727] [cursor=pointer]:
+                - /url: /ch/transpose-shape
+              - text: ）、
+              - strong [ref=f9e728]: softmax 成权重
+              - text: （
+              - link "第 29 节" [ref=f9e729] [cursor=pointer]:
+                - /url: /ch/softmax
+              - text: ）、
+              - strong [ref=f9e730]: 按权重对 V 做加权和
+              - text: （投影/低秩读出，第 18/22 节）。
+            - paragraph [ref=f9e731]:
+              - strong [ref=f9e732]: 看懂这一页 = 看懂注意力。
+              - text: GPT、BERT、LLaMA 的每一层，每一个 attention head，都在重复上面的六行。 下面
+              - link "第 32 节" [ref=f9e733] [cursor=pointer]:
+                - /url: /ch/multi-head
+              - text: 把它分成
+              - emphasis [ref=f9e734]: 多头
+              - text: （把 d 拆成 h 份并行运行），
+              - link "第 33 节" [ref=f9e735] [cursor=pointer]:
+                - /url: /ch/rope
+              - text: 给它补上位置信息（RoPE），
+              - link "第 34 节" [ref=f9e736] [cursor=pointer]:
+                - /url: /ch/transformer-block
+              - text: 把它装进完整的 Transformer block（加 残差 + LayerNorm + MLP）。 地基在这里；一切后续都是在这个公式上加砖。
+        - generic [ref=f9e737]:
+          - heading "看代码：从零实现 self-attention" [level=2] [ref=f9e738]
+          - generic [ref=f9e739]:
+            - generic [ref=f9e740]: self_attention.py
+            - generic [ref=f9e741]:
+              - generic [ref=f9e742]:
+                - generic [ref=f9e743]: "1"
+                - generic [ref=f9e744]: import numpy as np
+              - generic [ref=f9e745]:
+                - generic [ref=f9e746]: "2"
+                - generic [ref=f9e747]: import math
+              - generic [ref=f9e748]: "3"
+              - generic [ref=f9e750]:
+                - generic [ref=f9e751]: "4"
+                - generic [ref=f9e752]: "def self_attention(X, Wq, Wk, Wv):"
+              - generic [ref=f9e753]:
+                - generic [ref=f9e754]: "5"
+                - generic [ref=f9e755]: "\"\"\""
+              - generic [ref=f9e756]:
+                - generic [ref=f9e757]: "6"
+                - generic [ref=f9e758]: "X : (n, d) — n token embeddings, each dim d"
+              - generic [ref=f9e759]:
+                - generic [ref=f9e760]: "7"
+                - generic [ref=f9e761]: "Wq, Wk, Wv : (d, d) — projection weight matrices"
+              - generic [ref=f9e762]:
+                - generic [ref=f9e763]: "8"
+                - generic [ref=f9e764]: Returns output (n, d) and attention weights (n, n)
+              - generic [ref=f9e765]:
+                - generic [ref=f9e766]: "9"
+                - generic [ref=f9e767]: "\"\"\""
+              - generic [ref=f9e768]:
+                - generic [ref=f9e769]: "10"
+                - generic [ref=f9e770]: "Q = X @ Wq # (n, d) — project to Query space"
+              - generic [ref=f9e771]:
+                - generic [ref=f9e772]: "11"
+                - generic [ref=f9e773]: "K = X @ Wk # (n, d) — project to Key space"
+              - generic [ref=f9e774]:
+                - generic [ref=f9e775]: "12"
+                - generic [ref=f9e776]: "V = X @ Wv # (n, d) — project to Value space"
+              - generic [ref=f9e777]: "13"
+              - generic [ref=f9e779]:
+                - generic [ref=f9e780]: "14"
+                - generic [ref=f9e781]: d = Q.shape[-1]
+              - generic [ref=f9e782]:
+                - generic [ref=f9e783]: "15"
+                - generic [ref=f9e784]: "scores = Q @ K.T / math.sqrt(d) # (n, n) — scaled dot products"
+              - generic [ref=f9e785]:
+                - generic [ref=f9e786]: "16"
+                - generic [ref=f9e787]: weights = np.exp(scores - scores.max(-1, keepdims=True))
+              - generic [ref=f9e788]:
+                - generic [ref=f9e789]: "17"
+                - generic [ref=f9e790]: "weights = weights / weights.sum(-1, keepdims=True) # softmax, rows sum to 1"
+              - generic [ref=f9e791]: "18"
+              - generic [ref=f9e793]:
+                - generic [ref=f9e794]: "19"
+                - generic [ref=f9e795]: "out = weights @ V # (n, n) @ (n, d) = (n, d) — weighted sum of Values"
+              - generic [ref=f9e796]: "20"
+              - generic [ref=f9e798]:
+                - generic [ref=f9e799]: "21"
+                - generic [ref=f9e800]: "# shapes at each step:"
+              - generic [ref=f9e801]:
+                - generic [ref=f9e802]: "22"
+                - generic [ref=f9e803]: "# X:(n,d) → Q:(n,d), K:(n,d), V:(n,d)"
+              - generic [ref=f9e804]:
+                - generic [ref=f9e805]: "23"
+                - generic [ref=f9e806]: "# Q:(n,d) @ Kᵀ:(d,n) = scores:(n,n)"
+              - generic [ref=f9e807]:
+                - generic [ref=f9e808]: "24"
+                - generic [ref=f9e809]: "# softmax(scores):(n,n) @ V:(n,d) = out:(n,d)"
+              - generic [ref=f9e810]:
+                - generic [ref=f9e811]: "25"
+                - generic [ref=f9e812]: return out, weights
+              - generic [ref=f9e813]: "26"
+              - generic [ref=f9e815]:
+                - generic [ref=f9e816]: "27"
+                - generic [ref=f9e817]: "# ── demo ──────────────────────────────────────────────────────────────────────"
+              - generic [ref=f9e818]:
+                - generic [ref=f9e819]: "28"
+                - generic [ref=f9e820]: n, d = 5, 4
+              - generic [ref=f9e821]:
+                - generic [ref=f9e822]: "29"
+                - generic [ref=f9e823]: rng = np.random.default_rng(42)
+              - generic [ref=f9e824]:
+                - generic [ref=f9e825]: "30"
+                - generic [ref=f9e826]: X = rng.normal(size=(n, d))
+              - generic [ref=f9e827]:
+                - generic [ref=f9e828]: "31"
+                - generic [ref=f9e829]: Wq = rng.normal(size=(d, d)) * 0.5
+              - generic [ref=f9e830]:
+                - generic [ref=f9e831]: "32"
+                - generic [ref=f9e832]: Wk = rng.normal(size=(d, d)) * 0.5
+              - generic [ref=f9e833]:
+                - generic [ref=f9e834]: "33"
+                - generic [ref=f9e835]: Wv = rng.normal(size=(d, d)) * 0.5
+              - generic [ref=f9e836]: "34"
+              - generic [ref=f9e838]:
+                - generic [ref=f9e839]: "35"
+                - generic [ref=f9e840]: out, W = self_attention(X, Wq, Wk, Wv)
+              - generic [ref=f9e841]:
+                - generic [ref=f9e842]: "36"
+                - generic [ref=f9e843]: "print(\"output shape:\", out.shape) # (5, 4)"
+              - generic [ref=f9e844]:
+                - generic [ref=f9e845]: "37"
+                - generic [ref=f9e846]: "print(\"weights shape:\", W.shape) # (5, 5)"
+              - generic [ref=f9e847]:
+                - generic [ref=f9e848]: "38"
+                - generic [ref=f9e849]: "print(\"row sums:\", W.sum(axis=-1).round(6)) # [1. 1. 1. 1. 1.]"
+        - navigation [ref=f9e850]:
+          - link "← 上一节 30 交叉熵与极大似然" [ref=f9e851] [cursor=pointer]:
+            - /url: /ch/cross-entropy
+            - generic [ref=f9e852]: ← 上一节
+            - generic [ref=f9e853]: 30 交叉熵与极大似然
+          - link "下一节 → 32 多头注意力" [ref=f9e854] [cursor=pointer]:
+            - /url: /ch/multi-head
+            - generic [ref=f9e855]: 下一节 →
+            - generic [ref=f9e856]: 32 多头注意力
+        - paragraph [ref=f9e857]: 共 38 节 · 你在第 31 节
+      - generic [ref=f9e858]:
+        - generic [ref=f9e859]:
+          - text: © 2026
+          - link "FIM Labs" [ref=f9e860] [cursor=pointer]:
+            - /url: https://fim.ai
+        - generic [ref=f9e861]: 线性代数 → 注意力 · 一个开源教学项目

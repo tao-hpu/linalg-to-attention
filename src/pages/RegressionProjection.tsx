@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -475,7 +476,7 @@ export function RegressionProjection() {
             「线性预测 + 正交投影」这套直觉一路延伸下去：
             线性层是线性预测器，把输入映射到输出子空间；
             注意力的 value 加权是一种投影读出（从 value 子空间里提取信息）；
-            岭回归（第 27 节）是带正则化的投影，<code>H_λ = X(XᵀX + λI)⁻¹Xᵀ</code>，
+            岭回归（<ChRef slug="regularization" />）是带正则化的投影，<code>H_λ = X(XᵀX + λI)⁻¹Xᵀ</code>，
             加了弹簧、缩了投影。
           </p>
           <p>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { VectorCanvas } from '../components/VectorCanvas'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 import {
@@ -133,7 +134,7 @@ export function Projection() {
           本质就是把信息投影、读出——只保留"当前 query 看得见"的那部分。
         </p>
         <p>
-          第 20 节会专门讲<strong>最小二乘回归 = 把目标投影到特征张成的空间</strong>：
+          <ChRef slug="regression-projection" />会专门讲<strong>最小二乘回归 = 把目标投影到特征张成的空间</strong>：
           回归的几何本质就是这个投影——预测值是目标在特征空间里的影子，
           而残差（误差）必然垂直于所有特征，和这里 a−proj ⊥ b 是同一件事。
         </p>

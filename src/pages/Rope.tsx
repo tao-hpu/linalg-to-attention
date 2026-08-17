@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
+import { ChRef, chNum } from '../components/ChRef'
 import { VectorCanvas } from '../components/VectorCanvas'
 import { CodeBlock } from '../components/CodeBlock'
 import { dot, norm, angleBetween, degrees, fmt, type V } from '../vec'
@@ -112,7 +113,7 @@ def apply_rope(x, pos, base=10000.0):
 
     x_even, x_odd = x[0::2], x[1::2]      # 把向量拆成 d/2 个二维对
     out = np.empty_like(x)
-    # 每一对 (x_even, x_odd) 用 2D 旋转矩阵 R(ang) 旋转（第 17 节）
+    # 每一对 (x_even, x_odd) 用 2D 旋转矩阵 R(ang) 旋转（第 ${chNum('orthogonal-rotation')} 节）
     out[0::2] = x_even * cos - x_odd * sin
     out[1::2] = x_even * sin + x_odd * cos
     return out
@@ -197,7 +198,7 @@ export function Rope() {
       原始 Transformer 给 embedding <em>加</em>一个正弦位置向量；
       <strong>RoPE</strong> 换了个更干净的思路：按 token 的位置，把它的 Query / Key
       向量<strong>旋转</strong>一个角度——位置 m 的向量乘上旋转矩阵 <code>R(mθ)</code>，
-      也就是第 17 节那个 det = +1、只转不拉的 2D 旋转。下面你亲手转动 q′、k′，
+      也就是<ChRef slug="orthogonal-rotation" />那个 det = +1、只转不拉的 2D 旋转。下面你亲手转动 q′、k′，
       会发现一件神奇的事：注意力分数只认<strong>相对距离</strong>。
     </>
   )
@@ -390,9 +391,9 @@ export function Rope() {
       <Bridge>
         <p>
           <strong>RoPE 是当今主流 LLM 的标配位置编码</strong>——LLaMA、Qwen、GPT-NeoX
-          等几乎都用它。原因正是这一页演示的：旋转是正交变换（第 17 节），
+          等几乎都用它。原因正是这一页演示的：旋转是正交变换（<ChRef slug="orthogonal-rotation" />），
           <strong>不改 Q/K 的范数、只改相位</strong>，是一种「干净」的位置注入；
-          det = +1（第 12 节）保证它只转不翻、数值无损可逆。
+          det = +1（<ChRef slug="determinant" />）保证它只转不翻、数值无损可逆。
         </p>
         <p>
           相对位置 <code>n − m</code> 直接落在点积里，这是 RoPE 能较好<strong>外推到更长上下文</strong>
@@ -400,7 +401,7 @@ export function Rope() {
           只要相对距离在分布内，分数依然合理。
         </p>
         <p>
-          下一节（第 34 节）把它和注意力、残差、归一化、FFN 装在一起，
+          下一节（<ChRef slug="transformer-block" />）把它和注意力、残差、归一化、FFN 装在一起，
           组装成一个完整的 <strong>Transformer Block</strong>。
         </p>
       </Bridge>

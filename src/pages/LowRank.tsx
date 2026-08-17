@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── Brand tokens ───────────────────────────────────────────────────────────────
@@ -385,8 +386,8 @@ export function LowRank() {
           <p>
             模型压缩、知识蒸馏、KV-cache 降维也都吃这套：找到主要方向（大 σ），
             扔掉次要细节（小 σ），在误差预算内做到最优（Eckart–Young）。
-            秩 r = 你愿意保留的「主要方向数」——连回第 13 节（rank）、
-            第 21 节（SVD），延伸到第 35 节（LoRA 微调）。
+            秩 r = 你愿意保留的「主要方向数」——连回<ChRef slug="rank" />（rank）、
+            <ChRef slug="svd" />（SVD），延伸到<ChRef slug="lora-finetuning" />（LoRA 微调）。
           </p>
         </div>
       </section>

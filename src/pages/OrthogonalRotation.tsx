@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import { apply, multiply, transforms, format, type Mat2, type Vec2 } from '../linalg'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 import { TransformPanel } from '../TransformPanel'
 import { CodeBlock } from '../components/CodeBlock'
@@ -378,7 +379,7 @@ export function OrthogonalRotation() {
             RoPE 在长文本外推上比可学习位置编码更稳定：<code>Q⁻¹ = Qᵀ</code> 意味着数值上无损可逆。
           </p>
           <p>
-            连回第 16 节谱分解里的正交矩阵 Q；第 19 节格拉姆-施密特会教你如何
+            连回<ChRef slug="spectral" />谱分解里的正交矩阵 Q；<ChRef slug="gram-schmidt" />格拉姆-施密特会教你如何
             <em>构造</em>一组 orthonormal basis——那里的输出正是这里 Q 的列。
           </p>
         </div>

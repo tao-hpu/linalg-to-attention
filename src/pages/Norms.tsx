@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { VectorCanvas } from '../components/VectorCanvas'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 import { norm, normalize, scale, cosineSimilarity, fmt } from '../vec'
@@ -109,14 +110,14 @@ export function Norms() {
       <Bridge>
         <p>
           这就是 <code>cosine 相似度</code>的来历——<strong>先归一化，再做内积</strong>。
-          它把第 04 节的"内积 = 相似度"修正成了"只看方向的相似度"。
+          它把<ChRef slug="dot-product" />的"内积 = 相似度"修正成了"只看方向的相似度"。
         </p>
         <p>
           还有一处更隐蔽的长度校正:Transformer 的"缩放点积注意力"把分数除以 <code>√d</code>。
           维度 d 越高，两个随机向量的内积<strong>波动幅度</strong>天然越大
           （期望约为 0，但标准差按 <code>√d</code> 增长），
           除以 <code>√d</code> 就是在抵消这件事，让 <code>softmax</code> 不至于一上来就饱和。
-          把第 04 节的内积、和这一节的长度校正合起来，就是 <code>q·k/√d</code> 的全部含义。
+          把<ChRef slug="dot-product" />的内积、和这一节的长度校正合起来，就是 <code>q·k/√d</code> 的全部含义。
         </p>
       </Bridge>
 

@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import { VectorCanvas } from '../components/VectorCanvas'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 import { sub, dot, norm, projectOnto, fmt, type V } from '../vec'
@@ -228,7 +229,7 @@ export function OrthogonalProjection() {
           正交投影 = 「把一个向量在某个子空间里能表示的部分挑出来，剩下的丢掉」。
           <strong>多头注意力</strong>让每个 head 用自己的 W_Q/W_K/W_V
           在一个更小的 subspace 里独立投影、各管一摊；
-          PCA 降维、最小二乘<strong>回归 = 投影</strong>（第 20 节专门讲）全是同一套几何。
+          PCA 降维、最小二乘<strong>回归 = 投影</strong>（<ChRef slug="regression-projection" />专门讲）全是同一套几何。
         </p>
         <p>
           <code>P²=P</code>（idempotent）：投影矩阵是幂等的——

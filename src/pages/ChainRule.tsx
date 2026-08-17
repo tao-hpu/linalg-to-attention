@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ─── colour tokens ────────────────────────────────────────────────
@@ -404,7 +405,7 @@ loss = ½ · y²         = ½ × ${fmt(y)}²  = ${fmt(loss)}`}
           </p>
           <p>
             梯度消失 / 爆炸 = 这串乘积太小 / 太大；
-            残差连接 (residual connection) 和归一化 (LayerNorm，第 28 节)
+            残差连接 (residual connection) 和归一化 (LayerNorm，<ChRef slug="normalization" />)
             正是为了让这串乘积保持稳定，让梯度能从最后一层安全流回最前一层。
           </p>
         </div>

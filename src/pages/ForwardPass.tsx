@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChapterShell, Bridge } from '../components/ChapterShell'
+import { ChRef, chNum, chLabel } from '../components/ChRef'
 import { CodeBlock } from '../components/CodeBlock'
 
 // ── design tokens ─────────────────────────────────────────────────────────────
@@ -38,12 +39,11 @@ const SAMPLED = argmax(PROBS)         // 贪心采样选中的词（示意里取
 
 // ── 流水线步骤定义 ──────────────────────────────────────────────────────────────
 type Zone = 'in' | 'block' | 'out'
-interface Ch { slug: string; label: string }
 interface Step {
   label: string       // 阶段名
   shape: string       // 形状表达式（mono）
   role: string        // 一句话作用
-  links: Ch[]         // 回链到教过它的章节
+  links: string[]     // 回链到教过它的章节（slug）
   zone: Zone
 }
 
@@ -52,7 +52,7 @@ const STEPS: readonly Step[] = [
     label: 'Tokenize 分词',
     shape: `["猫","坐","在"]  →  ids : (${N},)`,
     role: '把文字切成词表里的整数 id——模型只认数字，不认汉字。',
-    links: [{ slug: 'bow-to-embedding', label: '第 02 节 · 从词袋到词向量' }],
+    links: ['bow-to-embedding'],
     zone: 'in',
   },
   {
@@ -60,8 +60,8 @@ const STEPS: readonly Step[] = [
     shape: `one-hot (${N}×${V}) · W_E (${V}×${D}) = X (${N}×${D})`,
     role: '每个 id 取出一行 embedding——本质就是 one-hot 向量乘嵌入矩阵 W_E。',
     links: [
-      { slug: 'vectors', label: '第 01 节 · 向量与坐标系' },
-      { slug: 'bow-to-embedding', label: '第 02 节 · 从词袋到词向量' },
+      'vectors',
+      'bow-to-embedding',
     ],
     zone: 'in',
   },
@@ -69,7 +69,7 @@ const STEPS: readonly Step[] = [
     label: 'RMSNorm（进 block）',
     shape: `(${N}×${D})  →  RMSNorm  →  (${N}×${D})`,
     role: '进子层前先把每个 token 的向量尺度拉平，深层训练才稳。',
-    links: [{ slug: 'normalization', label: '第 28 节 · 归一化' }],
+    links: ['normalization'],
     zone: 'block',
   },
   {
@@ -77,8 +77,8 @@ const STEPS: readonly Step[] = [
     shape: `X·W_Q, X·W_K, X·W_V : (${N}×${D})·(${D}×${D}) = (${N}×${D}) ×3`,
     role: '同一个 X 用三个可学习矩阵投到三个子空间：查询、键、值。',
     links: [
-      { slug: 'matrix-as-transform', label: '第 07 节 · 矩阵是变换' },
-      { slug: 'matrix-mult', label: '第 08 节 · 矩阵乘法的几何' },
+      'matrix-as-transform',
+      'matrix-mult',
     ],
     zone: 'block',
   },
@@ -88,7 +88,7 @@ const STEPS: readonly Step[] = [
     role:
       '注意力本身分不清词序，靠按位置旋转注入「它在第几位」。注意两点：RoPE 只转 Q 和 K，不碰 V；' +
       '而且它在每一层的注意力里都做一次，不是在输入端一次性加完——那是正弦绝对位置编码的做法。',
-    links: [{ slug: 'rope', label: '第 33 节 · 位置编码与 RoPE' }],
+    links: ['rope'],
     zone: 'block',
   },
   {
@@ -96,8 +96,8 @@ const STEPS: readonly Step[] = [
     shape: `QKᵀ (${N}×${N})  →  softmax  →  ·V = (${N}×${D})`,
     role: '唯一跨 token 的操作：每个 token 按相关性把别人的 Value 加权汇入自己。',
     links: [
-      { slug: 'self-attention', label: '第 31 节 · 自注意力' },
-      { slug: 'transpose-shape', label: '第 10 节 · 转置与形状' },
+      'self-attention',
+      'transpose-shape',
     ],
     zone: 'block',
   },
@@ -105,28 +105,28 @@ const STEPS: readonly Step[] = [
     label: '⊕ 残差相加',
     shape: `x + Attn(·) : (${N}×${D}) + (${N}×${D}) = (${N}×${D})`,
     role: '注意力只贡献一个增量，加回残差流，原信息不被覆盖、梯度直通。',
-    links: [{ slug: 'transformer-block', label: '第 34 节 · 一个 Transformer Block' }],
+    links: ['transformer-block'],
     zone: 'block',
   },
   {
     label: 'RMSNorm（进 FFN）',
     shape: `(${N}×${D})  →  RMSNorm  →  (${N}×${D})`,
     role: '第二次归一化，保证 FFN 拿到尺度一致的输入。',
-    links: [{ slug: 'normalization', label: '第 28 节 · 归一化' }],
+    links: ['normalization'],
     zone: 'block',
   },
   {
     label: 'FFN 前馈（升维→降维）',
     shape: `(${N}×${D})·(${D}×${FF}) → 激活 → ·(${FF}×${D}) = (${N}×${D})`,
     role: '逐 token 独立加工：先升到 4d 的「思考空间」做非线性，再降回 d。',
-    links: [{ slug: 'transformer-block', label: '第 34 节 · 一个 Transformer Block' }],
+    links: ['transformer-block'],
     zone: 'block',
   },
   {
     label: '⊕ 残差相加',
     shape: `x + FFN(·) : (${N}×${D}) + (${N}×${D}) = (${N}×${D})`,
     role: '第二条残差汇入。一个 block 走完 = 在 x 上叠了两个增量，形状不变。',
-    links: [{ slug: 'transformer-block', label: '第 34 节 · 一个 Transformer Block' }],
+    links: ['transformer-block'],
     zone: 'block',
   },
   {
@@ -134,8 +134,8 @@ const STEPS: readonly Step[] = [
     shape: `x[${N - 1}] (1×${D}) · W_Eᵀ (${D}×${V}) = logits (1×${V})`,
     role: '取最后一个 token 的向量，乘回 W_E 的转置（权重绑定），得到整个词表的分数。',
     links: [
-      { slug: 'bow-to-embedding', label: '第 02 节 · 从词袋到词向量' },
-      { slug: 'transpose-shape', label: '第 10 节 · 转置与形状' },
+      'bow-to-embedding',
+      'transpose-shape',
     ],
     zone: 'out',
   },
@@ -143,14 +143,14 @@ const STEPS: readonly Step[] = [
     label: 'Softmax → 下一词分布',
     shape: `logits (1×${V})  →  softmax  →  P(next) (1×${V})`,
     role: '把一排分数压成一组概率，和为 1——这就是模型对「下一个词」的预测分布。',
-    links: [{ slug: 'softmax', label: '第 29 节 · Softmax 与概率分布' }],
+    links: ['softmax'],
     zone: 'out',
   },
   {
     label: '采样取词',
     shape: `从 P(next) 采样  →  「${VOCAB[SAMPLED]}」`,
     role: '按概率从分布里挑出一个词——温度 / top-k / top-p 在这里控制随机性。',
-    links: [{ slug: 'sampling-decoding', label: '第 36 节 · 采样与解码' }],
+    links: ['sampling-decoding'],
     zone: 'out',
   },
 ]
@@ -173,23 +173,23 @@ def forward(ids, W_E, blocks):
 
     # 2) 堆叠 N 个 Transformer block
     for blk in blocks:                 # 每个 block 形状不变：(n, d) → (n, d)
-        h = rmsnorm(X)                 # (n, d)            第 28 节
-        Q, K, Vv = h @ blk.Wq, h @ blk.Wk, h @ blk.Wv   # (n, d) 第 07/08 节
-        Q, K = rope(Q), rope(K)        # 每层都转一次，只转 Q/K   第 33 节
-        A = softmax(Q @ K.T / d**0.5)  # (n, n)            第 31/10/29 节
-        X = X + A @ Vv                 # ⊕ 残差            第 34 节
-        h = rmsnorm(X)                 # (n, d)            第 28 节
+        h = rmsnorm(X)                 # (n, d)            第 ${chNum('normalization')} 节
+        Q, K, Vv = h @ blk.Wq, h @ blk.Wk, h @ blk.Wv   # (n, d) 第 ${chNum('matrix-as-transform')}/${chNum('matrix-mult')} 节
+        Q, K = rope(Q), rope(K)        # 每层都转一次，只转 Q/K   第 ${chNum('rope')} 节
+        A = softmax(Q @ K.T / d**0.5)  # (n, n)            第 ${chNum('self-attention')}/${chNum('transpose-shape')}/${chNum('softmax')} 节
+        X = X + A @ Vv                 # ⊕ 残差            第 ${chNum('transformer-block')} 节
+        h = rmsnorm(X)                 # (n, d)            第 ${chNum('normalization')} 节
         h = gelu(h @ blk.W1) @ blk.W2  # (n, d)→(n,4d)→(n,d)
         X = X + h                      # ⊕ 残差
 
     # 3) 末位归一化 + unembedding（权重绑定 W_Eᵀ）
-    logits = rmsnorm(X)[-1] @ W_E.T    # (1, vocab)        第 02 节
+    logits = rmsnorm(X)[-1] @ W_E.T    # (1, vocab)        第 ${chNum('bow-to-embedding')} 节
 
     # 4) softmax → 下一词分布
-    probs = softmax(logits)            # (1, vocab)        第 29 节
+    probs = softmax(logits)            # (1, vocab)        第 ${chNum('softmax')} 节
 
     # 5) 采样取词
-    next_id = sample(probs)            # temperature/top-k 第 36 节
+    next_id = sample(probs)            # temperature/top-k 第 ${chNum('sampling-decoding')} 节
     return next_id
 
 # shapes:  ids:(n,) → X:(n,d) → … → logits:(vocab,) → probs:(vocab,) → 下一个词`
@@ -331,7 +331,7 @@ export function ForwardPass() {
             background: `rgba(${RUST_RGB},0.03)`,
           }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: RUST, letterSpacing: '0.04em', margin: '0 0 6px' }}>
-              ② 一个 Transformer Block · 第 34 节 · 重复 N 层
+              ② 一个 Transformer Block · <ChRef slug="transformer-block" /> · 重复 N 层
             </div>
             {renderChips(BLOCK_IDX)}
           </div>
@@ -371,10 +371,10 @@ export function ForwardPass() {
               {step.role}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {step.links.map((c) => (
+              {step.links.map((slug) => (
                 <Link
-                  key={c.slug}
-                  to={`/ch/${c.slug}`}
+                  key={slug}
+                  to={`/ch/${slug}`}
                   style={{
                     fontSize: 12.5, fontWeight: 600, textDecoration: 'none',
                     color: IKB, background: `rgba(${IKB_RGB},0.08)`,
@@ -382,7 +382,7 @@ export function ForwardPass() {
                     borderRadius: 999, padding: '4px 12px',
                   }}
                 >
-                  {c.label} →
+                  {chLabel(slug, true)} →
                 </Link>
               ))}
             </div>
@@ -408,15 +408,15 @@ export function ForwardPass() {
         }}>
           {[
             [`ids        : (${N},)`, '   — 3 个 token 的整数 id'],
-            [`X          : ${N}×${D}`, '   — embedding 查表（第 02 节）'],
-            [`Q,K,V      : ${N}×${D}`, '   — 三路投影（第 07/08 节）'],
-            [`QKᵀ        : ${N}×${N}`, '   — 注意力分数，token×token（第 10 节）'],
-            [`attn·V     : ${N}×${D}`, '   — 加权 Value（第 31 节），形状回到 X'],
-            [`FFN        : ${N}×${D}`, `   — 升到 ${FF} 再降回 ${D}（第 34 节）`],
+            [`X          : ${N}×${D}`, `   — embedding 查表（第 ${chNum('bow-to-embedding')} 节）`],
+            [`Q,K,V      : ${N}×${D}`, `   — 三路投影（第 ${chNum('matrix-as-transform')}/${chNum('matrix-mult')} 节）`],
+            [`QKᵀ        : ${N}×${N}`, `   — 注意力分数，token×token（第 ${chNum('transpose-shape')} 节）`],
+            [`attn·V     : ${N}×${D}`, `   — 加权 Value（第 ${chNum('self-attention')} 节），形状回到 X`],
+            [`FFN        : ${N}×${D}`, `   — 升到 ${FF} 再降回 ${D}（第 ${chNum('transformer-block')} 节）`],
             [`block out  : ${N}×${D}`, '   — 一层走完，形状不变 · ×N 层'],
-            [`logits     : 1×${V}`, '   — 末位 · W_Eᵀ（权重绑定，第 02 节）'],
-            [`P(next)    : 1×${V}`, '   — softmax 成概率分布（第 29 节）'],
-            [`next token : 「${VOCAB[SAMPLED]}」`, '   — 采样取词（第 36 节）'],
+            [`logits     : 1×${V}`, `   — 末位 · W_Eᵀ（权重绑定，第 ${chNum('bow-to-embedding')} 节）`],
+            [`P(next)    : 1×${V}`, `   — softmax 成概率分布（第 ${chNum('softmax')} 节）`],
+            [`next token : 「${VOCAB[SAMPLED]}」`, `   — 采样取词（第 ${chNum('sampling-decoding')} 节）`],
           ].map(([shape, note], i) => (
             <div key={i}>
               <span style={{ color: IKB, fontWeight: 700 }}>{shape}</span>

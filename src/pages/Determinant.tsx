@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { apply, type Mat2, type Vec2 } from '../linalg'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 
@@ -420,9 +421,9 @@ export function Determinant() {
             它就在销毁信息，你永远拿不回输入。
           </p>
           <p>
-            后面三节都从这里长出来：第 13 节「矩阵的秩」讲变换
-            <em>留下了几维</em>；第 14 节「逆矩阵」讲 det ≠ 0 时才能还原；
-            第 21 节 SVD 把奇异值和行列式联系起来
+            后面三节都从这里长出来：<ChRef slug="rank" />「矩阵的秩」讲变换
+            <em>留下了几维</em>；<ChRef slug="inverse" />「逆矩阵」讲 det ≠ 0 时才能还原；
+            <ChRef slug="svd" /> SVD 把奇异值和行列式联系起来
             （<code>|det| = 所有奇异值之积</code>——奇异值恒非负，符号另由朝向决定，
             正好对应本节的 det &lt; 0）。行列式是整条线索的关键岔路口。
           </p>

@@ -1,0 +1,458 @@
+- generic [ref=f10e3]:
+  - banner [ref=f10e4]:
+    - generic [ref=f10e5]:
+      - button "切换全局导航" [expanded] [ref=f10e6] [cursor=pointer]:
+        - generic [ref=f10e7]: ✕
+      - link "线性代数 → 注意力" [ref=f10e8] [cursor=pointer]:
+        - /url: /
+    - navigation [ref=f10e9]:
+      - button "搜索章节" [ref=f10e10] [cursor=pointer]:
+        - generic [ref=f10e11]: ⌕
+        - generic [ref=f10e13]: ⌘K
+      - link "大纲" [ref=f10e14] [cursor=pointer]:
+        - /url: /
+      - link "★ GitHub" [ref=f10e15] [cursor=pointer]:
+        - /url: https://github.com/tao-hpu/linalg-to-attention
+  - generic [ref=f10e16]:
+    - navigation "全书导航" [ref=f10e17]:
+      - link "全书大纲" [ref=f10e18] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f10e19]:
+        - generic [ref=f10e20]: 第一部分 · 向量：意义的载体
+        - list [ref=f10e21]:
+          - listitem [ref=f10e22]:
+            - link "01 向量与坐标系 ★" [ref=f10e23] [cursor=pointer]:
+              - /url: /ch/vectors
+              - generic [ref=f10e24]: "01"
+              - generic [ref=f10e25]: 向量与坐标系 ★
+          - listitem [ref=f10e26]:
+            - link "02 从词袋到词向量" [ref=f10e27] [cursor=pointer]:
+              - /url: /ch/bow-to-embedding
+              - generic [ref=f10e28]: "02"
+              - generic [ref=f10e29]: 从词袋到词向量
+          - listitem [ref=f10e30]:
+            - link "03 向量的加减与缩放" [ref=f10e31] [cursor=pointer]:
+              - /url: /ch/vector-arithmetic
+              - generic [ref=f10e32]: "03"
+              - generic [ref=f10e33]: 向量的加减与缩放
+          - listitem [ref=f10e34]:
+            - link "04 内积 ★" [ref=f10e35] [cursor=pointer]:
+              - /url: /ch/dot-product
+              - generic [ref=f10e36]: "04"
+              - generic [ref=f10e37]: 内积 ★
+          - listitem [ref=f10e38]:
+            - link "05 投影" [ref=f10e39] [cursor=pointer]:
+              - /url: /ch/projection
+              - generic [ref=f10e40]: "05"
+              - generic [ref=f10e41]: 投影
+          - listitem [ref=f10e42]:
+            - link "06 范数与单位向量" [ref=f10e43] [cursor=pointer]:
+              - /url: /ch/norms
+              - generic [ref=f10e44]: "06"
+              - generic [ref=f10e45]: 范数与单位向量
+      - generic [ref=f10e46]:
+        - generic [ref=f10e47]: 第二部分 · 矩阵：一个动作
+        - list [ref=f10e48]:
+          - listitem [ref=f10e49]:
+            - link "07 矩阵是变换 ★" [ref=f10e50] [cursor=pointer]:
+              - /url: /ch/matrix-as-transform
+              - generic [ref=f10e51]: "07"
+              - generic [ref=f10e52]: 矩阵是变换 ★
+          - listitem [ref=f10e53]:
+            - link "08 矩阵乘法的几何 ★" [ref=f10e54] [cursor=pointer]:
+              - /url: /ch/matrix-mult
+              - generic [ref=f10e55]: "08"
+              - generic [ref=f10e56]: 矩阵乘法的几何 ★
+          - listitem [ref=f10e57]:
+            - link "09 矩阵乘法的四种视角" [ref=f10e58] [cursor=pointer]:
+              - /url: /ch/matmul-views
+              - generic [ref=f10e59]: "09"
+              - generic [ref=f10e60]: 矩阵乘法的四种视角
+          - listitem [ref=f10e61]:
+            - link "10 转置与形状 ★" [ref=f10e62] [cursor=pointer]:
+              - /url: /ch/transpose-shape
+              - generic [ref=f10e63]: "10"
+              - generic [ref=f10e64]: 转置与形状 ★
+          - listitem [ref=f10e65]:
+            - link "11 批量与张量" [ref=f10e66] [cursor=pointer]:
+              - /url: /ch/batching
+              - generic [ref=f10e67]: "11"
+              - generic [ref=f10e68]: 批量与张量
+      - generic [ref=f10e69]:
+        - generic [ref=f10e70]: 第三部分 · 方阵的秘密
+        - list [ref=f10e71]:
+          - listitem [ref=f10e72]:
+            - link "✓ 行列式" [ref=f10e73] [cursor=pointer]:
+              - /url: /ch/determinant
+              - generic [ref=f10e74]: ✓
+              - generic [ref=f10e75]: 行列式
+          - listitem [ref=f10e76]:
+            - link "13 矩阵的秩 ★" [ref=f10e77] [cursor=pointer]:
+              - /url: /ch/rank
+              - generic [ref=f10e78]: "13"
+              - generic [ref=f10e79]: 矩阵的秩 ★
+          - listitem [ref=f10e80]:
+            - link "14 逆矩阵" [ref=f10e81] [cursor=pointer]:
+              - /url: /ch/inverse
+              - generic [ref=f10e82]: "14"
+              - generic [ref=f10e83]: 逆矩阵
+          - listitem [ref=f10e84]:
+            - link "15 特征值与特征向量" [ref=f10e85] [cursor=pointer]:
+              - /url: /ch/eigen
+              - generic [ref=f10e86]: "15"
+              - generic [ref=f10e87]: 特征值与特征向量
+          - listitem [ref=f10e88]:
+            - link "16 对称矩阵与谱分解" [ref=f10e89] [cursor=pointer]:
+              - /url: /ch/spectral
+              - generic [ref=f10e90]: "16"
+              - generic [ref=f10e91]: 对称矩阵与谱分解
+      - generic [ref=f10e92]:
+        - generic [ref=f10e93]: 第四部分 · 正交、回归与投影
+        - list [ref=f10e94]:
+          - listitem [ref=f10e95]:
+            - link "17 正交矩阵与旋转" [ref=f10e96] [cursor=pointer]:
+              - /url: /ch/orthogonal-rotation
+              - generic [ref=f10e97]: "17"
+              - generic [ref=f10e98]: 正交矩阵与旋转
+          - listitem [ref=f10e99]:
+            - link "18 正交投影" [ref=f10e100] [cursor=pointer]:
+              - /url: /ch/orthogonal-projection
+              - generic [ref=f10e101]: "18"
+              - generic [ref=f10e102]: 正交投影
+          - listitem [ref=f10e103]:
+            - link "19 格拉姆-施密特与 QR" [ref=f10e104] [cursor=pointer]:
+              - /url: /ch/gram-schmidt
+              - generic [ref=f10e105]: "19"
+              - generic [ref=f10e106]: 格拉姆-施密特与 QR
+          - listitem [ref=f10e107]:
+            - link "20 回归 = 投影" [ref=f10e108] [cursor=pointer]:
+              - /url: /ch/regression-projection
+              - generic [ref=f10e109]: "20"
+              - generic [ref=f10e110]: 回归 = 投影
+      - generic [ref=f10e111]:
+        - generic [ref=f10e112]: 第五部分 · 降维：抓住主要矛盾
+        - list [ref=f10e113]:
+          - listitem [ref=f10e114]:
+            - link "21 SVD 奇异值分解 ★" [ref=f10e115] [cursor=pointer]:
+              - /url: /ch/svd
+              - generic [ref=f10e116]: "21"
+              - generic [ref=f10e117]: SVD 奇异值分解 ★
+          - listitem [ref=f10e118]:
+            - link "22 低秩近似 ★" [ref=f10e119] [cursor=pointer]:
+              - /url: /ch/low-rank
+              - generic [ref=f10e120]: "22"
+              - generic [ref=f10e121]: 低秩近似 ★
+          - listitem [ref=f10e122]:
+            - link "23 PCA 主成分分析" [ref=f10e123] [cursor=pointer]:
+              - /url: /ch/pca
+              - generic [ref=f10e124]: "23"
+              - generic [ref=f10e125]: PCA 主成分分析
+      - generic [ref=f10e126]:
+        - generic [ref=f10e127]: 第六部分 · 学习：模型怎么变聪明
+        - list [ref=f10e128]:
+          - listitem [ref=f10e129]:
+            - link "24 梯度" [ref=f10e130] [cursor=pointer]:
+              - /url: /ch/gradient
+              - generic [ref=f10e131]: "24"
+              - generic [ref=f10e132]: 梯度
+          - listitem [ref=f10e133]:
+            - link "25 链式法则与 Jacobian" [ref=f10e134] [cursor=pointer]:
+              - /url: /ch/chain-rule
+              - generic [ref=f10e135]: "25"
+              - generic [ref=f10e136]: 链式法则与 Jacobian
+          - listitem [ref=f10e137]:
+            - link "26 梯度下降" [ref=f10e138] [cursor=pointer]:
+              - /url: /ch/gradient-descent
+              - generic [ref=f10e139]: "26"
+              - generic [ref=f10e140]: 梯度下降
+          - listitem [ref=f10e141]:
+            - link "27 正则化：Ridge 与 Lasso" [ref=f10e142] [cursor=pointer]:
+              - /url: /ch/regularization
+              - generic [ref=f10e143]: "27"
+              - generic [ref=f10e144]: 正则化：Ridge 与 Lasso
+          - listitem [ref=f10e145]:
+            - link "28 归一化" [ref=f10e146] [cursor=pointer]:
+              - /url: /ch/normalization
+              - generic [ref=f10e147]: "28"
+              - generic [ref=f10e148]: 归一化
+      - generic [ref=f10e149]:
+        - generic [ref=f10e150]: 第七部分 · 概率视角：模型在「猜下一个词」
+        - list [ref=f10e151]:
+          - listitem [ref=f10e152]:
+            - link "✓ Softmax 与概率分布 ★" [ref=f10e153] [cursor=pointer]:
+              - /url: /ch/softmax
+              - generic [ref=f10e154]: ✓
+              - generic [ref=f10e155]: Softmax 与概率分布 ★
+          - listitem [ref=f10e156]:
+            - link "30 交叉熵与极大似然" [ref=f10e157] [cursor=pointer]:
+              - /url: /ch/cross-entropy
+              - generic [ref=f10e158]: "30"
+              - generic [ref=f10e159]: 交叉熵与极大似然
+      - generic [ref=f10e160]:
+        - generic [ref=f10e161]: 第八部分 · 合成：亲手拼出注意力
+        - list [ref=f10e162]:
+          - listitem [ref=f10e163]:
+            - link "✓ 自注意力 ★" [ref=f10e164] [cursor=pointer]:
+              - /url: /ch/self-attention
+              - generic [ref=f10e165]: ✓
+              - generic [ref=f10e166]: 自注意力 ★
+          - listitem [ref=f10e167]:
+            - link "32 多头注意力" [ref=f10e168] [cursor=pointer]:
+              - /url: /ch/multi-head
+              - generic [ref=f10e169]: "32"
+              - generic [ref=f10e170]: 多头注意力
+          - listitem [ref=f10e171]:
+            - link "33 位置编码与 RoPE" [ref=f10e172] [cursor=pointer]:
+              - /url: /ch/rope
+              - generic [ref=f10e173]: "33"
+              - generic [ref=f10e174]: 位置编码与 RoPE
+          - listitem [ref=f10e175]:
+            - link "34 一个 Transformer Block" [ref=f10e176] [cursor=pointer]:
+              - /url: /ch/transformer-block
+              - generic [ref=f10e177]: "34"
+              - generic [ref=f10e178]: 一个 Transformer Block
+      - generic [ref=f10e179]:
+        - generic [ref=f10e180]: 第九部分 · 尾声：接到 LLM 工程
+        - list [ref=f10e181]:
+          - listitem [ref=f10e182]:
+            - link "35 LoRA 与高效微调" [ref=f10e183] [cursor=pointer]:
+              - /url: /ch/lora-finetuning
+              - generic [ref=f10e184]: "35"
+              - generic [ref=f10e185]: LoRA 与高效微调
+          - listitem [ref=f10e186]:
+            - link "36 采样与解码" [ref=f10e187] [cursor=pointer]:
+              - /url: /ch/sampling-decoding
+              - generic [ref=f10e188]: "36"
+              - generic [ref=f10e189]: 采样与解码
+          - listitem [ref=f10e190]:
+            - link "✓ 量化与数值" [ref=f10e191] [cursor=pointer]:
+              - /url: /ch/quantization
+              - generic [ref=f10e192]: ✓
+              - generic [ref=f10e193]: 量化与数值
+      - generic [ref=f10e194]:
+        - generic [ref=f10e195]: 第十部分 · 终点：完整的前向传播
+        - list [ref=f10e196]:
+          - listitem [ref=f10e197]:
+            - link "✓ 跑通一次前向传播 ★" [ref=f10e198] [cursor=pointer]:
+              - /url: /ch/forward-pass
+              - generic [ref=f10e199]: ✓
+              - generic [ref=f10e200]: 跑通一次前向传播 ★
+    - main [ref=f10e201]:
+      - article [ref=f10e202]:
+        - generic [ref=f10e203]:
+          - generic [ref=f10e204]:
+            - link "大纲" [ref=f10e205] [cursor=pointer]:
+              - /url: /
+            - text: · 第九部分 · 尾声：接到 LLM 工程
+          - generic [ref=f10e206]: 第 35 节
+          - heading "LoRA 与高效微调 冻结大矩阵，只学一个低秩的小更新" [level=1] [ref=f10e207]:
+            - text: LoRA 与高效微调
+            - generic [ref=f10e208]: 冻结大矩阵，只学一个低秩的小更新
+          - paragraph [ref=f10e209]:
+            - text: 全量 fine-tuning 要更新权重矩阵里的每一个数—— 一张消费级显卡根本放不下几十亿参数。
+            - strong [ref=f10e210]: LoRA
+            - text: （Low-Rank Adaptation）的答案很优雅： 把大矩阵
+            - code [ref=f10e211]: W
+            - text: 冻结（frozen），只让两个小矩阵
+            - code [ref=f10e212]: B
+            - text: （d×r）和
+            - code [ref=f10e213]: A
+            - text: （r×d）参与训练； 它们的乘积
+            - code [ref=f10e214]: ΔW = B·A
+            - text: 是 rank ≤ r 的低秩更新—— 这正是你在
+            - link "第 13 节" [ref=f10e215] [cursor=pointer]:
+              - /url: /ch/rank
+            - text: （矩阵的秩）和
+            - link "第 22 节" [ref=f10e216] [cursor=pointer]:
+              - /url: /ch/low-rank
+            - text: （低秩近似）学到的数学， 在这里
+            - strong [ref=f10e217]: 兑现
+            - text: 。 拖动下面的 rank r 滑块，亲手看节省效果和低秩结构如何随 r 变化。
+        - generic [ref=f10e219]:
+          - generic [ref=f10e220]:
+            - generic [ref=f10e221]: rank r
+            - generic [ref=f10e222]:
+              - text: r =
+              - strong [ref=f10e223]: "2"
+              - text: （≪ d，低秩，压缩显著）
+          - generic [ref=f10e224]:
+            - slider "r = 2 / 8" [ref=f10e225]: "2"
+            - generic [ref=f10e226]: r = 2 / 8
+        - generic [ref=f10e227]:
+          - generic [ref=f10e228]:
+            - generic [ref=f10e229]:
+              - generic [ref=f10e295]: W（frozen ❄️）
+              - generic [ref=f10e296]: 8×8 · 不参与训练
+            - generic [ref=f10e297]: +
+            - generic [ref=f10e298]:
+              - generic [ref=f10e299]: ΔW = B · A（trainable, rank ≤ 2）
+              - generic [ref=f10e300]:
+                - generic [ref=f10e301]:
+                  - generic [ref=f10e319]: B
+                  - generic [ref=f10e320]: 8×2
+                - generic [ref=f10e321]: ·
+                - generic [ref=f10e322]:
+                  - generic [ref=f10e340]: A
+                  - generic [ref=f10e341]: 2×8
+                - generic [ref=f10e342]: =
+                - generic [ref=f10e343]:
+                  - generic [ref=f10e409]: BA = ΔW
+                  - generic [ref=f10e410]: 8×8 · rank ≤ 2
+            - generic [ref=f10e411]: =
+            - generic [ref=f10e412]:
+              - generic [ref=f10e478]: W + BA（有效权重）
+              - generic [ref=f10e479]: 8×8 · 推理时合并回 W
+          - generic [ref=f10e480]:
+            - strong [ref=f10e481]: rank(BA) ≤ r = 2
+            - text: ，由构造保证—— B 只有 2 列，BA 的每一列都在 B 的 column space 里， 最多 2 个独立方向（连回
+            - link "第 13 节" [ref=f10e482] [cursor=pointer]:
+              - /url: /ch/rank
+            - text: ：秩 = column space 维数）。
+        - generic [ref=f10e483]:
+          - generic [ref=f10e484]:
+            - generic [ref=f10e485]:
+              - generic [ref=f10e486]:
+                - text: 全参数 fine-tuning
+                - code [ref=f10e487]: d² = 8×8
+              - generic [ref=f10e488]: "64"
+              - generic [ref=f10e489]: params（演示 d=8）
+            - generic [ref=f10e490]:
+              - generic [ref=f10e491]:
+                - text: LoRA
+                - code [ref=f10e492]: 2·d·r = 2×8×2
+              - generic [ref=f10e493]: "32"
+              - generic [ref=f10e494]: trainable params
+            - generic [ref=f10e495]:
+              - generic [ref=f10e496]:
+                - text: 节省效果
+                - code [ref=f10e497]: 仅训 50.0%
+              - generic [ref=f10e498]: 省了 2.0×
+              - generic [ref=f10e499]: 仅训 50.0% 的参数
+          - paragraph [ref=f10e500]:
+            - text: † 演示用 d=8。实际 LLM 中 d=4096，r=8： LoRA 参数 65,536 vs 全参数 16,777,216，省了
+            - strong [ref=f10e501]: 256×
+            - text: ，仅训练
+            - strong [ref=f10e502]: 0.4%
+            - text: 。
+        - paragraph [ref=f10e504]:
+          - strong [ref=f10e505]: r = 2：LoRA 只训练 32 个参数（50.0%）， 省了 2.0×。
+          - text: 有效权重
+          - code [ref=f10e506]: W + BA
+          - text: 与全量微调的结果接近—— 前提是「微调任务所需的改变量 ΔW 确实是低秩的」。 这正是 LoRA 的核心假设，也是
+          - link "第 22 节" [ref=f10e507] [cursor=pointer]:
+            - /url: /ch/low-rank
+          - text: 低秩近似的底层逻辑。 把 r 继续拖大，观察节省空间如何消失。
+        - generic [ref=f10e508]:
+          - generic [ref=f10e509]: 这就是 LLM 里的什么
+          - generic [ref=f10e510]:
+            - paragraph [ref=f10e511]:
+              - text: LoRA 是今天微调大模型的默认方法（
+              - strong [ref=f10e512]: PEFT
+              - text: 库的核心）。 QLoRA 在它基础上叠加量化（连到
+              - link "第 37 节" [ref=f10e513] [cursor=pointer]:
+                - /url: /ch/quantization
+              - text: ）， 把 70B 参数的模型压进一张消费级显卡。 它能成立，全靠你前面学的两件事：
+            - paragraph [ref=f10e514]:
+              - strong [ref=f10e515]: 一，权重更新是低秩的。
+              - text: 让模型适应新任务，只需要在 W 的方向空间里加几个新方向—— 用
+              - code [ref=f10e516]: ΔW = B·A
+              - text: （rank ≤ r）这两个薄矩阵就够， 参数量从 d² 压到 2dr（
+              - link "第 13 节" [ref=f10e517] [cursor=pointer]:
+                - /url: /ch/rank
+              - text: ：rank；
+              - link "第 22 节" [ref=f10e518] [cursor=pointer]:
+                - /url: /ch/low-rank
+              - text: ：低秩近似）。
+            - paragraph [ref=f10e519]:
+              - strong [ref=f10e520]: 二，训练完可以把 BA 合并回 W。
+              - text: 推理时有效权重
+              - code [ref=f10e521]: W + BA
+              - text: 直接一次矩阵乘法， 零额外延迟——代价全部在训练阶段支付。
+            - paragraph [ref=f10e522]: 一张消费级显卡微调几十亿参数的模型，靠的就是这个数学。 这是「线性代数 → LLM 工程」最直接的兑现。
+        - generic [ref=f10e523]:
+          - heading "看代码：LoRA 层实现" [level=2] [ref=f10e524]
+          - generic [ref=f10e525]:
+            - generic [ref=f10e526]: lora_layer.py
+            - generic [ref=f10e527]:
+              - generic [ref=f10e528]:
+                - generic [ref=f10e529]: "1"
+                - generic [ref=f10e530]: import torch
+              - generic [ref=f10e531]:
+                - generic [ref=f10e532]: "2"
+                - generic [ref=f10e533]: import torch.nn as nn
+              - generic [ref=f10e534]: "3"
+              - generic [ref=f10e536]:
+                - generic [ref=f10e537]: "4"
+                - generic [ref=f10e538]: "class LoRALayer(nn.Module):"
+              - generic [ref=f10e539]:
+                - generic [ref=f10e540]: "5"
+                - generic [ref=f10e541]: "\"\"\"冻结 W，只训练低秩增量 ΔW = B @ A (rank ≤ r)\"\"\""
+              - generic [ref=f10e542]:
+                - generic [ref=f10e543]: "6"
+                - generic [ref=f10e544]: "def __init__(self, d: int, r: int):"
+              - generic [ref=f10e545]:
+                - generic [ref=f10e546]: "7"
+                - generic [ref=f10e547]: super().__init__()
+              - generic [ref=f10e548]:
+                - generic [ref=f10e549]: "8"
+                - generic [ref=f10e550]: "self.W = nn.Parameter(torch.randn(d, d), requires_grad=False) # frozen"
+              - generic [ref=f10e551]:
+                - generic [ref=f10e552]: "9"
+                - generic [ref=f10e553]: "# 论文与 PEFT 的约定：A 随机初始化、B 全零"
+              - generic [ref=f10e554]:
+                - generic [ref=f10e555]: "10"
+                - generic [ref=f10e556]: "self.A = nn.Parameter(torch.randn(r, d) * 0.01) # shape (r, d)"
+              - generic [ref=f10e557]:
+                - generic [ref=f10e558]: "11"
+                - generic [ref=f10e559]: "self.B = nn.Parameter(torch.zeros(d, r)) # shape (d, r)"
+              - generic [ref=f10e560]:
+                - generic [ref=f10e561]: "12"
+                - generic [ref=f10e562]: "# B = 0 ⇒ 训练开始时 ΔW = B@A = 0，模型行为与预训练权重完全一致"
+              - generic [ref=f10e563]:
+                - generic [ref=f10e564]: "13"
+                - generic [ref=f10e565]: "# 可训练参数: 2·d·r vs 全量微调 d·d"
+              - generic [ref=f10e566]: "14"
+              - generic [ref=f10e568]:
+                - generic [ref=f10e569]: "15"
+                - generic [ref=f10e570]: "def forward(self, x: torch.Tensor) -> torch.Tensor:"
+              - generic [ref=f10e571]:
+                - generic [ref=f10e572]: "16"
+                - generic [ref=f10e573]: return x @ (self.W + self.B @ self.A).T
+              - generic [ref=f10e574]:
+                - generic [ref=f10e575]: "17"
+                - generic [ref=f10e576]: "# 等价省内存写法: x @ self.W.T + (x @ self.A.T) @ self.B.T"
+              - generic [ref=f10e577]: "18"
+              - generic [ref=f10e579]:
+                - generic [ref=f10e580]: "19"
+                - generic [ref=f10e581]: "# 参数量对比 (d=4096, r=8)"
+              - generic [ref=f10e582]:
+                - generic [ref=f10e583]: "20"
+                - generic [ref=f10e584]: d, r = 4096, 8
+              - generic [ref=f10e585]:
+                - generic [ref=f10e586]: "21"
+                - generic [ref=f10e587]: "full = d * d # 16,777,216"
+              - generic [ref=f10e588]:
+                - generic [ref=f10e589]: "22"
+                - generic [ref=f10e590]: "lora = 2 * d * r # 65,536"
+              - generic [ref=f10e591]:
+                - generic [ref=f10e592]: "23"
+                - generic [ref=f10e593]: "print(f\"full={full:,} LoRA={lora:,} 省了 {full // lora}×\")"
+              - generic [ref=f10e594]:
+                - generic [ref=f10e595]: "24"
+                - generic [ref=f10e596]: "# 推理合并（零额外延迟）: W_merged = W + B @ A"
+        - navigation [ref=f10e597]:
+          - link "← 上一节 34 一个 Transformer Block" [ref=f10e598] [cursor=pointer]:
+            - /url: /ch/transformer-block
+            - generic [ref=f10e599]: ← 上一节
+            - generic [ref=f10e600]: 34 一个 Transformer Block
+          - link "下一节 → 36 采样与解码" [ref=f10e601] [cursor=pointer]:
+            - /url: /ch/sampling-decoding
+            - generic [ref=f10e602]: 下一节 →
+            - generic [ref=f10e603]: 36 采样与解码
+        - paragraph [ref=f10e604]: 共 38 节 · 你在第 35 节
+      - generic [ref=f10e605]:
+        - generic [ref=f10e606]:
+          - text: © 2026
+          - link "FIM Labs" [ref=f10e607] [cursor=pointer]:
+            - /url: https://fim.ai
+        - generic [ref=f10e608]: 线性代数 → 注意力 · 一个开源教学项目

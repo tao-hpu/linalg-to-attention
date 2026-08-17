@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef, chNum } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── Color constants ────────────────────────────────────────────────────────────
@@ -112,7 +113,7 @@ const pct  = (n: number): string => (n * 100).toFixed(1) + '%'
 const SNIPPET = `import numpy as np
 
 def decode_next(logits, T=1.0, top_k=None, top_p=None):
-    # 1. logits / T → softmax（temperature 在这里生效，连回第 29 节）
+    # 1. logits / T → softmax（temperature 在这里生效，连回第 ${chNum('softmax')} 节）
     z = logits / T
     z -= z.max()                          # 数值稳定：shift-invariance
     probs = np.exp(z) / np.exp(z).sum()   # softmax
@@ -217,7 +218,7 @@ export function SamplingDecoding() {
         sub="模型怎么从概率分布里选出下一个词？"
         lede={
           <>
-        模型前向传播结束，输出词表上一排 logit；经过 softmax（第 29 节）
+        模型前向传播结束，输出词表上一排 logit；经过 softmax（<ChRef slug="softmax" />）
         变成<strong>概率分布</strong>。但分布本身不是词——还需要一步
         「<strong>decoding</strong>」：从分布里<em>挑出</em>下一个 token。
         <strong> Greedy（argmax）</strong>永远选概率最高的那个，稳定但容易重复；
@@ -290,7 +291,7 @@ export function SamplingDecoding() {
           <div className="control-head">
             <span className="slot-tag slot-tag--rust">T</span>
             <span style={{ fontSize: '0.74rem', color: '#666', marginLeft: '0.3rem' }}>
-              temperature（低 → 锐，高 → 平；连回第 29 节 softmax）
+              temperature（低 → 锐，高 → 平；连回<ChRef slug="softmax" /> softmax）
             </span>
           </div>
           <label className="slider-row">
@@ -643,7 +644,7 @@ export function SamplingDecoding() {
           在 softmax 之前把 logit 除以 T，再归一化。
           T &lt; 1 让分布更锐（低概率词接近零，高概率词接近 1）；
           T &gt; 1 让分布更平（低概率词也能脱颖而出）。
-          拖动 T 滑块，观察柱子整体收窄或铺开——这就是第 29 节 softmax 里 T 参数在推理时的直接体现。
+          拖动 T 滑块，观察柱子整体收窄或铺开——这就是<ChRef slug="softmax" /> softmax 里 T 参数在推理时的直接体现。
         </p>
         <p>
           <strong>Top-k：</strong>
@@ -672,8 +673,8 @@ export function SamplingDecoding() {
             温度高更有创意但容易跑飞；top-p 是当前最常用的折中。
           </p>
           <p>
-            连回前面：分布从哪来——第 29 节 softmax 把 logit 变成概率；
-            训练时的分布目标——第 30 节交叉熵要求模型把概率压到正确词上。
+            连回前面：分布从哪来——<ChRef slug="softmax" /> softmax 把 logit 变成概率；
+            训练时的分布目标——<ChRef slug="cross-entropy" />交叉熵要求模型把概率压到正确词上。
             推理时你的采样参数调的是「怎么使用这个分布」，
             而模型本身（logit 怎么算出来）完全没变。
           </p>

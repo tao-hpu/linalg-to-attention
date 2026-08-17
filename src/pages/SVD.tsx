@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { apply, multiply, nearlyEqual, type Mat2, type Vec2 } from '../linalg'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 
@@ -477,7 +478,7 @@ export function SVD() {
             扔掉小奇异值，矩阵的行为几乎不变。
           </p>
           <p>
-            σ → 0 的方向就是第 16 节谱分解里「快被压扁的维度」，也是第 13 节「秩」的直接体现。
+            σ → 0 的方向就是<ChRef slug="spectral" />谱分解里「快被压扁的维度」，也是<ChRef slug="rank" />「秩」的直接体现。
             LoRA 的核心：不直接训练整个权重矩阵 W，而是训练
             {' '}<code>W + AB</code>（A、B 低秩），利用的正是
             W 的奇异值分布集中在少数几个大奇异值上这一事实。

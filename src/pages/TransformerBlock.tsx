@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { chNum } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ─── types ───────────────────────────────────────────────────────────────────
@@ -27,11 +28,11 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
     desc:
       '对每个 token 独立做归一化：减均值、除标准差，再乘可学习参数 γ 和 β，' +
       '让各维度尺度归一。pre-norm 把它放在子层之前——梯度从残差相加处直通底层，' +
-      '不受归一化阻断，深层训练更稳定（连接第 28 节）。',
+      `不受归一化阻断，深层训练更稳定（连接第 ${chNum('normalization')} 节）。`,
     descPost:
       '对每个 token 独立做归一化：减均值、除标准差，再乘可学习参数 γ 和 β。' +
       'post-norm 把它放在残差相加「之后」——梯度回传时必须先穿过 LayerNorm 才能' +
-      '回到底层，路径没有 pre-norm 干净，所以原始论文那套深层网络需要 warm-up 才稳（连接第 28 节）。',
+      `回到底层，路径没有 pre-norm 干净，所以原始论文那套深层网络需要 warm-up 才稳（连接第 ${chNum('normalization')} 节）。`,
     isAdd: false,
   },
   attn: {
@@ -40,7 +41,7 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
     desc:
       '唯一跨 token 的操作：每个 token 的 Query 查询序列中所有 Key，' +
       '用 softmax 得到注意力权重后加权聚合 Value，写回 n × d 的残差流。' +
-      '多头 = 分 h 个子空间并行关注，再拼回来（连接第 32 节）。' +
+      `多头 = 分 h 个子空间并行关注，再拼回来（连接第 ${chNum('multi-head')} 节）。` +
       'Attention 负责在 token 之间搬运信息；MLP 负责逐 token 独立加工。',
     isAdd: false,
   },
@@ -50,11 +51,11 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
     desc:
       '把注意力输出加回输入流：x ← x + Attn(LN₁(x))。⊕ 是残差流的汇入点——' +
       '子层只贡献一个增量，原始信息不会被覆盖。' +
-      '反向传播时梯度直穿 ⊕，不经过注意力矩阵，有效防止梯度消失（连接第 25 节链式法则）。',
+      `反向传播时梯度直穿 ⊕，不经过注意力矩阵，有效防止梯度消失（连接第 ${chNum('chain-rule')} 节链式法则）。`,
     descPost:
       '把注意力输出加回输入流：x ← x + Attn(x)，随后才轮到 LN₁——' +
       '整层写作 x ← LN₁(x + Attn(x))。⊕ 依然是残差流的汇入点，' +
-      '但梯度穿过 ⊕ 之后还要再过一层归一化，不像 pre-norm 那样一路直通（连接第 25 节链式法则）。',
+      `但梯度穿过 ⊕ 之后还要再过一层归一化，不像 pre-norm 那样一路直通（连接第 ${chNum('chain-rule')} 节链式法则）。`,
     isAdd: true,
   },
   ln2: {
@@ -63,10 +64,10 @@ const BOX_META: Record<BoxKey, BoxMeta> = {
     desc:
       '第二个 LayerNorm，放在 MLP 之前。原理与 LN₁ 完全相同，' +
       '只是作用在第一次残差相加之后的流上，保证 MLP 拿到尺度归一的输入，' +
-      '让深层训练不崩（连接第 28 节）。',
+      `让深层训练不崩（连接第 ${chNum('normalization')} 节）。`,
     descPost:
       '第二个 LayerNorm，post-norm 里它排在 MLP 的残差相加之后：x ← LN₂(x + MLP(x))。' +
-      '原理与 LN₁ 完全相同，只是归一化的是已经汇入增量的残差流本身（连接第 28 节）。',
+      `原理与 LN₁ 完全相同，只是归一化的是已经汇入增量的残差流本身（连接第 ${chNum('normalization')} 节）。`,
     isAdd: false,
   },
   mlp: {
@@ -104,7 +105,7 @@ class TransformerBlock(nn.Module):
     def __init__(self, d: int, heads: int):
         super().__init__()
         self.ln1  = nn.LayerNorm(d)
-        self.attn = MultiHeadAttention(d, heads)  # 第 32 节
+        self.attn = MultiHeadAttention(d, heads)  # 第 ${chNum('multi-head')} 节
         self.ln2  = nn.LayerNorm(d)
         self.mlp  = nn.Sequential(
             nn.Linear(d, 4 * d),

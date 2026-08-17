@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── 颜色常量 ──────────────────────────────────────────────────────────────────
@@ -380,9 +381,9 @@ export function Softmax() {
             <strong>① 注意力权重</strong>——<code>softmax(QKᵀ / √d)</code>{' '}
             把 token 间的打分变成「每个 token 分配多少注意力」的概率；
             分母的 <code>√d</code> 本质上就是在调 temperature（d 越大，内积越大，除以 √d 降回合理范围），
-            与第 06 节讲的范数缩放直接相连。
+            与<ChRef slug="norms" />讲的范数缩放直接相连。
             <strong>② 输出层</strong>——把最后一层 logits 变成词表上的概率分布，
-            模型从中采样或取 argmax 生成下一个词（采样细节见第 36 节）。
+            模型从中采样或取 argmax 生成下一个词（采样细节见<ChRef slug="sampling-decoding" />）。
           </p>
           <p>
             推理时你看到的 temperature 参数就是这里的 T：

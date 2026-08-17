@@ -420,3 +420,23 @@ h1 {
   .chain-arrow { flex-direction: row; gap: 8px; padding: 2px 0; }
   .chain-arrow-glyph { transform: rotate(90deg); }
 }
+
+/* ── 正文里的章节交叉引用（<ChRef>） ───────────────────────────────────────── */
+/* 出现频率高（自注意力一页就 16 处），所以不做整段高亮：只上 IKB 色 + 一条虚下划线，
+   悬停才实心。white-space:nowrap 防止「第 28 节」在行末被拆开。 */
+.chref {
+  color: var(--ikb);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px dotted rgba(0, 47, 167, 0.42);
+}
+a.chref:hover {
+  border-bottom-style: solid;
+  background: var(--ikb-soft);
+}
+/* slug 打错时的醒目兜底，正常上线的页面不该出现 */
+.chref--missing {
+  color: #b23a00;
+  background: #ffe9e0;
+  border-bottom: 1px solid #b23a00;
+}

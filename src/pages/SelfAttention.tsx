@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef, chNum } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── design tokens ─────────────────────────────────────────────────────────────
@@ -393,9 +394,9 @@ export function SelfAttention() {
         整个过程就一个公式：把每个 token 的 embedding 投影成
         <strong> Query、Key、Value</strong>（<code>Q=XW_Q</code>,
         {' '}<code>K=XW_K</code>, <code>V=XW_V</code>）；
-        用点积打分（第 04 节），除以 √d 缩放（第 06 节）；
-        softmax 归一化成权重（第 29 节）；
-        最后做加权和 <code>output = softmax(QKᵀ/√d)·V</code>（第 10 节的形状逻辑在此收口）。
+        用点积打分（<ChRef slug="dot-product" />），除以 √d 缩放（<ChRef slug="norms" />）；
+        softmax 归一化成权重（<ChRef slug="softmax" />）；
+        最后做加权和 <code>output = softmax(QKᵀ/√d)·V</code>（<ChRef slug="transpose-shape" />的形状逻辑在此收口）。
         下面你亲手跑完整个 pipeline，每一步都有实数。
           </>
         }
@@ -476,7 +477,7 @@ export function SelfAttention() {
           {!useScaling && (
             <p style={{ fontSize: 12, color: RUST, margin: '6px 0 0', fontWeight: 600 }}>
               分数变大 → 分布变尖，权重往少数几个 token 上挤，梯度随之变小。
-              这就是为什么要除以 √d（第 06 节）。
+              这就是为什么要除以 √d（<ChRef slug="norms" />）。
             </p>
           )}
         </div>
@@ -577,8 +578,8 @@ export function SelfAttention() {
           第二步：打分 + Softmax — 得到注意力权重
         </h2>
         <p style={{ color: '#444', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
-          Query 与所有 Key 做点积（第 04 节）：<code>QKᵀ</code> 的形状 {N}×{D} · {D}×{N} = {N}×{N}（第 10 节的转置逻辑在此体现）。
-          除以 √d = √{D} = {Math.sqrt(D).toFixed(0)} 防止梯度消失（第 06 节）。
+          Query 与所有 Key 做点积（<ChRef slug="dot-product" />）：<code>QKᵀ</code> 的形状 {N}×{D} · {D}×{N} = {N}×{N}（<ChRef slug="transpose-shape" />的转置逻辑在此体现）。
+          除以 √d = √{D} = {Math.sqrt(D).toFixed(0)} 防止梯度消失（<ChRef slug="norms" />）。
           再 softmax 每一行 → 权重，每行之和 = 1。
         </p>
 
@@ -784,11 +785,11 @@ export function SelfAttention() {
             [`Q = X·W_Q  :  ${N}×${D}`, '   — Query 矩阵'],
             [`K = X·W_K  :  ${N}×${D}`, '   — Key 矩阵'],
             [`V = X·W_V  :  ${N}×${D}`, '   — Value 矩阵'],
-            [`Kᵀ         :  ${D}×${N}`, '   — 转置后内维对齐（第 10 节）'],
+            [`Kᵀ         :  ${D}×${N}`, `   — 转置后内维对齐（第 ${chNum('transpose-shape')} 节）`],
             [`QKᵀ        :  ${N}×${N}`, `   — 每个 token 对每个 token 的原始得分`],
-            [`QKᵀ/√d    :  ${N}×${N}`, `   — 除以 √${D}=${Math.sqrt(D).toFixed(0)} 缩放（第 06 节）`],
-            [`softmax(…) :  ${N}×${N}`, '   — 注意力权重，每行 = 概率分布（第 29 节）'],
-            [`output     :  ${N}×${D}`, '   — 加权 Value 和，形状等于 X（第 18/22 节）'],
+            [`QKᵀ/√d    :  ${N}×${N}`, `   — 除以 √${D}=${Math.sqrt(D).toFixed(0)} 缩放（第 ${chNum('norms')} 节）`],
+            [`softmax(…) :  ${N}×${N}`, `   — 注意力权重，每行 = 概率分布（第 ${chNum('softmax')} 节）`],
+            [`output     :  ${N}×${D}`, `   — 加权 Value 和，形状等于 X（第 ${chNum('orthogonal-projection')}/${chNum('low-rank')} 节）`],
           ].map(([shape, note], idx) => (
             <div key={idx}>
               <span style={{ color: IKB, fontWeight: 700 }}>{shape}</span>
@@ -826,18 +827,18 @@ export function SelfAttention() {
             你刚刚亲手算完了 Transformer 的心脏。
             <code>Attention(Q, K, V) = softmax(QKᵀ/√d) · V</code>
             里的每一块都是前面的章节：
-            <strong>点积打分</strong>（第 04 节）、
-            <strong>√d 缩放</strong>（第 06 节）、
-            <strong>QKᵀ 对齐维度</strong>（第 10 节）、
-            <strong>softmax 成权重</strong>（第 29 节）、
-            <strong>按权重对 V 做加权和</strong>（投影/低秩读出，第 18/22 节）。
+            <strong>点积打分</strong>（<ChRef slug="dot-product" />）、
+            <strong>√d 缩放</strong>（<ChRef slug="norms" />）、
+            <strong>QKᵀ 对齐维度</strong>（<ChRef slug="transpose-shape" />）、
+            <strong>softmax 成权重</strong>（<ChRef slug="softmax" />）、
+            <strong>按权重对 V 做加权和</strong>（投影/低秩读出，第 {chNum('orthogonal-projection')}/{chNum('low-rank')} 节）。
           </p>
           <p>
             <strong>看懂这一页 = 看懂注意力。</strong>
             GPT、BERT、LLaMA 的每一层，每一个 attention head，都在重复上面的六行。
-            下面第 32 节把它分成<em>多头</em>（把 d 拆成 h 份并行运行），
-            第 33 节给它补上位置信息（RoPE），
-            第 34 节把它装进完整的 Transformer block（加 残差 + LayerNorm + MLP）。
+            下面<ChRef slug="multi-head" />把它分成<em>多头</em>（把 d 拆成 h 份并行运行），
+            <ChRef slug="rope" />给它补上位置信息（RoPE），
+            <ChRef slug="transformer-block" />把它装进完整的 Transformer block（加 残差 + LayerNorm + MLP）。
             地基在这里；一切后续都是在这个公式上加砖。
           </p>
         </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ─── Math helpers ────────────────────────────────────────────────────────────
@@ -520,7 +521,7 @@ export function CrossEntropy() {
       <section style={{ marginTop: 36 }}>
         <h2 className="sec-h" style={{ color: '#002fa7' }}>① 一个词：损失就是 −log p</h2>
         <p style={{ margin: 0, maxWidth: '62ch', fontSize: 15.5, color: 'var(--ink-soft)' }}>
-          模型在每个位置先吐出一组分数（logits），softmax 把它们压成一组概率（第 29 节）。
+          模型在每个位置先吐出一组分数（logits），softmax 把它们压成一组概率（<ChRef slug="softmax" />）。
           真实的下一个词拿到的那份概率记作 <code>p</code>，这个位置的损失就只是 <code>−log p</code>。
           p 越接近 1，损失越接近 0；p 越接近 0，损失冲向无穷。拖动下面的滑块，看这两个数怎么联动。
         </p>
@@ -679,7 +680,7 @@ export function CrossEntropy() {
         <div className="bridge-body">
           <p>
             <code>F.cross_entropy(logits, targets)</code> 是 LLM 预训练的损失函数。
-            每个 token 位置，模型先用 softmax 把 logits 变成概率分布（第 29 节），
+            每个 token 位置，模型先用 softmax 把 logits 变成概率分布（<ChRef slug="softmax" />），
             再取真实下一个词的概率算 −log p，最后全序列平均。
             这三步，正是你在上面三级台阶里亲手拨过的每一步。
           </p>
@@ -690,7 +691,7 @@ export function CrossEntropy() {
           </p>
           <p>
             <strong>评估时看的是困惑度 perplexity = exp(CE)</strong>，越低说明模型对真实文本越有把握
-            （GPT-2 在 WebText 上约 18）。再往后，第 36 节的采样就是从这里的概率分布里挑词：
+            （GPT-2 在 WebText 上约 18）。再往后，<ChRef slug="sampling-decoding" />的采样就是从这里的概率分布里挑词：
             Softmax 产出分布，CE 打分，采样取词，三者首尾相接。
           </p>
         </div>

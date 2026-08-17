@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef, chNum } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
@@ -252,7 +253,7 @@ export function LoraFinetuning() {
         把大矩阵 <code>W</code> 冻结（frozen），只让两个小矩阵{' '}
         <code>B</code>（d×r）和 <code>A</code>（r×d）参与训练；
         它们的乘积 <code>ΔW = B·A</code> 是 rank ≤ r 的低秩更新——
-        这正是你在第 13 节（矩阵的秩）和第 22 节（低秩近似）学到的数学，
+        这正是你在<ChRef slug="rank" />（矩阵的秩）和<ChRef slug="low-rank" />（低秩近似）学到的数学，
         在这里<strong>兑现</strong>。
         拖动下面的 rank r 滑块，亲手看节省效果和低秩结构如何随 r 变化。
           </>
@@ -390,9 +391,9 @@ export function LoraFinetuning() {
         }}>
           <strong style={{ color: RUST }}>rank(BA) ≤ r = {r}</strong>，由构造保证——
           B 只有 {r} 列，BA 的每一列都在 B 的 column space 里，
-          最多 {r} 个独立方向（连回第 13 节：秩 = column space 维数）。
+          最多 {r} 个独立方向（连回<ChRef slug="rank" />：秩 = column space 维数）。
           {r === 1 &&
-            ' r=1 时 BA 正是 rank-1 outer product，与第 13 节「外积」完全吻合。'}
+            ` r=1 时 BA 正是 rank-1 outer product，与第 ${chNum('rank')} 节「外积」完全吻合。`}
           {r === D &&
             ` r=d=${D} 时 BA 可以满秩，低秩约束消失。`}
         </div>
@@ -497,7 +498,7 @@ export function LoraFinetuning() {
             </strong>
             {' '}有效权重 <code>W + BA</code> 与全量微调的结果接近——
             前提是「微调任务所需的改变量 ΔW 确实是低秩的」。
-            这正是 LoRA 的核心假设，也是第 22 节低秩近似的底层逻辑。
+            这正是 LoRA 的核心假设，也是<ChRef slug="low-rank" />低秩近似的底层逻辑。
             把 r 继续拖大，观察节省空间如何消失。
           </p>
         ) : (
@@ -519,7 +520,7 @@ export function LoraFinetuning() {
         <div className="bridge-body">
           <p>
             LoRA 是今天微调大模型的默认方法（<strong>PEFT</strong> 库的核心）。
-            QLoRA 在它基础上叠加量化（连到第 37 节），
+            QLoRA 在它基础上叠加量化（连到<ChRef slug="quantization" />），
             把 70B 参数的模型压进一张消费级显卡。
             它能成立，全靠你前面学的两件事：
           </p>
@@ -527,7 +528,7 @@ export function LoraFinetuning() {
             <strong>一，权重更新是低秩的。</strong>
             让模型适应新任务，只需要在 W 的方向空间里加几个新方向——
             用 <code>ΔW = B·A</code>（rank ≤ r）这两个薄矩阵就够，
-            参数量从 d² 压到 2dr（第 13 节：rank；第 22 节：低秩近似）。
+            参数量从 d² 压到 2dr（<ChRef slug="rank" />：rank；<ChRef slug="low-rank" />：低秩近似）。
           </p>
           <p>
             <strong>二，训练完可以把 BA 合并回 W。</strong>

@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { CodeBlock } from '../components/CodeBlock'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
@@ -356,7 +357,7 @@ export function Gradient() {
           <p>
             训练 = 把所有参数看成超高维空间里的一个点，loss 是它的「高度」。
             反向传播算出每个权重对应的 <strong>partial derivative</strong>，拼成
-            <strong> −∇<sub>θ</sub>loss</strong>，优化器就沿这个方向挪一小步（第 26 节：梯度下降）。
+            <strong> −∇<sub>θ</sub>loss</strong>，优化器就沿这个方向挪一小步（<ChRef slug="gradient-descent" />：梯度下降）。
             垂直于 level set = 最高效的下坡方向——所以 gradient 是训练的全部信号，不多也不少。
           </p>
         </div>

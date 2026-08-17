@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { apply, multiply, nearlyEqual, type Mat2, type Vec2 } from '../linalg'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 
@@ -560,9 +561,9 @@ export function Spectral() {
             orthogonal eigenvector。
           </p>
           <p>
-            Spectral decomposition = <strong>PCA 的引擎</strong>（第 23 节）：
+            Spectral decomposition = <strong>PCA 的引擎</strong>（<ChRef slug="pca" />）：
             主成分分析就是在求协方差矩阵的特征向量，把数据投影到方差最大的方向上。
-            它也是理解 <strong>SVD</strong>（第 21 节）的台阶——SVD 把谱分解推广到任意非方阵：
+            它也是理解 <strong>SVD</strong>（<ChRef slug="svd" />）的台阶——SVD 把谱分解推广到任意非方阵：
             <code> M = U Σ Vᵀ</code>，U、V 的列都 orthogonal，Σ 是奇异值对角阵。
             看懂这一页，SVD 就只是谱分解的自然延伸。
           </p>

@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { apply, type Mat2, type Vec2 } from '../linalg'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 
@@ -547,8 +548,8 @@ export function Eigen() {
           <p>
             在 Transformer 里，残差连接 + LayerNorm 的叠加在隐式地控制各层变换的 eigenvalue 谱不爆炸、不消亡，
             这关系到梯度流的稳定性。
-            往后看：第 16 节<strong>谱分解</strong>把对称矩阵完全拆成特征方向的直和；
-            第 21 节 <strong>SVD</strong> 把任意矩阵写成旋转-拉伸-旋转——
+            往后看：<ChRef slug="spectral" /><strong>谱分解</strong>把对称矩阵完全拆成特征方向的直和；
+            <ChRef slug="svd" /> <strong>SVD</strong> 把任意矩阵写成旋转-拉伸-旋转——
             奇异值正是 MᵀM 特征值的平方根，eigenvalue 是那里的地基。
           </p>
         </div>

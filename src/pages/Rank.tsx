@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { type Vec2 } from '../linalg'
+import { ChRef } from '../components/ChRef'
 import { ChapterShell } from '../components/ChapterShell'
 import { CodeBlock } from '../components/CodeBlock'
 
@@ -487,8 +488,8 @@ export function Rank() {
             {' '}<strong>低秩的</strong>——让模型适应新任务只需要少数几个新方向。
             所以把 <code>ΔW = B·A</code>（B: <code>d×r</code>，A: <code>r×d</code>，r ≪ d），
             只训练这两个瘦矩阵，参数量从 d² 压到 2·r·d。
-            第 21 节 SVD 把 rank 的结构看得更清楚；第 22 节低秩近似、第 35 节 LoRA
-            都是这一页的兑现。也连回第 12 节：<strong>det = 0 ⟺ 降秩</strong>。
+            <ChRef slug="svd" /> SVD 把 rank 的结构看得更清楚；<ChRef slug="low-rank" />低秩近似、<ChRef slug="lora-finetuning" /> LoRA
+            都是这一页的兑现。也连回<ChRef slug="determinant" />：<strong>det = 0 ⟺ 降秩</strong>。
           </p>
         </div>
       </section>
