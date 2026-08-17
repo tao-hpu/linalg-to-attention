@@ -251,7 +251,7 @@ export function Rope() {
 
         <div className="control">
           <div className="control-head">
-            <span className="slot-tag" style={{ background: RUST }}>n · key 位置</span>
+            <span className="slot-tag slot-tag--rust">n · key 位置</span>
           </div>
           <label className="slider-row">
             <input type="range" min={0} max={8} step={1} value={n}

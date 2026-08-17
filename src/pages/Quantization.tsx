@@ -441,7 +441,7 @@ export function Quantization() {
           style={{ borderLeft: '3px solid #c75b39', paddingLeft: '0.75rem' }}
         >
           <div className="control-head">
-            <span className="slot-tag" style={{ color: '#c75b39' }}>w15</span>
+            <span className="slot-tag slot-tag--rust">w15</span>
             <span style={{ color: '#888', fontSize: 13, marginLeft: '0.3rem' }}>
               离群值（outlier）——拖大它，看 scale 被撑大、小权重塌缩到 0
             </span>
@@ -467,7 +467,7 @@ export function Quantization() {
           style={{ borderLeft: '3px solid #002fa7', paddingLeft: '0.75rem' }}
         >
           <div className="control-head">
-            <span className="slot-tag" style={{ color: '#002fa7' }}>per-channel</span>
+            <span className="slot-tag">per-channel</span>
             <span style={{ color: '#888', fontSize: 13, marginLeft: '0.3rem' }}>
               关 = 整组共用一个 scale；开 = 每 {CHANNEL_SIZE} 个权重分一通道、各自定 scale
             </span>

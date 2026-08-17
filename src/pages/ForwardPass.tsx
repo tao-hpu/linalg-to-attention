@@ -276,7 +276,7 @@ export function ForwardPass() {
       <section className="controls" style={{ gridTemplateColumns: '1fr' }}>
         <div className="control" style={{ borderTopColor: RUST }}>
           <div className="control-head">
-            <span className="slot-tag" style={{ background: RUST }}>
+            <span className="slot-tag slot-tag--rust">
               {active + 1}/{STEPS.length}
             </span>
             <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1b1f24' }}>

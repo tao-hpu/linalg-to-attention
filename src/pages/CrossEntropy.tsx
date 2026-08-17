@@ -570,7 +570,7 @@ export function CrossEntropy() {
         {/* Right: true class selector */}
         <div className="control" style={{ borderTopColor: '#c75b39' }}>
           <div className="control-head">
-            <span className="slot-tag" style={{ background: '#c75b39' }}>true</span>
+            <span className="slot-tag slot-tag--rust">true</span>
             <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>正确词（或点击柱）</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

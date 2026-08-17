@@ -119,10 +119,8 @@ export function Softmax() {
         {TOKEN_DEFS.map((tok, i) => (
           <div className="control" key={tok.zh}>
             <div className="control-head">
-              <span
-                className="slot-tag"
-                style={{ color: i === argmax ? RUST : IKB }}
-              >
+              {/* argmax 那个换底色，不是换字色——胶囊是深底白字，改 color 会让字消失。 */}
+              <span className={`slot-tag${i === argmax ? ' slot-tag--rust' : ''}`}>
                 {tok.zh}
               </span>
               <span style={{ fontSize: '0.74rem', color: '#666', marginLeft: '0.3rem' }}>
@@ -154,7 +152,7 @@ export function Softmax() {
           style={{ borderLeft: `3px solid ${RUST}`, paddingLeft: '0.75rem' }}
         >
           <div className="control-head">
-            <span className="slot-tag" style={{ color: RUST }}>T</span>
+            <span className="slot-tag slot-tag--rust">T</span>
             <span style={{ fontSize: '0.74rem', color: '#666', marginLeft: '0.3rem' }}>
               temperature（越小越锐，越大越平）
             </span>

@@ -297,7 +297,7 @@ export function SamplingDecoding() {
           style={{ borderLeft: `3px solid ${RUST}`, paddingLeft: '0.75rem' }}
         >
           <div className="control-head">
-            <span className="slot-tag" style={{ color: RUST }}>T</span>
+            <span className="slot-tag slot-tag--rust">T</span>
             <span style={{ fontSize: '0.74rem', color: '#666', marginLeft: '0.3rem' }}>
               temperature（低 → 锐，高 → 平；连回第 29 节 softmax）
             </span>

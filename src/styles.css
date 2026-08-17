@@ -119,6 +119,8 @@ h1 {
   gap: 12px;
   margin-bottom: 14px;
 }
+/* 标签胶囊：白字 + 实心底。要换配色请改 background，不要改 color——
+   底色是深的，把 color 改成 IKB 或 rust 会让字直接消失在底上。 */
 .slot-tag {
   font-family: var(--mono);
   font-weight: 700;
@@ -133,7 +135,11 @@ h1 {
   place-items: center;
   white-space: nowrap;
   border-radius: 2px;
+  flex: none;                 /* 别被 .control-head 的 flex 压窄：nowrap 的长标签会溢出到底色外面 */
 }
+/* 锈色胶囊：品牌锈 #c75b39 配白字只有 4.21:1，够不到 WCAG AA 的 4.5。
+   压深一档到 4.75:1，肉眼几乎看不出差别。锈色当文字色配白底不受影响，仍用 --rust。 */
+.slot-tag--rust { background: #bd5233; }
 .control select {
   font-family: var(--sans);
   font-size: 15px;

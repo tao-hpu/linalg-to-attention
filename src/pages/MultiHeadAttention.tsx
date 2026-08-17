@@ -460,7 +460,7 @@ export function MultiHeadAttention() {
         {/* ÷τ 缩放 / 温度滑块 —— 本章高潮：QKᵀ/√d_head */}
         <div className="control" style={{ borderLeft: `3px solid ${IKB}`, paddingLeft: '0.75rem' }}>
           <div className="control-head">
-            <span className="slot-tag" style={{ color: IKB }}>缩放 ÷τ（√d_head）</span>
+            <span className="slot-tag">缩放 ÷τ（√d_head）</span>
             <span style={{ fontSize: '0.74rem', color: 'var(--ink-soft)', marginLeft: '0.4rem' }}>
               拖动改变 softmax 温度：τ 小 → 分布变尖，τ 大 → 变平
             </span>

@@ -451,7 +451,7 @@ export function SelfAttention() {
           style={{ borderLeft: `3px solid ${IKB}`, paddingLeft: '0.75rem' }}
         >
           <div className="control-head">
-            <span className="slot-tag" style={{ color: IKB }}>√d 缩放</span>
+            <span className="slot-tag">√d 缩放</span>
             <span style={{ fontSize: '0.74rem', color: '#666', marginLeft: '0.4rem' }}>
               关掉看 softmax 饱和
             </span>
