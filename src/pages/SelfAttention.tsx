@@ -836,7 +836,8 @@ export function SelfAttention() {
           <p>
             <strong>看懂这一页 = 看懂注意力。</strong>
             GPT、BERT、LLaMA 的每一层，每一个 attention head，都在重复上面的六行。
-            下面<ChRef slug="multi-head" />把它分成<em>多头</em>（把 d 拆成 h 份并行运行），
+            下面<ChRef slug="causal-mask" />给它加上<em>因果掩码</em>（挡住后文，GPT 才能靠前文猜下一个词），
+            <ChRef slug="multi-head" />把它分成<em>多头</em>（把 d 拆成 h 份并行运行），
             <ChRef slug="rope" />给它补上位置信息（RoPE），
             <ChRef slug="transformer-block" />把它装进完整的 Transformer block（加 残差 + LayerNorm + MLP）。
             地基在这里；一切后续都是在这个公式上加砖。

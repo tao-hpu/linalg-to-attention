@@ -1,0 +1,23 @@
+- generic [ref=f15e3]:
+  - banner [ref=f15e4]:
+    - generic [ref=f15e5]:
+      - button "切换全局导航" [ref=f15e6] [cursor=pointer]:
+        - generic [ref=f15e7]: ☰
+      - link "线性代数 → 注意力" [ref=f15e8] [cursor=pointer]:
+        - /url: /
+    - navigation [ref=f15e9]:
+      - button "搜索章节" [ref=f15e10] [cursor=pointer]:
+        - generic [ref=f15e11]: ⌕
+        - generic [ref=f15e12]: ⌘K
+      - link "大纲" [ref=f15e13] [cursor=pointer]:
+        - /url: /
+      - link "★ GitHub" [ref=f15e14] [cursor=pointer]:
+        - /url: https://github.com/tao-hpu/linalg-to-attention
+  - main [ref=f15e16]:
+    - status [ref=f15e17]: 加载中…
+    - generic [ref=f15e18]:
+      - generic [ref=f15e19]:
+        - text: © 2026
+        - link "FIM Labs" [ref=f15e20] [cursor=pointer]:
+          - /url: https://fim.ai
+      - generic [ref=f15e21]: 线性代数 → 注意力 · 一个开源教学项目

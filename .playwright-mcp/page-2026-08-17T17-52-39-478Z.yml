@@ -1,0 +1,533 @@
+- generic [ref=f14e3]:
+  - banner [ref=f14e4]:
+    - generic [ref=f14e5]:
+      - button "切换全局导航" [expanded] [ref=f14e6] [cursor=pointer]:
+        - generic [ref=f14e7]: ✕
+      - link "线性代数 → 注意力" [ref=f14e8] [cursor=pointer]:
+        - /url: /
+    - navigation [ref=f14e9]:
+      - button "搜索章节" [ref=f14e10] [cursor=pointer]:
+        - generic [ref=f14e11]: ⌕
+        - generic [ref=f14e13]: ⌘K
+      - link "大纲" [ref=f14e14] [cursor=pointer]:
+        - /url: /
+      - link "★ GitHub" [ref=f14e15] [cursor=pointer]:
+        - /url: https://github.com/tao-hpu/linalg-to-attention
+  - generic [ref=f14e16]:
+    - navigation "全书导航" [ref=f14e17]:
+      - link "全书大纲" [ref=f14e18] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f14e19]:
+        - generic [ref=f14e20]: 第一部分 · 向量：意义的载体
+        - list [ref=f14e21]:
+          - listitem [ref=f14e22]:
+            - link "01 向量与坐标系 ★" [ref=f14e23] [cursor=pointer]:
+              - /url: /ch/vectors
+              - generic [ref=f14e24]: "01"
+              - generic [ref=f14e25]: 向量与坐标系 ★
+          - listitem [ref=f14e26]:
+            - link "02 从词袋到词向量" [ref=f14e27] [cursor=pointer]:
+              - /url: /ch/bow-to-embedding
+              - generic [ref=f14e28]: "02"
+              - generic [ref=f14e29]: 从词袋到词向量
+          - listitem [ref=f14e30]:
+            - link "03 向量的加减与缩放" [ref=f14e31] [cursor=pointer]:
+              - /url: /ch/vector-arithmetic
+              - generic [ref=f14e32]: "03"
+              - generic [ref=f14e33]: 向量的加减与缩放
+          - listitem [ref=f14e34]:
+            - link "04 内积 ★" [ref=f14e35] [cursor=pointer]:
+              - /url: /ch/dot-product
+              - generic [ref=f14e36]: "04"
+              - generic [ref=f14e37]: 内积 ★
+          - listitem [ref=f14e38]:
+            - link "✓ 投影" [ref=f14e39] [cursor=pointer]:
+              - /url: /ch/projection
+              - generic [ref=f14e40]: ✓
+              - generic [ref=f14e41]: 投影
+          - listitem [ref=f14e42]:
+            - link "06 范数与单位向量" [ref=f14e43] [cursor=pointer]:
+              - /url: /ch/norms
+              - generic [ref=f14e44]: "06"
+              - generic [ref=f14e45]: 范数与单位向量
+      - generic [ref=f14e46]:
+        - generic [ref=f14e47]: 第二部分 · 矩阵：一个动作
+        - list [ref=f14e48]:
+          - listitem [ref=f14e49]:
+            - link "07 矩阵是变换 ★" [ref=f14e50] [cursor=pointer]:
+              - /url: /ch/matrix-as-transform
+              - generic [ref=f14e51]: "07"
+              - generic [ref=f14e52]: 矩阵是变换 ★
+          - listitem [ref=f14e53]:
+            - link "08 矩阵乘法的几何 ★" [ref=f14e54] [cursor=pointer]:
+              - /url: /ch/matrix-mult
+              - generic [ref=f14e55]: "08"
+              - generic [ref=f14e56]: 矩阵乘法的几何 ★
+          - listitem [ref=f14e57]:
+            - link "09 矩阵乘法的四种视角" [ref=f14e58] [cursor=pointer]:
+              - /url: /ch/matmul-views
+              - generic [ref=f14e59]: "09"
+              - generic [ref=f14e60]: 矩阵乘法的四种视角
+          - listitem [ref=f14e61]:
+            - link "10 转置与形状 ★" [ref=f14e62] [cursor=pointer]:
+              - /url: /ch/transpose-shape
+              - generic [ref=f14e63]: "10"
+              - generic [ref=f14e64]: 转置与形状 ★
+          - listitem [ref=f14e65]:
+            - link "11 批量与张量" [ref=f14e66] [cursor=pointer]:
+              - /url: /ch/batching
+              - generic [ref=f14e67]: "11"
+              - generic [ref=f14e68]: 批量与张量
+      - generic [ref=f14e69]:
+        - generic [ref=f14e70]: 第三部分 · 方阵的秘密
+        - list [ref=f14e71]:
+          - listitem [ref=f14e72]:
+            - link "✓ 行列式" [ref=f14e73] [cursor=pointer]:
+              - /url: /ch/determinant
+              - generic [ref=f14e74]: ✓
+              - generic [ref=f14e75]: 行列式
+          - listitem [ref=f14e76]:
+            - link "13 矩阵的秩 ★" [ref=f14e77] [cursor=pointer]:
+              - /url: /ch/rank
+              - generic [ref=f14e78]: "13"
+              - generic [ref=f14e79]: 矩阵的秩 ★
+          - listitem [ref=f14e80]:
+            - link "14 逆矩阵" [ref=f14e81] [cursor=pointer]:
+              - /url: /ch/inverse
+              - generic [ref=f14e82]: "14"
+              - generic [ref=f14e83]: 逆矩阵
+          - listitem [ref=f14e84]:
+            - link "15 特征值与特征向量" [ref=f14e85] [cursor=pointer]:
+              - /url: /ch/eigen
+              - generic [ref=f14e86]: "15"
+              - generic [ref=f14e87]: 特征值与特征向量
+          - listitem [ref=f14e88]:
+            - link "16 对称矩阵与谱分解" [ref=f14e89] [cursor=pointer]:
+              - /url: /ch/spectral
+              - generic [ref=f14e90]: "16"
+              - generic [ref=f14e91]: 对称矩阵与谱分解
+      - generic [ref=f14e92]:
+        - generic [ref=f14e93]: 第四部分 · 正交、回归与投影
+        - list [ref=f14e94]:
+          - listitem [ref=f14e95]:
+            - link "17 正交矩阵与旋转" [ref=f14e96] [cursor=pointer]:
+              - /url: /ch/orthogonal-rotation
+              - generic [ref=f14e97]: "17"
+              - generic [ref=f14e98]: 正交矩阵与旋转
+          - listitem [ref=f14e99]:
+            - link "18 正交投影" [ref=f14e100] [cursor=pointer]:
+              - /url: /ch/orthogonal-projection
+              - generic [ref=f14e101]: "18"
+              - generic [ref=f14e102]: 正交投影
+          - listitem [ref=f14e103]:
+            - link "19 格拉姆-施密特与 QR" [ref=f14e104] [cursor=pointer]:
+              - /url: /ch/gram-schmidt
+              - generic [ref=f14e105]: "19"
+              - generic [ref=f14e106]: 格拉姆-施密特与 QR
+          - listitem [ref=f14e107]:
+            - link "20 回归 = 投影" [ref=f14e108] [cursor=pointer]:
+              - /url: /ch/regression-projection
+              - generic [ref=f14e109]: "20"
+              - generic [ref=f14e110]: 回归 = 投影
+      - generic [ref=f14e111]:
+        - generic [ref=f14e112]: 第五部分 · 降维：抓住主要矛盾
+        - list [ref=f14e113]:
+          - listitem [ref=f14e114]:
+            - link "21 SVD 奇异值分解 ★" [ref=f14e115] [cursor=pointer]:
+              - /url: /ch/svd
+              - generic [ref=f14e116]: "21"
+              - generic [ref=f14e117]: SVD 奇异值分解 ★
+          - listitem [ref=f14e118]:
+            - link "22 低秩近似 ★" [ref=f14e119] [cursor=pointer]:
+              - /url: /ch/low-rank
+              - generic [ref=f14e120]: "22"
+              - generic [ref=f14e121]: 低秩近似 ★
+          - listitem [ref=f14e122]:
+            - link "23 PCA 主成分分析" [ref=f14e123] [cursor=pointer]:
+              - /url: /ch/pca
+              - generic [ref=f14e124]: "23"
+              - generic [ref=f14e125]: PCA 主成分分析
+      - generic [ref=f14e126]:
+        - generic [ref=f14e127]: 第六部分 · 学习：模型怎么变聪明
+        - list [ref=f14e128]:
+          - listitem [ref=f14e129]:
+            - link "24 梯度" [ref=f14e130] [cursor=pointer]:
+              - /url: /ch/gradient
+              - generic [ref=f14e131]: "24"
+              - generic [ref=f14e132]: 梯度
+          - listitem [ref=f14e133]:
+            - link "25 链式法则与 Jacobian" [ref=f14e134] [cursor=pointer]:
+              - /url: /ch/chain-rule
+              - generic [ref=f14e135]: "25"
+              - generic [ref=f14e136]: 链式法则与 Jacobian
+          - listitem [ref=f14e137]:
+            - link "26 梯度下降" [ref=f14e138] [cursor=pointer]:
+              - /url: /ch/gradient-descent
+              - generic [ref=f14e139]: "26"
+              - generic [ref=f14e140]: 梯度下降
+          - listitem [ref=f14e141]:
+            - link "27 正则化：Ridge 与 Lasso" [ref=f14e142] [cursor=pointer]:
+              - /url: /ch/regularization
+              - generic [ref=f14e143]: "27"
+              - generic [ref=f14e144]: 正则化：Ridge 与 Lasso
+          - listitem [ref=f14e145]:
+            - link "28 归一化" [ref=f14e146] [cursor=pointer]:
+              - /url: /ch/normalization
+              - generic [ref=f14e147]: "28"
+              - generic [ref=f14e148]: 归一化
+      - generic [ref=f14e149]:
+        - generic [ref=f14e150]: 第七部分 · 概率视角：模型在「猜下一个词」
+        - list [ref=f14e151]:
+          - listitem [ref=f14e152]:
+            - link "✓ Softmax 与概率分布 ★" [ref=f14e153] [cursor=pointer]:
+              - /url: /ch/softmax
+              - generic [ref=f14e154]: ✓
+              - generic [ref=f14e155]: Softmax 与概率分布 ★
+          - listitem [ref=f14e156]:
+            - link "30 交叉熵与极大似然" [ref=f14e157] [cursor=pointer]:
+              - /url: /ch/cross-entropy
+              - generic [ref=f14e158]: "30"
+              - generic [ref=f14e159]: 交叉熵与极大似然
+      - generic [ref=f14e160]:
+        - generic [ref=f14e161]: 第八部分 · 合成：亲手拼出注意力
+        - list [ref=f14e162]:
+          - listitem [ref=f14e163]:
+            - link "✓ 自注意力 ★" [ref=f14e164] [cursor=pointer]:
+              - /url: /ch/self-attention
+              - generic [ref=f14e165]: ✓
+              - generic [ref=f14e166]: 自注意力 ★
+          - listitem [ref=f14e167]:
+            - link "✓ 因果掩码 ★" [ref=f14e168] [cursor=pointer]:
+              - /url: /ch/causal-mask
+              - generic [ref=f14e169]: ✓
+              - generic [ref=f14e170]: 因果掩码 ★
+          - listitem [ref=f14e171]:
+            - link "33 多头注意力" [ref=f14e172] [cursor=pointer]:
+              - /url: /ch/multi-head
+              - generic [ref=f14e173]: "33"
+              - generic [ref=f14e174]: 多头注意力
+          - listitem [ref=f14e175]:
+            - link "34 位置编码与 RoPE" [ref=f14e176] [cursor=pointer]:
+              - /url: /ch/rope
+              - generic [ref=f14e177]: "34"
+              - generic [ref=f14e178]: 位置编码与 RoPE
+          - listitem [ref=f14e179]:
+            - link "35 一个 Transformer Block" [ref=f14e180] [cursor=pointer]:
+              - /url: /ch/transformer-block
+              - generic [ref=f14e181]: "35"
+              - generic [ref=f14e182]: 一个 Transformer Block
+      - generic [ref=f14e183]:
+        - generic [ref=f14e184]: 第九部分 · 尾声：接到 LLM 工程
+        - list [ref=f14e185]:
+          - listitem [ref=f14e186]:
+            - link "✓ LoRA 与高效微调" [ref=f14e187] [cursor=pointer]:
+              - /url: /ch/lora-finetuning
+              - generic [ref=f14e188]: ✓
+              - generic [ref=f14e189]: LoRA 与高效微调
+          - listitem [ref=f14e190]:
+            - link "37 采样与解码" [ref=f14e191] [cursor=pointer]:
+              - /url: /ch/sampling-decoding
+              - generic [ref=f14e192]: "37"
+              - generic [ref=f14e193]: 采样与解码
+          - listitem [ref=f14e194]:
+            - link "✓ 量化与数值" [ref=f14e195] [cursor=pointer]:
+              - /url: /ch/quantization
+              - generic [ref=f14e196]: ✓
+              - generic [ref=f14e197]: 量化与数值
+      - generic [ref=f14e198]:
+        - generic [ref=f14e199]: 第十部分 · 终点：完整的前向传播
+        - list [ref=f14e200]:
+          - listitem [ref=f14e201]:
+            - link "✓ 跑通一次前向传播 ★" [ref=f14e202] [cursor=pointer]:
+              - /url: /ch/forward-pass
+              - generic [ref=f14e203]: ✓
+              - generic [ref=f14e204]: 跑通一次前向传播 ★
+    - main [ref=f14e205]:
+      - article [ref=f14e206]:
+        - generic [ref=f14e207]:
+          - generic [ref=f14e208]:
+            - link "大纲" [ref=f14e209] [cursor=pointer]:
+              - /url: /
+            - text: · 第八部分 · 合成：亲手拼出注意力
+          - generic [ref=f14e210]: 第 32 节 ★ 核心
+          - heading "因果掩码 softmax(QKᵀ/√d + M)·V" [level=1] [ref=f14e211]:
+            - text: 因果掩码
+            - generic [ref=f14e212]: softmax(QKᵀ/√d + M)·V
+          - paragraph [ref=f14e213]:
+            - text: 上一节算出的注意力是
+            - strong [ref=f14e214]: 全连通
+            - text: 的：n×n 的分数矩阵里每个格子都有值， 第 1 个 token 能看到第 5 个。可 GPT 的训练目标是「根据前文猜下一个词」—— 要是位置 1 能看见位置 2，那它猜位置 2 就等于抄答案，loss 会降到很低， 模型却什么都没学会，生成时更是无从下手（那时候后文根本还不存在）。
+            - strong [ref=f14e215]: 因果掩码
+            - text: 解决这件事，手法简单到有点朴素： 在 softmax 之前，把分数矩阵的上三角全部改成 −∞。
+        - generic [ref=f14e217]:
+          - generic [ref=f14e218]:
+            - generic [ref=f14e219]: 掩码方式
+            - generic [ref=f14e220]: 切换三种做法，看分数矩阵和权重矩阵怎么变
+          - generic [ref=f14e221]:
+            - button "不掩码" [ref=f14e222] [cursor=pointer]
+            - button "因果掩码（softmax 之前置 −∞）" [ref=f14e223] [cursor=pointer]
+            - button "softmax 之后抹零" [ref=f14e224] [cursor=pointer]
+        - generic [ref=f14e225]:
+          - generic [ref=f14e226]:
+            - generic [ref=f14e227]: ① 分数 S = QKᵀ/√d
+            - generic [ref=f14e228]:
+              - generic [ref=f14e229]: 猫
+              - generic [ref=f14e230]: 坐
+              - generic [ref=f14e231]: 在
+              - generic [ref=f14e232]: 垫子
+              - generic [ref=f14e233]: 上
+            - generic [ref=f14e234]:
+              - button "猫" [ref=f14e235] [cursor=pointer]
+              - generic [ref=f14e236]: "2.51"
+              - generic [ref=f14e237]: −∞
+              - generic [ref=f14e238]: −∞
+              - generic [ref=f14e239]: −∞
+              - generic [ref=f14e240]: −∞
+            - generic [ref=f14e241]:
+              - button "坐" [pressed] [ref=f14e242] [cursor=pointer]
+              - generic [ref=f14e243]: "1.96"
+              - generic [ref=f14e244]: "2.08"
+              - generic [ref=f14e245]: −∞
+              - generic [ref=f14e246]: −∞
+              - generic [ref=f14e247]: −∞
+            - generic [ref=f14e248]:
+              - button "在" [ref=f14e249] [cursor=pointer]
+              - generic [ref=f14e250]: "0.46"
+              - generic [ref=f14e251]: "1.87"
+              - generic [ref=f14e252]: "1.68"
+              - generic [ref=f14e253]: −∞
+              - generic [ref=f14e254]: −∞
+            - generic [ref=f14e255]:
+              - button "垫子" [ref=f14e256] [cursor=pointer]
+              - generic [ref=f14e257]: "0.78"
+              - generic [ref=f14e258]: "1.45"
+              - generic [ref=f14e259]: "2.54"
+              - generic [ref=f14e260]: "2.51"
+              - generic [ref=f14e261]: −∞
+            - generic [ref=f14e262]:
+              - button "上" [ref=f14e263] [cursor=pointer]
+              - generic [ref=f14e264]: "1.91"
+              - generic [ref=f14e265]: "1.99"
+              - generic [ref=f14e266]: "1.84"
+              - generic [ref=f14e267]: "1.91"
+              - generic [ref=f14e268]: "2.97"
+            - generic [ref=f14e269]:
+              - generic [ref=f14e270]: q↓
+              - generic [ref=f14e271]: k→
+            - paragraph [ref=f14e272]: 上三角被换成 −∞。注意对角线还在：每个 token 看得见自己。
+          - generic [ref=f14e273]:
+            - generic [ref=f14e274]: ② 权重 A = softmax(S)，逐行
+            - generic [ref=f14e275]:
+              - generic [ref=f14e276]: 猫
+              - generic [ref=f14e277]: 坐
+              - generic [ref=f14e278]: 在
+              - generic [ref=f14e279]: 垫子
+              - generic [ref=f14e280]: 上
+            - generic [ref=f14e281]:
+              - button "猫" [ref=f14e282] [cursor=pointer]
+              - generic [ref=f14e283]: "1.00"
+              - generic [ref=f14e284]: "0.00"
+              - generic [ref=f14e285]: "0.00"
+              - generic [ref=f14e286]: "0.00"
+              - generic [ref=f14e287]: "0.00"
+            - generic [ref=f14e288]:
+              - button "坐" [pressed] [ref=f14e289] [cursor=pointer]
+              - generic [ref=f14e290]: "0.47"
+              - generic [ref=f14e291]: "0.53"
+              - generic [ref=f14e292]: "0.00"
+              - generic [ref=f14e293]: "0.00"
+              - generic [ref=f14e294]: "0.00"
+            - generic [ref=f14e295]:
+              - button "在" [ref=f14e296] [cursor=pointer]
+              - generic [ref=f14e297]: "0.12"
+              - generic [ref=f14e298]: "0.48"
+              - generic [ref=f14e299]: "0.40"
+              - generic [ref=f14e300]: "0.00"
+              - generic [ref=f14e301]: "0.00"
+            - generic [ref=f14e302]:
+              - button "垫子" [ref=f14e303] [cursor=pointer]
+              - generic [ref=f14e304]: "0.07"
+              - generic [ref=f14e305]: "0.14"
+              - generic [ref=f14e306]: "0.40"
+              - generic [ref=f14e307]: "0.39"
+              - generic [ref=f14e308]: "0.00"
+            - generic [ref=f14e309]:
+              - button "上" [ref=f14e310] [cursor=pointer]
+              - generic [ref=f14e311]: "0.15"
+              - generic [ref=f14e312]: "0.16"
+              - generic [ref=f14e313]: "0.14"
+              - generic [ref=f14e314]: "0.14"
+              - generic [ref=f14e315]: "0.42"
+            - generic [ref=f14e316]:
+              - generic [ref=f14e317]: q↓
+              - generic [ref=f14e318]: k→
+            - paragraph [ref=f14e319]: exp(−∞) = 0，上三角自动归零，剩下的权重重新分摊，行和仍是 1。
+        - generic [ref=f14e320]:
+          - heading "行和还是 1 吗" [level=2] [ref=f14e321]
+          - generic [ref=f14e322]:
+            - generic [ref=f14e323]: 每行权重之和（注意力必须是一组概率，行和 = 1）
+            - generic [ref=f14e324]:
+              - generic [ref=f14e325]: 猫 ：1.000
+              - generic [ref=f14e326]: 坐 ：1.000
+              - generic [ref=f14e327]: 在 ：1.000
+              - generic [ref=f14e328]: 垫子 ：1.000
+              - generic [ref=f14e329]: 上 ：1.000
+            - paragraph [ref=f14e330]: 行和全部为 1.000：每个 token 的注意力仍是一组完整的概率分布， 掩码只是把候选集合从「整句」缩到「自己和前文」。
+        - generic [ref=f14e331]:
+          - heading "这个位置看见了谁" [level=2] [ref=f14e332]
+          - paragraph [ref=f14e333]: 点左侧任意一行的 token 名切换查看。锈色柱= 来自未来的信息。
+          - generic [ref=f14e334]:
+            - generic [ref=f14e335]: 位置 2「坐」的输出向量，由哪些 token 的 Value 加权而成
+            - generic [ref=f14e336]:
+              - generic [ref=f14e337]:
+                - generic [ref=f14e339]: 猫
+                - generic [ref=f14e340]: "0.471"
+              - generic [ref=f14e341]:
+                - generic [ref=f14e343]: 坐
+                - generic [ref=f14e344]: "0.529"
+              - generic [ref=f14e345]:
+                - generic [ref=f14e347]: 在
+                - generic [ref=f14e348]: "0.000"
+              - generic [ref=f14e349]:
+                - generic [ref=f14e351]: 垫子
+                - generic [ref=f14e352]: "0.000"
+              - generic [ref=f14e353]:
+                - generic [ref=f14e355]: 上
+                - generic [ref=f14e356]: "0.000"
+            - paragraph [ref=f14e357]: 全部权重都落在位置 2 及其之前，未来那几列是 0.000。 位置 2 的输出只依赖它自己和前文，可以放心用来预测 「在」。
+        - generic [ref=f14e358]:
+          - heading "为什么是 −∞，而不是直接乘 0" [level=2] [ref=f14e359]
+          - paragraph [ref=f14e360]:
+            - text: 掩码写成一个加法项：
+            - code [ref=f14e361]: softmax(QKᵀ/√d + M)
+            - text: ，其中 M 的上三角是 −∞、其余为 0。 用加法而不是乘法，是因为它要在 softmax
+            - emphasis [ref=f14e362]: 之内
+            - text: 生效：
+            - link "第 29 节" [ref=f14e363] [cursor=pointer]:
+              - /url: /ch/softmax
+            - text: 讲过 softmax 先取 exp 再归一化，而 exp(−∞) = 0， 于是未来位置的分子直接是 0，同时也不进分母。剩下的合法位置重新分摊掉全部概率， 行和仍然精确等于 1。
+          - paragraph [ref=f14e364]: 换成「softmax 之后抹零」就不成立了：分母里已经算进了未来位置的 exp，抹零只是把分子丢掉， 总量守不住。上面切到第三种模式能直接看到行和塌下去， 而且每一行塌的幅度还不一样——输出等于被乘上了一个逐行不同的随机缩放， 后面的残差相加和归一化都会被它带偏。
+          - paragraph [ref=f14e366]:
+            - text: 掩码不引入任何参数，也不改变形状：进去 (n×n)，出来还是 (n×n)。 它只是把注意力的候选集合从「整句」削成「自己和前文」， 所以
+            - link "第 10 节" [ref=f14e367] [cursor=pointer]:
+              - /url: /ch/transpose-shape
+            - text: 那套形状推导一个字都不用改。
+        - generic [ref=f14e368]:
+          - heading "一次前向，n 个训练信号" [level=2] [ref=f14e369]
+          - paragraph [ref=f14e370]:
+            - text: 掩码真正的价值在训练效率。有了它，一句长度 n 的话喂进去跑
+            - emphasis [ref=f14e371]: 一次
+            - text: 前向， 第 i 行的输出只依赖前 i 个词，于是能同时得到 n 个「预测下一个词」的训练样本： 位置 1 预测第 2 个词、位置 2 预测第 3 个词……一直到位置 n−1。 n 份
+            - link "第 30 节" [ref=f14e372] [cursor=pointer]:
+              - /url: /ch/cross-entropy
+            - text: 的 loss 一起回传。 没有掩码就只能把同一句话截成 n 段分别跑，慢 n 倍。
+          - generic [ref=f14e373]:
+            - generic [ref=f14e374]: 位置 1「猫」→ 猜「坐」
+            - generic [ref=f14e375]: 位置 2「坐」→ 猜「在」
+            - generic [ref=f14e376]: 位置 3「在」→ 猜「垫子」
+            - generic [ref=f14e377]: 位置 4「垫子」→ 猜「上」
+          - paragraph [ref=f14e378]: 推理时反过来：词是一个一个吐出来的，第 t 步只有前 t 个 token 存在， 「看不见未来」不是靠掩码强加的，而是本来就没有未来。 训练与推理因此对齐——这正是 decoder-only 架构成立的前提。 也正因为第 t 步用到的 K、V 前 t−1 行与上一步完全相同， 它们才能被缓存下来（KV Cache），把逐词生成的成本从 O(n²) 摊成每步 O(n)。
+        - generic [ref=f14e379]:
+          - generic [ref=f14e380]: 这就是 LLM 里的什么
+          - generic [ref=f14e381]:
+            - paragraph [ref=f14e382]:
+              - text: GPT 系列、LLaMA、Qwen 这些
+              - strong [ref=f14e383]: decoder-only
+              - text: 模型，每一层的注意力都带因果掩码； BERT 那类
+              - strong [ref=f14e384]: encoder
+              - text: 模型不带，因为它的任务是「完形填空」， 本来就该看见两边。同一套
+              - code [ref=f14e385]: softmax(QKᵀ/√d)·V
+              - text: ， 加不加这个上三角，决定了它是个「生成模型」还是个「理解模型」。
+            - paragraph [ref=f14e386]:
+              - text: 工程上有两处细节值得记：一是掩码值常写
+              - code [ref=f14e387]: "-1e9"
+              - text: 而非真正的
+              - code [ref=f14e388]: "-inf"
+              - text: ， fp16 下 inf 参与减法会产生 NaN；二是 FlashAttention 这类实现根本不会把 (n×n) 的分数矩阵物化到显存里，掩码是分块计算时顺手跳过的，
+              - link "第 31 节" [ref=f14e389] [cursor=pointer]:
+                - /url: /ch/self-attention
+              - text: 说的 O(n²) 显存瓶颈，主要就是被这一步绕开的。
+        - generic [ref=f14e390]:
+          - heading "看代码：加一个上三角" [level=2] [ref=f14e391]
+          - generic [ref=f14e392]:
+            - generic [ref=f14e393]: causal_attention.py
+            - generic [ref=f14e394]:
+              - generic [ref=f14e395]:
+                - generic [ref=f14e396]: "1"
+                - generic [ref=f14e397]: import numpy as np
+              - generic [ref=f14e398]: "2"
+              - generic [ref=f14e400]:
+                - generic [ref=f14e401]: "3"
+                - generic [ref=f14e402]: "def softmax(x, axis=-1):"
+              - generic [ref=f14e403]:
+                - generic [ref=f14e404]: "4"
+                - generic [ref=f14e405]: x = x - x.max(axis=axis, keepdims=True)
+              - generic [ref=f14e406]:
+                - generic [ref=f14e407]: "5"
+                - generic [ref=f14e408]: e = np.exp(x)
+              - generic [ref=f14e409]:
+                - generic [ref=f14e410]: "6"
+                - generic [ref=f14e411]: return e / e.sum(axis=axis, keepdims=True)
+              - generic [ref=f14e412]: "7"
+              - generic [ref=f14e414]:
+                - generic [ref=f14e415]: "8"
+                - generic [ref=f14e416]: "def causal_attention(Q, K, V):"
+              - generic [ref=f14e417]:
+                - generic [ref=f14e418]: "9"
+                - generic [ref=f14e419]: "# Q, K, V : (n, d)"
+              - generic [ref=f14e420]:
+                - generic [ref=f14e421]: "10"
+                - generic [ref=f14e422]: n, d = Q.shape
+              - generic [ref=f14e423]:
+                - generic [ref=f14e424]: "11"
+                - generic [ref=f14e425]: "scores = Q @ K.T / np.sqrt(d) # (n, n) 第 31 节"
+              - generic [ref=f14e426]: "12"
+              - generic [ref=f14e428]:
+                - generic [ref=f14e429]: "13"
+                - generic [ref=f14e430]: "# 上三角（j > i，即「未来」）置 −∞。"
+              - generic [ref=f14e431]:
+                - generic [ref=f14e432]: "14"
+                - generic [ref=f14e433]: "# np.triu(..., k=1) 取严格上三角，对角线本身保留——每个 token 看得见自己。"
+              - generic [ref=f14e434]:
+                - generic [ref=f14e435]: "15"
+                - generic [ref=f14e436]: mask = np.triu(np.ones((n, n), dtype=bool), k=1)
+              - generic [ref=f14e437]:
+                - generic [ref=f14e438]: "16"
+                - generic [ref=f14e439]: scores = np.where(mask, -np.inf, scores)
+              - generic [ref=f14e440]: "17"
+              - generic [ref=f14e442]:
+                - generic [ref=f14e443]: "18"
+                - generic [ref=f14e444]: "attn = softmax(scores, axis=-1) # exp(−∞)=0，第 29 节"
+              - generic [ref=f14e445]:
+                - generic [ref=f14e446]: "19"
+                - generic [ref=f14e447]: "return attn @ V # (n, d)"
+              - generic [ref=f14e448]: "20"
+              - generic [ref=f14e450]:
+                - generic [ref=f14e451]: "21"
+                - generic [ref=f14e452]: "# 实现上常写 -1e9 而不是 -np.inf：fp16 下 inf 参与运算容易出 NaN，"
+              - generic [ref=f14e453]:
+                - generic [ref=f14e454]: "22"
+                - generic [ref=f14e455]: "# 一个足够大的负数在 softmax 里效果相同。"
+              - generic [ref=f14e456]: "23"
+              - generic [ref=f14e458]:
+                - generic [ref=f14e459]: "24"
+                - generic [ref=f14e460]: "# PyTorch：F.scaled_dot_product_attention(q, k, v, is_causal=True)"
+              - generic [ref=f14e461]:
+                - generic [ref=f14e462]: "25"
+                - generic [ref=f14e463]: "# 内部就是这套掩码，且不会真的把 (n, n) 矩阵物化出来。"
+        - navigation [ref=f14e464]:
+          - link "← 上一节 31 自注意力" [ref=f14e465] [cursor=pointer]:
+            - /url: /ch/self-attention
+            - generic [ref=f14e466]: ← 上一节
+            - generic [ref=f14e467]: 31 自注意力
+          - link "下一节 → 33 多头注意力" [ref=f14e468] [cursor=pointer]:
+            - /url: /ch/multi-head
+            - generic [ref=f14e469]: 下一节 →
+            - generic [ref=f14e470]: 33 多头注意力
+        - paragraph [ref=f14e471]: 共 39 节 · 你在第 32 节
+      - generic [ref=f14e472]:
+        - generic [ref=f14e473]:
+          - text: © 2026
+          - link "FIM Labs" [ref=f14e474] [cursor=pointer]:
+            - /url: https://fim.ai
+        - generic [ref=f14e475]: 线性代数 → 注意力 · 一个开源教学项目

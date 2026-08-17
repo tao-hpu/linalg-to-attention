@@ -92,11 +92,15 @@ const STEPS: readonly Step[] = [
     zone: 'block',
   },
   {
-    label: '注意力 softmax(QKᵀ/√d)·V',
-    shape: `QKᵀ (${N}×${N})  →  softmax  →  ·V = (${N}×${D})`,
-    role: '唯一跨 token 的操作：每个 token 按相关性把别人的 Value 加权汇入自己。',
+    label: '注意力 softmax(QKᵀ/√d + M)·V',
+    shape: `QKᵀ (${N}×${N})  →  +因果掩码 → softmax  →  ·V = (${N}×${D})`,
+    role:
+      '唯一跨 token 的操作：每个 token 按相关性把别人的 Value 加权汇入自己。' +
+      'decoder-only 模型在 softmax 之前先把分数矩阵的上三角置 −∞，' +
+      '每个位置因此只看得见自己和前文。',
     links: [
       'self-attention',
+      'causal-mask',
       'transpose-shape',
     ],
     zone: 'block',
@@ -171,12 +175,17 @@ def forward(ids, W_E, blocks):
     # 1) embedding 查表：one-hot @ W_E，等价于按行取
     X = W_E[ids]                       # (n, d)
 
+    # 因果掩码：所有层共用同一张 (n, n) 上三角布尔图
+    causal_mask = np.triu(np.ones((n, n), dtype=bool), k=1)
+
     # 2) 堆叠 N 个 Transformer block
     for blk in blocks:                 # 每个 block 形状不变：(n, d) → (n, d)
         h = rmsnorm(X)                 # (n, d)            第 ${chNum('normalization')} 节
         Q, K, Vv = h @ blk.Wq, h @ blk.Wk, h @ blk.Wv   # (n, d) 第 ${chNum('matrix-as-transform')}/${chNum('matrix-mult')} 节
         Q, K = rope(Q), rope(K)        # 每层都转一次，只转 Q/K   第 ${chNum('rope')} 节
-        A = softmax(Q @ K.T / d**0.5)  # (n, n)            第 ${chNum('self-attention')}/${chNum('transpose-shape')}/${chNum('softmax')} 节
+        S = Q @ K.T / d**0.5           # (n, n)            第 ${chNum('self-attention')}/${chNum('transpose-shape')} 节
+        S = np.where(causal_mask, -np.inf, S)   # 上三角挡住     第 ${chNum('causal-mask')} 节
+        A = softmax(S)                 # (n, n)            第 ${chNum('softmax')} 节
         X = X + A @ Vv                 # ⊕ 残差            第 ${chNum('transformer-block')} 节
         h = rmsnorm(X)                 # (n, d)            第 ${chNum('normalization')} 节
         h = gelu(h @ blk.W1) @ blk.W2  # (n, d)→(n,4d)→(n,d)
@@ -410,7 +419,7 @@ export function ForwardPass() {
             [`ids        : (${N},)`, '   — 3 个 token 的整数 id'],
             [`X          : ${N}×${D}`, `   — embedding 查表（第 ${chNum('bow-to-embedding')} 节）`],
             [`Q,K,V      : ${N}×${D}`, `   — 三路投影（第 ${chNum('matrix-as-transform')}/${chNum('matrix-mult')} 节）`],
-            [`QKᵀ        : ${N}×${N}`, `   — 注意力分数，token×token（第 ${chNum('transpose-shape')} 节）`],
+            [`QKᵀ        : ${N}×${N}`, `   — 注意力分数，token×token，上三角被掩掉（第 ${chNum('transpose-shape')}/${chNum('causal-mask')} 节）`],
             [`attn·V     : ${N}×${D}`, `   — 加权 Value（第 ${chNum('self-attention')} 节），形状回到 X`],
             [`FFN        : ${N}×${D}`, `   — 升到 ${FF} 再降回 ${D}（第 ${chNum('transformer-block')} 节）`],
             [`block out  : ${N}×${D}`, '   — 一层走完，形状不变 · ×N 层'],

@@ -1,0 +1,694 @@
+- generic [ref=f12e3]:
+  - banner [ref=f12e4]:
+    - generic [ref=f12e5]:
+      - button "切换全局导航" [expanded] [ref=f12e6] [cursor=pointer]:
+        - generic [ref=f12e7]: ✕
+      - link "线性代数 → 注意力" [ref=f12e8] [cursor=pointer]:
+        - /url: /
+    - navigation [ref=f12e9]:
+      - button "搜索章节" [ref=f12e10] [cursor=pointer]:
+        - generic [ref=f12e11]: ⌕
+        - generic [ref=f12e13]: ⌘K
+      - link "大纲" [ref=f12e14] [cursor=pointer]:
+        - /url: /
+      - link "★ GitHub" [ref=f12e15] [cursor=pointer]:
+        - /url: https://github.com/tao-hpu/linalg-to-attention
+  - generic [ref=f12e16]:
+    - navigation "全书导航" [ref=f12e17]:
+      - link "全书大纲" [ref=f12e18] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f12e19]:
+        - generic [ref=f12e20]: 第一部分 · 向量：意义的载体
+        - list [ref=f12e21]:
+          - listitem [ref=f12e22]:
+            - link "01 向量与坐标系 ★" [ref=f12e23] [cursor=pointer]:
+              - /url: /ch/vectors
+              - generic [ref=f12e24]: "01"
+              - generic [ref=f12e25]: 向量与坐标系 ★
+          - listitem [ref=f12e26]:
+            - link "02 从词袋到词向量" [ref=f12e27] [cursor=pointer]:
+              - /url: /ch/bow-to-embedding
+              - generic [ref=f12e28]: "02"
+              - generic [ref=f12e29]: 从词袋到词向量
+          - listitem [ref=f12e30]:
+            - link "03 向量的加减与缩放" [ref=f12e31] [cursor=pointer]:
+              - /url: /ch/vector-arithmetic
+              - generic [ref=f12e32]: "03"
+              - generic [ref=f12e33]: 向量的加减与缩放
+          - listitem [ref=f12e34]:
+            - link "04 内积 ★" [ref=f12e35] [cursor=pointer]:
+              - /url: /ch/dot-product
+              - generic [ref=f12e36]: "04"
+              - generic [ref=f12e37]: 内积 ★
+          - listitem [ref=f12e38]:
+            - link "✓ 投影" [ref=f12e39] [cursor=pointer]:
+              - /url: /ch/projection
+              - generic [ref=f12e40]: ✓
+              - generic [ref=f12e41]: 投影
+          - listitem [ref=f12e42]:
+            - link "06 范数与单位向量" [ref=f12e43] [cursor=pointer]:
+              - /url: /ch/norms
+              - generic [ref=f12e44]: "06"
+              - generic [ref=f12e45]: 范数与单位向量
+      - generic [ref=f12e46]:
+        - generic [ref=f12e47]: 第二部分 · 矩阵：一个动作
+        - list [ref=f12e48]:
+          - listitem [ref=f12e49]:
+            - link "07 矩阵是变换 ★" [ref=f12e50] [cursor=pointer]:
+              - /url: /ch/matrix-as-transform
+              - generic [ref=f12e51]: "07"
+              - generic [ref=f12e52]: 矩阵是变换 ★
+          - listitem [ref=f12e53]:
+            - link "08 矩阵乘法的几何 ★" [ref=f12e54] [cursor=pointer]:
+              - /url: /ch/matrix-mult
+              - generic [ref=f12e55]: "08"
+              - generic [ref=f12e56]: 矩阵乘法的几何 ★
+          - listitem [ref=f12e57]:
+            - link "09 矩阵乘法的四种视角" [ref=f12e58] [cursor=pointer]:
+              - /url: /ch/matmul-views
+              - generic [ref=f12e59]: "09"
+              - generic [ref=f12e60]: 矩阵乘法的四种视角
+          - listitem [ref=f12e61]:
+            - link "10 转置与形状 ★" [ref=f12e62] [cursor=pointer]:
+              - /url: /ch/transpose-shape
+              - generic [ref=f12e63]: "10"
+              - generic [ref=f12e64]: 转置与形状 ★
+          - listitem [ref=f12e65]:
+            - link "11 批量与张量" [ref=f12e66] [cursor=pointer]:
+              - /url: /ch/batching
+              - generic [ref=f12e67]: "11"
+              - generic [ref=f12e68]: 批量与张量
+      - generic [ref=f12e69]:
+        - generic [ref=f12e70]: 第三部分 · 方阵的秘密
+        - list [ref=f12e71]:
+          - listitem [ref=f12e72]:
+            - link "✓ 行列式" [ref=f12e73] [cursor=pointer]:
+              - /url: /ch/determinant
+              - generic [ref=f12e74]: ✓
+              - generic [ref=f12e75]: 行列式
+          - listitem [ref=f12e76]:
+            - link "13 矩阵的秩 ★" [ref=f12e77] [cursor=pointer]:
+              - /url: /ch/rank
+              - generic [ref=f12e78]: "13"
+              - generic [ref=f12e79]: 矩阵的秩 ★
+          - listitem [ref=f12e80]:
+            - link "14 逆矩阵" [ref=f12e81] [cursor=pointer]:
+              - /url: /ch/inverse
+              - generic [ref=f12e82]: "14"
+              - generic [ref=f12e83]: 逆矩阵
+          - listitem [ref=f12e84]:
+            - link "15 特征值与特征向量" [ref=f12e85] [cursor=pointer]:
+              - /url: /ch/eigen
+              - generic [ref=f12e86]: "15"
+              - generic [ref=f12e87]: 特征值与特征向量
+          - listitem [ref=f12e88]:
+            - link "16 对称矩阵与谱分解" [ref=f12e89] [cursor=pointer]:
+              - /url: /ch/spectral
+              - generic [ref=f12e90]: "16"
+              - generic [ref=f12e91]: 对称矩阵与谱分解
+      - generic [ref=f12e92]:
+        - generic [ref=f12e93]: 第四部分 · 正交、回归与投影
+        - list [ref=f12e94]:
+          - listitem [ref=f12e95]:
+            - link "17 正交矩阵与旋转" [ref=f12e96] [cursor=pointer]:
+              - /url: /ch/orthogonal-rotation
+              - generic [ref=f12e97]: "17"
+              - generic [ref=f12e98]: 正交矩阵与旋转
+          - listitem [ref=f12e99]:
+            - link "18 正交投影" [ref=f12e100] [cursor=pointer]:
+              - /url: /ch/orthogonal-projection
+              - generic [ref=f12e101]: "18"
+              - generic [ref=f12e102]: 正交投影
+          - listitem [ref=f12e103]:
+            - link "19 格拉姆-施密特与 QR" [ref=f12e104] [cursor=pointer]:
+              - /url: /ch/gram-schmidt
+              - generic [ref=f12e105]: "19"
+              - generic [ref=f12e106]: 格拉姆-施密特与 QR
+          - listitem [ref=f12e107]:
+            - link "20 回归 = 投影" [ref=f12e108] [cursor=pointer]:
+              - /url: /ch/regression-projection
+              - generic [ref=f12e109]: "20"
+              - generic [ref=f12e110]: 回归 = 投影
+      - generic [ref=f12e111]:
+        - generic [ref=f12e112]: 第五部分 · 降维：抓住主要矛盾
+        - list [ref=f12e113]:
+          - listitem [ref=f12e114]:
+            - link "21 SVD 奇异值分解 ★" [ref=f12e115] [cursor=pointer]:
+              - /url: /ch/svd
+              - generic [ref=f12e116]: "21"
+              - generic [ref=f12e117]: SVD 奇异值分解 ★
+          - listitem [ref=f12e118]:
+            - link "22 低秩近似 ★" [ref=f12e119] [cursor=pointer]:
+              - /url: /ch/low-rank
+              - generic [ref=f12e120]: "22"
+              - generic [ref=f12e121]: 低秩近似 ★
+          - listitem [ref=f12e122]:
+            - link "23 PCA 主成分分析" [ref=f12e123] [cursor=pointer]:
+              - /url: /ch/pca
+              - generic [ref=f12e124]: "23"
+              - generic [ref=f12e125]: PCA 主成分分析
+      - generic [ref=f12e126]:
+        - generic [ref=f12e127]: 第六部分 · 学习：模型怎么变聪明
+        - list [ref=f12e128]:
+          - listitem [ref=f12e129]:
+            - link "24 梯度" [ref=f12e130] [cursor=pointer]:
+              - /url: /ch/gradient
+              - generic [ref=f12e131]: "24"
+              - generic [ref=f12e132]: 梯度
+          - listitem [ref=f12e133]:
+            - link "25 链式法则与 Jacobian" [ref=f12e134] [cursor=pointer]:
+              - /url: /ch/chain-rule
+              - generic [ref=f12e135]: "25"
+              - generic [ref=f12e136]: 链式法则与 Jacobian
+          - listitem [ref=f12e137]:
+            - link "26 梯度下降" [ref=f12e138] [cursor=pointer]:
+              - /url: /ch/gradient-descent
+              - generic [ref=f12e139]: "26"
+              - generic [ref=f12e140]: 梯度下降
+          - listitem [ref=f12e141]:
+            - link "27 正则化：Ridge 与 Lasso" [ref=f12e142] [cursor=pointer]:
+              - /url: /ch/regularization
+              - generic [ref=f12e143]: "27"
+              - generic [ref=f12e144]: 正则化：Ridge 与 Lasso
+          - listitem [ref=f12e145]:
+            - link "28 归一化" [ref=f12e146] [cursor=pointer]:
+              - /url: /ch/normalization
+              - generic [ref=f12e147]: "28"
+              - generic [ref=f12e148]: 归一化
+      - generic [ref=f12e149]:
+        - generic [ref=f12e150]: 第七部分 · 概率视角：模型在「猜下一个词」
+        - list [ref=f12e151]:
+          - listitem [ref=f12e152]:
+            - link "✓ Softmax 与概率分布 ★" [ref=f12e153] [cursor=pointer]:
+              - /url: /ch/softmax
+              - generic [ref=f12e154]: ✓
+              - generic [ref=f12e155]: Softmax 与概率分布 ★
+          - listitem [ref=f12e156]:
+            - link "30 交叉熵与极大似然" [ref=f12e157] [cursor=pointer]:
+              - /url: /ch/cross-entropy
+              - generic [ref=f12e158]: "30"
+              - generic [ref=f12e159]: 交叉熵与极大似然
+      - generic [ref=f12e160]:
+        - generic [ref=f12e161]: 第八部分 · 合成：亲手拼出注意力
+        - list [ref=f12e162]:
+          - listitem [ref=f12e163]:
+            - link "✓ 自注意力 ★" [ref=f12e164] [cursor=pointer]:
+              - /url: /ch/self-attention
+              - generic [ref=f12e165]: ✓
+              - generic [ref=f12e166]: 自注意力 ★
+          - listitem [ref=f12e167]:
+            - link "✓ 因果掩码 ★" [ref=f12e168] [cursor=pointer]:
+              - /url: /ch/causal-mask
+              - generic [ref=f12e169]: ✓
+              - generic [ref=f12e170]: 因果掩码 ★
+          - listitem [ref=f12e171]:
+            - link "33 多头注意力" [ref=f12e172] [cursor=pointer]:
+              - /url: /ch/multi-head
+              - generic [ref=f12e173]: "33"
+              - generic [ref=f12e174]: 多头注意力
+          - listitem [ref=f12e175]:
+            - link "34 位置编码与 RoPE" [ref=f12e176] [cursor=pointer]:
+              - /url: /ch/rope
+              - generic [ref=f12e177]: "34"
+              - generic [ref=f12e178]: 位置编码与 RoPE
+          - listitem [ref=f12e179]:
+            - link "35 一个 Transformer Block" [ref=f12e180] [cursor=pointer]:
+              - /url: /ch/transformer-block
+              - generic [ref=f12e181]: "35"
+              - generic [ref=f12e182]: 一个 Transformer Block
+      - generic [ref=f12e183]:
+        - generic [ref=f12e184]: 第九部分 · 尾声：接到 LLM 工程
+        - list [ref=f12e185]:
+          - listitem [ref=f12e186]:
+            - link "✓ LoRA 与高效微调" [ref=f12e187] [cursor=pointer]:
+              - /url: /ch/lora-finetuning
+              - generic [ref=f12e188]: ✓
+              - generic [ref=f12e189]: LoRA 与高效微调
+          - listitem [ref=f12e190]:
+            - link "37 采样与解码" [ref=f12e191] [cursor=pointer]:
+              - /url: /ch/sampling-decoding
+              - generic [ref=f12e192]: "37"
+              - generic [ref=f12e193]: 采样与解码
+          - listitem [ref=f12e194]:
+            - link "✓ 量化与数值" [ref=f12e195] [cursor=pointer]:
+              - /url: /ch/quantization
+              - generic [ref=f12e196]: ✓
+              - generic [ref=f12e197]: 量化与数值
+      - generic [ref=f12e198]:
+        - generic [ref=f12e199]: 第十部分 · 终点：完整的前向传播
+        - list [ref=f12e200]:
+          - listitem [ref=f12e201]:
+            - link "✓ 跑通一次前向传播 ★" [ref=f12e202] [cursor=pointer]:
+              - /url: /ch/forward-pass
+              - generic [ref=f12e203]: ✓
+              - generic [ref=f12e204]: 跑通一次前向传播 ★
+    - main [ref=f12e205]:
+      - generic [ref=f12e206]:
+        - generic [ref=f12e207]:
+          - generic [ref=f12e208]: 交互式教程 · 从零开始
+          - heading "线性代数 → 注意力" [level=1] [ref=f12e209]
+          - paragraph [ref=f12e210]: 可视化地，从一个向量一路搭到 Transformer 的注意力机制。
+          - paragraph [ref=f12e211]:
+            - text: 说人话：
+            - strong [ref=f12e212]: 手搓大模型之前的那门预科课
+            - text: 😎
+          - paragraph [ref=f12e213]:
+            - text: 这不是又一份「看动画」的演示，也不是一摞「给你代码」的清单。 每一页只回答
+            - strong [ref=f12e214]: 一个「为什么」
+            - text: ——你拖动滑块、亲手改参数，看几何当场变化， 然后页底一句话把它焊到 LLM 上：
+            - emphasis [ref=f12e215]: 这就是注意力里的那一步
+            - text: 。 风格对标「从零实现 GPT」，只不过我们从更底层的数学搭起。
+          - paragraph [ref=f12e216]:
+            - strong [ref=f12e217]: 学完你能：
+            - text: 看懂注意力的每一步，并在之后碰 LLM 的
+            - emphasis [ref=f12e218]: 训练 / 微调 / 推理
+            - text: 时，知道每个环节背后的数学在做什么——而不是只会调包。
+        - generic [ref=f12e219]:
+          - generic [ref=f12e220]:
+            - generic [ref=f12e221]: "01"
+            - paragraph [ref=f12e222]:
+              - strong [ref=f12e223]: 为什么驱动
+              - text: 每页一个真问题，不是定义堆砌。
+          - generic [ref=f12e224]:
+            - generic [ref=f12e225]: "02"
+            - paragraph [ref=f12e226]:
+              - strong [ref=f12e227]: 拖一下就懂
+              - text: 几何随参数实时变，不靠想象。
+          - generic [ref=f12e228]:
+            - generic [ref=f12e229]: "03"
+            - paragraph [ref=f12e230]:
+              - strong [ref=f12e231]: 焊到 LLM
+              - text: 每个概念都接上 Transformer 的某个零件。
+        - generic [ref=f12e232]:
+          - generic [ref=f12e233]:
+            - heading "大纲" [level=2] [ref=f12e234]
+            - generic [ref=f12e235]: 39 节 · 已上线 39 · ★ 通往注意力的主线
+          - generic [ref=f12e239]:
+            - generic [ref=f12e240]:
+              - text: 已读
+              - strong [ref=f12e241]: "8"
+              - text: / 39（21%）
+            - generic [ref=f12e242]:
+              - button "只看主线 ★" [ref=f12e243] [cursor=pointer]
+              - button "清除进度" [ref=f12e244] [cursor=pointer]
+          - generic [ref=f12e245]:
+            - generic [ref=f12e246]:
+              - heading "第一部分 · 向量：意义的载体" [level=3] [ref=f12e247]
+              - paragraph [ref=f12e248]: 一串数字怎么就装下了「意义」。
+            - generic [ref=f12e249]:
+              - link "01 向量与坐标系 ★ 一串数字怎么表示「意义」？ → 词嵌入 embedding 可玩" [ref=f12e250] [cursor=pointer]:
+                - /url: /ch/vectors
+                - generic [ref=f12e251]: "01"
+                - generic [ref=f12e252]:
+                  - generic [ref=f12e253]:
+                    - text: 向量与坐标系
+                    - generic "通往注意力的主线" [ref=f12e254]: ★
+                  - generic [ref=f12e255]: 一串数字怎么表示「意义」？
+                - generic [ref=f12e256]: → 词嵌入 embedding
+                - generic [ref=f12e257]: 可玩
+              - link "02 从词袋到词向量 文本怎么变成向量？从 TF-IDF 到稠密 embedding → 稠密词向量、one-hot 的进化 可玩" [ref=f12e258] [cursor=pointer]:
+                - /url: /ch/bow-to-embedding
+                - generic [ref=f12e259]: "02"
+                - generic [ref=f12e260]:
+                  - generic [ref=f12e261]: 从词袋到词向量
+                  - generic [ref=f12e262]: 文本怎么变成向量？从 TF-IDF 到稠密 embedding
+                - generic [ref=f12e263]: → 稠密词向量、one-hot 的进化
+                - generic [ref=f12e264]: 可玩
+              - link "03 向量的加减与缩放 语义能做算术吗？ → king − man + woman 可玩" [ref=f12e265] [cursor=pointer]:
+                - /url: /ch/vector-arithmetic
+                - generic [ref=f12e266]: "03"
+                - generic [ref=f12e267]:
+                  - generic [ref=f12e268]: 向量的加减与缩放
+                  - generic [ref=f12e269]: 语义能做算术吗？
+                - generic [ref=f12e270]: → king − man + woman
+                - generic [ref=f12e271]: 可玩
+              - link "04 内积 ★ 两个向量「像不像」，怎么用一个数衡量？ → 注意力打分 q·k 可玩" [ref=f12e272] [cursor=pointer]:
+                - /url: /ch/dot-product
+                - generic [ref=f12e273]: "04"
+                - generic [ref=f12e274]:
+                  - generic [ref=f12e275]:
+                    - text: 内积
+                    - generic "通往注意力的主线" [ref=f12e276]: ★
+                  - generic [ref=f12e277]: 两个向量「像不像」，怎么用一个数衡量？
+                - generic [ref=f12e278]: → 注意力打分 q·k
+                - generic [ref=f12e279]: 可玩
+              - link "✓ 投影 一个向量在某方向上「占多少」？ → 信息的读出 已读" [ref=f12e280] [cursor=pointer]:
+                - /url: /ch/projection
+                - generic [ref=f12e281]: ✓
+                - generic [ref=f12e282]:
+                  - generic [ref=f12e283]: 投影
+                  - generic [ref=f12e284]: 一个向量在某方向上「占多少」？
+                - generic [ref=f12e285]: → 信息的读出
+                - generic [ref=f12e286]: 已读
+              - link "06 范数与单位向量 怎么公平比较长短不一的向量？ → cosine 相似度、缩放点积里的 √d 可玩" [ref=f12e287] [cursor=pointer]:
+                - /url: /ch/norms
+                - generic [ref=f12e288]: "06"
+                - generic [ref=f12e289]:
+                  - generic [ref=f12e290]: 范数与单位向量
+                  - generic [ref=f12e291]: 怎么公平比较长短不一的向量？
+                - generic [ref=f12e292]: → cosine 相似度、缩放点积里的 √d
+                - generic [ref=f12e293]: 可玩
+          - generic [ref=f12e294]:
+            - generic [ref=f12e295]:
+              - heading "第二部分 · 矩阵：一个动作" [level=3] [ref=f12e296]
+              - paragraph [ref=f12e297]: 矩阵不是数表，是一次空间变换。
+            - generic [ref=f12e298]:
+              - link "07 矩阵是变换 ★ 矩阵到底「做」了什么？ → 线性层 = 一次空间变换 可玩" [ref=f12e299] [cursor=pointer]:
+                - /url: /ch/matrix-as-transform
+                - generic [ref=f12e300]: "07"
+                - generic [ref=f12e301]:
+                  - generic [ref=f12e302]:
+                    - text: 矩阵是变换
+                    - generic "通往注意力的主线" [ref=f12e303]: ★
+                  - generic [ref=f12e304]: 矩阵到底「做」了什么？
+                - generic [ref=f12e305]: → 线性层 = 一次空间变换
+                - generic [ref=f12e306]: 可玩
+              - link "08 矩阵乘法的几何 ★ 为什么换了顺序，结果就不一样？ → 线性层与 Q·K·V 投影 可玩" [ref=f12e307] [cursor=pointer]:
+                - /url: /ch/matrix-mult
+                - generic [ref=f12e308]: "08"
+                - generic [ref=f12e309]:
+                  - generic [ref=f12e310]:
+                    - text: 矩阵乘法的几何
+                    - generic "通往注意力的主线" [ref=f12e311]: ★
+                  - generic [ref=f12e312]: 为什么换了顺序，结果就不一样？
+                - generic [ref=f12e313]: → 线性层与 Q·K·V 投影
+                - generic [ref=f12e314]: 可玩
+              - link "09 矩阵乘法的四种视角 同一个乘法，四种「看法」 → 看懂 attention 的不同写法 可玩" [ref=f12e315] [cursor=pointer]:
+                - /url: /ch/matmul-views
+                - generic [ref=f12e316]: "09"
+                - generic [ref=f12e317]:
+                  - generic [ref=f12e318]: 矩阵乘法的四种视角
+                  - generic [ref=f12e319]: 同一个乘法，四种「看法」
+                - generic [ref=f12e320]: → 看懂 attention 的不同写法
+                - generic [ref=f12e321]: 可玩
+              - link "10 转置与形状 ★ QKᵀ 那个「ᵀ」为什么必须有？ → 注意力分数矩阵、维度对齐 可玩" [ref=f12e322] [cursor=pointer]:
+                - /url: /ch/transpose-shape
+                - generic [ref=f12e323]: "10"
+                - generic [ref=f12e324]:
+                  - generic [ref=f12e325]:
+                    - text: 转置与形状
+                    - generic "通往注意力的主线" [ref=f12e326]: ★
+                  - generic [ref=f12e327]: QKᵀ 那个「ᵀ」为什么必须有？
+                - generic [ref=f12e328]: → 注意力分数矩阵、维度对齐
+                - generic [ref=f12e329]: 可玩
+              - link "11 批量与张量 一次处理一整句话怎么算？ → batch、多 token 并行 可玩" [ref=f12e330] [cursor=pointer]:
+                - /url: /ch/batching
+                - generic [ref=f12e331]: "11"
+                - generic [ref=f12e332]:
+                  - generic [ref=f12e333]: 批量与张量
+                  - generic [ref=f12e334]: 一次处理一整句话怎么算？
+                - generic [ref=f12e335]: → batch、多 token 并行
+                - generic [ref=f12e336]: 可玩
+          - generic [ref=f12e337]:
+            - generic [ref=f12e338]:
+              - heading "第三部分 · 方阵的秘密" [level=3] [ref=f12e339]
+              - paragraph [ref=f12e340]: 行列式、逆、特征值——方阵里藏着的结构。
+            - generic [ref=f12e341]:
+              - link "✓ 行列式 一个变换会不会把信息「压扁」？ → 可逆性、信息瓶颈 已读" [ref=f12e342] [cursor=pointer]:
+                - /url: /ch/determinant
+                - generic [ref=f12e343]: ✓
+                - generic [ref=f12e344]:
+                  - generic [ref=f12e345]: 行列式
+                  - generic [ref=f12e346]: 一个变换会不会把信息「压扁」？
+                - generic [ref=f12e347]: → 可逆性、信息瓶颈
+                - generic [ref=f12e348]: 已读
+              - link "13 矩阵的秩 ★ 一个变换到底「留下」了几维？ → 低秩、LoRA 里的秩 r 可玩" [ref=f12e349] [cursor=pointer]:
+                - /url: /ch/rank
+                - generic [ref=f12e350]: "13"
+                - generic [ref=f12e351]:
+                  - generic [ref=f12e352]:
+                    - text: 矩阵的秩
+                    - generic "通往注意力的主线" [ref=f12e353]: ★
+                  - generic [ref=f12e354]: 一个变换到底「留下」了几维？
+                - generic [ref=f12e355]: → 低秩、LoRA 里的秩 r
+                - generic [ref=f12e356]: 可玩
+              - link "14 逆矩阵 变换能不能还原？ → 为什么有些层不可逆 可玩" [ref=f12e357] [cursor=pointer]:
+                - /url: /ch/inverse
+                - generic [ref=f12e358]: "14"
+                - generic [ref=f12e359]:
+                  - generic [ref=f12e360]: 逆矩阵
+                  - generic [ref=f12e361]: 变换能不能还原？
+                - generic [ref=f12e362]: → 为什么有些层不可逆
+                - generic [ref=f12e363]: 可玩
+              - link "15 特征值与特征向量 一个变换里，哪些方向「岿然不动」？ → 主轴、稳定表征 可玩" [ref=f12e364] [cursor=pointer]:
+                - /url: /ch/eigen
+                - generic [ref=f12e365]: "15"
+                - generic [ref=f12e366]:
+                  - generic [ref=f12e367]: 特征值与特征向量
+                  - generic [ref=f12e368]: 一个变换里，哪些方向「岿然不动」？
+                - generic [ref=f12e369]: → 主轴、稳定表征
+                - generic [ref=f12e370]: 可玩
+              - link "16 对称矩阵与谱分解 最「温顺」的一类矩阵长什么样？ → 协方差、Gram 矩阵 可玩" [ref=f12e371] [cursor=pointer]:
+                - /url: /ch/spectral
+                - generic [ref=f12e372]: "16"
+                - generic [ref=f12e373]:
+                  - generic [ref=f12e374]: 对称矩阵与谱分解
+                  - generic [ref=f12e375]: 最「温顺」的一类矩阵长什么样？
+                - generic [ref=f12e376]: → 协方差、Gram 矩阵
+                - generic [ref=f12e377]: 可玩
+          - generic [ref=f12e378]:
+            - generic [ref=f12e379]:
+              - heading "第四部分 · 正交、回归与投影" [level=3] [ref=f12e380]
+              - paragraph [ref=f12e381]: 旋转、垂直、最小二乘——这里把统计接进几何。
+            - generic [ref=f12e382]:
+              - link "17 正交矩阵与旋转 不改变长度的变换长什么样？ → RoPE 旋转位置编码 可玩" [ref=f12e383] [cursor=pointer]:
+                - /url: /ch/orthogonal-rotation
+                - generic [ref=f12e384]: "17"
+                - generic [ref=f12e385]:
+                  - generic [ref=f12e386]: 正交矩阵与旋转
+                  - generic [ref=f12e387]: 不改变长度的变换长什么样？
+                - generic [ref=f12e388]: → RoPE 旋转位置编码
+                - generic [ref=f12e389]: 可玩
+              - link "18 正交投影 把一个向量「拍」到子空间上 → 多头注意力的子空间分工 可玩" [ref=f12e390] [cursor=pointer]:
+                - /url: /ch/orthogonal-projection
+                - generic [ref=f12e391]: "18"
+                - generic [ref=f12e392]:
+                  - generic [ref=f12e393]: 正交投影
+                  - generic [ref=f12e394]: 把一个向量「拍」到子空间上
+                - generic [ref=f12e395]: → 多头注意力的子空间分工
+                - generic [ref=f12e396]: 可玩
+              - link "19 格拉姆-施密特与 QR 怎么造一组互相垂直的基？ → 正交基、数值稳定 可玩" [ref=f12e397] [cursor=pointer]:
+                - /url: /ch/gram-schmidt
+                - generic [ref=f12e398]: "19"
+                - generic [ref=f12e399]:
+                  - generic [ref=f12e400]: 格拉姆-施密特与 QR
+                  - generic [ref=f12e401]: 怎么造一组互相垂直的基？
+                - generic [ref=f12e402]: → 正交基、数值稳定
+                - generic [ref=f12e403]: 可玩
+              - link "20 回归 = 投影 「拟合一条线」为什么等价于「投影」？ → 最小二乘的几何（统计与几何合流） 可玩" [ref=f12e404] [cursor=pointer]:
+                - /url: /ch/regression-projection
+                - generic [ref=f12e405]: "20"
+                - generic [ref=f12e406]:
+                  - generic [ref=f12e407]: 回归 = 投影
+                  - generic [ref=f12e408]: 「拟合一条线」为什么等价于「投影」？
+                - generic [ref=f12e409]: → 最小二乘的几何（统计与几何合流）
+                - generic [ref=f12e410]: 可玩
+          - generic [ref=f12e411]:
+            - generic [ref=f12e412]:
+              - heading "第五部分 · 降维：抓住主要矛盾" [level=3] [ref=f12e413]
+              - paragraph [ref=f12e414]: SVD 一把钥匙，开降维、压缩、LoRA 三把锁。
+            - generic [ref=f12e415]:
+              - link "21 SVD 奇异值分解 ★ 任意矩阵都能拆成「旋转-拉伸-旋转」？ → 万能分解 可玩" [ref=f12e416] [cursor=pointer]:
+                - /url: /ch/svd
+                - generic [ref=f12e417]: "21"
+                - generic [ref=f12e418]:
+                  - generic [ref=f12e419]:
+                    - text: SVD 奇异值分解
+                    - generic "通往注意力的主线" [ref=f12e420]: ★
+                  - generic [ref=f12e421]: 任意矩阵都能拆成「旋转-拉伸-旋转」？
+                - generic [ref=f12e422]: → 万能分解
+                - generic [ref=f12e423]: 可玩
+              - link "22 低秩近似 ★ 为什么留几个最大奇异值就够了？ → LoRA、压缩 可玩" [ref=f12e424] [cursor=pointer]:
+                - /url: /ch/low-rank
+                - generic [ref=f12e425]: "22"
+                - generic [ref=f12e426]:
+                  - generic [ref=f12e427]:
+                    - text: 低秩近似
+                    - generic "通往注意力的主线" [ref=f12e428]: ★
+                  - generic [ref=f12e429]: 为什么留几个最大奇异值就够了？
+                - generic [ref=f12e430]: → LoRA、压缩
+                - generic [ref=f12e431]: 可玩
+              - link "23 PCA 主成分分析 高维数据怎么「拍扁」还不丢信息？ → embedding 可视化、降维 可玩" [ref=f12e432] [cursor=pointer]:
+                - /url: /ch/pca
+                - generic [ref=f12e433]: "23"
+                - generic [ref=f12e434]:
+                  - generic [ref=f12e435]: PCA 主成分分析
+                  - generic [ref=f12e436]: 高维数据怎么「拍扁」还不丢信息？
+                - generic [ref=f12e437]: → embedding 可视化、降维
+                - generic [ref=f12e438]: 可玩
+          - generic [ref=f12e439]:
+            - generic [ref=f12e440]:
+              - heading "第六部分 · 学习：模型怎么变聪明" [level=3] [ref=f12e441]
+              - paragraph [ref=f12e442]: 梯度、反向传播、正则化——训练的全部机理。
+            - generic [ref=f12e443]:
+              - link "24 梯度 往哪个方向走 loss 降得最快？ → 训练信号 可玩" [ref=f12e444] [cursor=pointer]:
+                - /url: /ch/gradient
+                - generic [ref=f12e445]: "24"
+                - generic [ref=f12e446]:
+                  - generic [ref=f12e447]: 梯度
+                  - generic [ref=f12e448]: 往哪个方向走 loss 降得最快？
+                - generic [ref=f12e449]: → 训练信号
+                - generic [ref=f12e450]: 可玩
+              - link "25 链式法则与 Jacobian 误差怎么一层层传回去？ → 反向传播 可玩" [ref=f12e451] [cursor=pointer]:
+                - /url: /ch/chain-rule
+                - generic [ref=f12e452]: "25"
+                - generic [ref=f12e453]:
+                  - generic [ref=f12e454]: 链式法则与 Jacobian
+                  - generic [ref=f12e455]: 误差怎么一层层传回去？
+                - generic [ref=f12e456]: → 反向传播
+                - generic [ref=f12e457]: 可玩
+              - link "26 梯度下降 怎么一步步逼近答案？ → 训练全过程、Adam 可玩" [ref=f12e458] [cursor=pointer]:
+                - /url: /ch/gradient-descent
+                - generic [ref=f12e459]: "26"
+                - generic [ref=f12e460]:
+                  - generic [ref=f12e461]: 梯度下降
+                  - generic [ref=f12e462]: 怎么一步步逼近答案？
+                - generic [ref=f12e463]: → 训练全过程、Adam
+                - generic [ref=f12e464]: 可玩
+              - link "27 正则化：Ridge 与 Lasso L2 给参数加弹簧、L1 逼出稀疏——为什么有用？ → weight decay；Ridge/Lasso = 高斯/拉普拉斯先验下的 MAP 可玩" [ref=f12e465] [cursor=pointer]:
+                - /url: /ch/regularization
+                - generic [ref=f12e466]: "27"
+                - generic [ref=f12e467]:
+                  - generic [ref=f12e468]: 正则化：Ridge 与 Lasso
+                  - generic [ref=f12e469]: L2 给参数加弹簧、L1 逼出稀疏——为什么有用？
+                - generic [ref=f12e470]: → weight decay；Ridge/Lasso = 高斯/拉普拉斯先验下的 MAP
+                - generic [ref=f12e471]: 可玩
+              - link "28 归一化 为什么每层后面都要「拉平」一下？ → LayerNorm / RMSNorm 可玩" [ref=f12e472] [cursor=pointer]:
+                - /url: /ch/normalization
+                - generic [ref=f12e473]: "28"
+                - generic [ref=f12e474]:
+                  - generic [ref=f12e475]: 归一化
+                  - generic [ref=f12e476]: 为什么每层后面都要「拉平」一下？
+                - generic [ref=f12e477]: → LayerNorm / RMSNorm
+                - generic [ref=f12e478]: 可玩
+          - generic [ref=f12e479]:
+            - generic [ref=f12e480]:
+              - heading "第七部分 · 概率视角：模型在「猜下一个词」" [level=3] [ref=f12e481]
+              - paragraph [ref=f12e482]: 把分数变概率，把训练变成极大似然。
+            - generic [ref=f12e483]:
+              - link "✓ Softmax 与概率分布 ★ 怎么把一堆分数变成一组「权重」？ → 注意力权重、输出分布 已读" [ref=f12e484] [cursor=pointer]:
+                - /url: /ch/softmax
+                - generic [ref=f12e485]: ✓
+                - generic [ref=f12e486]:
+                  - generic [ref=f12e487]:
+                    - text: Softmax 与概率分布
+                    - generic "通往注意力的主线" [ref=f12e488]: ★
+                  - generic [ref=f12e489]: 怎么把一堆分数变成一组「权重」？
+                - generic [ref=f12e490]: → 注意力权重、输出分布
+                - generic [ref=f12e491]: 已读
+              - link "30 交叉熵与极大似然 LLM 的训练目标到底在最小化什么？ → 交叉熵 loss = MLE（统计的主场） 可玩" [ref=f12e492] [cursor=pointer]:
+                - /url: /ch/cross-entropy
+                - generic [ref=f12e493]: "30"
+                - generic [ref=f12e494]:
+                  - generic [ref=f12e495]: 交叉熵与极大似然
+                  - generic [ref=f12e496]: LLM 的训练目标到底在最小化什么？
+                - generic [ref=f12e497]: → 交叉熵 loss = MLE（统计的主场）
+                - generic [ref=f12e498]: 可玩
+          - generic [ref=f12e499]:
+            - generic [ref=f12e500]:
+              - heading "第八部分 · 合成：亲手拼出注意力" [level=3] [ref=f12e501]
+              - paragraph [ref=f12e502]: 前面所有零件，在这里组装成 Transformer。
+            - generic [ref=f12e503]:
+              - link "✓ 自注意力 ★ 吓人的注意力公式，到底在算什么？ → 这就是 attention 的全部 已读" [ref=f12e504] [cursor=pointer]:
+                - /url: /ch/self-attention
+                - generic [ref=f12e505]: ✓
+                - generic [ref=f12e506]:
+                  - generic [ref=f12e507]:
+                    - text: 自注意力
+                    - generic "通往注意力的主线" [ref=f12e508]: ★
+                  - generic [ref=f12e509]: 吓人的注意力公式，到底在算什么？
+                - generic [ref=f12e510]: → 这就是 attention 的全部
+                - generic [ref=f12e511]: 已读
+              - link "✓ 因果掩码 ★ 预测下一个词时，怎么防止模型偷看后文？ → decoder-only 的因果注意力、KV Cache 的前提 已读" [ref=f12e512] [cursor=pointer]:
+                - /url: /ch/causal-mask
+                - generic [ref=f12e513]: ✓
+                - generic [ref=f12e514]:
+                  - generic [ref=f12e515]:
+                    - text: 因果掩码
+                    - generic "通往注意力的主线" [ref=f12e516]: ★
+                  - generic [ref=f12e517]: 预测下一个词时，怎么防止模型偷看后文？
+                - generic [ref=f12e518]: → decoder-only 的因果注意力、KV Cache 的前提
+                - generic [ref=f12e519]: 已读
+              - link "33 多头注意力 为什么要「分头」看？ → multi-head 可玩" [ref=f12e520] [cursor=pointer]:
+                - /url: /ch/multi-head
+                - generic [ref=f12e521]: "33"
+                - generic [ref=f12e522]:
+                  - generic [ref=f12e523]: 多头注意力
+                  - generic [ref=f12e524]: 为什么要「分头」看？
+                - generic [ref=f12e525]: → multi-head
+                - generic [ref=f12e526]: 可玩
+              - link "34 位置编码与 RoPE 注意力本身分不清词序，位置信息怎么加进去？ → RoPE 旋转位置编码（旋转矩阵的回归） 可玩" [ref=f12e527] [cursor=pointer]:
+                - /url: /ch/rope
+                - generic [ref=f12e528]: "34"
+                - generic [ref=f12e529]:
+                  - generic [ref=f12e530]: 位置编码与 RoPE
+                  - generic [ref=f12e531]: 注意力本身分不清词序，位置信息怎么加进去？
+                - generic [ref=f12e532]: → RoPE 旋转位置编码（旋转矩阵的回归）
+                - generic [ref=f12e533]: 可玩
+              - link "35 一个 Transformer Block 残差 + 归一化 + MLP 怎么组装成一层？ → 完整的一层 可玩" [ref=f12e534] [cursor=pointer]:
+                - /url: /ch/transformer-block
+                - generic [ref=f12e535]: "35"
+                - generic [ref=f12e536]:
+                  - generic [ref=f12e537]: 一个 Transformer Block
+                  - generic [ref=f12e538]: 残差 + 归一化 + MLP 怎么组装成一层？
+                - generic [ref=f12e539]: → 完整的一层
+                - generic [ref=f12e540]: 可玩
+          - generic [ref=f12e541]:
+            - generic [ref=f12e542]:
+              - heading "第九部分 · 尾声：接到 LLM 工程" [level=3] [ref=f12e543]
+              - paragraph [ref=f12e544]: 地基打完，落到你的真实目标：训练、微调、推理。
+            - generic [ref=f12e545]:
+              - link "✓ LoRA 与高效微调 为什么改一个低秩的小矩阵就能微调大模型？ → 微调 / PEFT（低秩在这集大成） 已读" [ref=f12e546] [cursor=pointer]:
+                - /url: /ch/lora-finetuning
+                - generic [ref=f12e547]: ✓
+                - generic [ref=f12e548]:
+                  - generic [ref=f12e549]: LoRA 与高效微调
+                  - generic [ref=f12e550]: 为什么改一个低秩的小矩阵就能微调大模型？
+                - generic [ref=f12e551]: → 微调 / PEFT（低秩在这集大成）
+                - generic [ref=f12e552]: 已读
+              - link "37 采样与解码 模型怎么从概率分布里「选词」生成？ → 推理：temperature / top-k / top-p 可玩" [ref=f12e553] [cursor=pointer]:
+                - /url: /ch/sampling-decoding
+                - generic [ref=f12e554]: "37"
+                - generic [ref=f12e555]:
+                  - generic [ref=f12e556]: 采样与解码
+                  - generic [ref=f12e557]: 模型怎么从概率分布里「选词」生成？
+                - generic [ref=f12e558]: → 推理：temperature / top-k / top-p
+                - generic [ref=f12e559]: 可玩
+              - link "✓ 量化与数值 为什么权重能从 float 压到 int8/int4 还能用？ → 推理效率、数值精度 已读" [ref=f12e560] [cursor=pointer]:
+                - /url: /ch/quantization
+                - generic [ref=f12e561]: ✓
+                - generic [ref=f12e562]:
+                  - generic [ref=f12e563]: 量化与数值
+                  - generic [ref=f12e564]: 为什么权重能从 float 压到 int8/int4 还能用？
+                - generic [ref=f12e565]: → 推理效率、数值精度
+                - generic [ref=f12e566]: 已读
+          - generic [ref=f12e567]:
+            - generic [ref=f12e568]:
+              - heading "第十部分 · 终点：完整的前向传播" [level=3] [ref=f12e569]
+              - paragraph [ref=f12e570]: 把前面所有零件串成一次完整的前向传播，然后交棒给正课。
+            - link "✓ 跑通一次前向传播 ★ 一句话喂进模型，从 token 到下一个词，到底流过哪些矩阵？ → 完整的 forward pass；接下来去哪 已读" [ref=f12e572] [cursor=pointer]:
+              - /url: /ch/forward-pass
+              - generic [ref=f12e573]: ✓
+              - generic [ref=f12e574]:
+                - generic [ref=f12e575]:
+                  - text: 跑通一次前向传播
+                  - generic "通往注意力的主线" [ref=f12e576]: ★
+                - generic [ref=f12e577]: 一句话喂进模型，从 token 到下一个词，到底流过哪些矩阵？
+              - generic [ref=f12e578]: → 完整的 forward pass；接下来去哪
+              - generic [ref=f12e579]: 已读
+        - generic [ref=f12e580]:
+          - paragraph [ref=f12e581]: 不知道从哪开始？直接玩第一个上线的章节：
+          - link "01 · 向量与坐标系 →" [ref=f12e582] [cursor=pointer]:
+            - /url: /ch/vectors
+            - text: 01 · 向量与坐标系
+            - generic [ref=f12e583]: →
+        - generic [ref=f12e584]:
+          - paragraph [ref=f12e585]: 觉得有用？去 GitHub 点个 ★ Star，是对这个项目最实在的鼓励—— 也方便你之后回来追更后面的章节。
+          - link "★ 在 GitHub 上 Star" [ref=f12e586] [cursor=pointer]:
+            - /url: https://github.com/tao-hpu/linalg-to-attention
+      - generic [ref=f12e587]:
+        - generic [ref=f12e588]:
+          - text: © 2026
+          - link "FIM Labs" [ref=f12e589] [cursor=pointer]:
+            - /url: https://fim.ai
+        - generic [ref=f12e590]: 线性代数 → 注意力 · 一个开源教学项目

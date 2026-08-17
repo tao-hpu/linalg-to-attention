@@ -44,6 +44,7 @@ const Normalization = L(() => import('./pages/Normalization'), 'Normalization')
 const Softmax = L(() => import('./pages/Softmax'), 'Softmax')
 const CrossEntropy = L(() => import('./pages/CrossEntropy'), 'CrossEntropy')
 const SelfAttention = L(() => import('./pages/SelfAttention'), 'SelfAttention')
+const CausalMask = L(() => import('./pages/CausalMask'), 'CausalMask')
 const MultiHeadAttention = L(() => import('./pages/MultiHeadAttention'), 'MultiHeadAttention')
 const Rope = L(() => import('./pages/Rope'), 'Rope')
 const TransformerBlock = L(() => import('./pages/TransformerBlock'), 'TransformerBlock')
@@ -98,6 +99,7 @@ export default function App() {
                   <Route path="softmax" element={<Softmax />} />
                   <Route path="cross-entropy" element={<CrossEntropy />} />
                   <Route path="self-attention" element={<SelfAttention />} />
+                  <Route path="causal-mask" element={<CausalMask />} />
                   <Route path="multi-head" element={<MultiHeadAttention />} />
                   <Route path="rope" element={<Rope />} />
                   <Route path="transformer-block" element={<TransformerBlock />} />

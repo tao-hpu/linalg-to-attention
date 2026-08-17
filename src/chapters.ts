@@ -100,25 +100,26 @@ export const parts: Part[] = [
     blurb: '前面所有零件，在这里组装成 Transformer。',
     chapters: [
       { slug: 'self-attention', num: '31', title: '自注意力', hook: '吓人的注意力公式，到底在算什么？', bridge: '这就是 attention 的全部', status: 'live', core: true },
-      { slug: 'multi-head', num: '32', title: '多头注意力', hook: '为什么要「分头」看？', bridge: 'multi-head', status: 'live' },
-      { slug: 'rope', num: '33', title: '位置编码与 RoPE', hook: '注意力本身分不清词序，位置信息怎么加进去？', bridge: 'RoPE 旋转位置编码（旋转矩阵的回归）', status: 'live' },
-      { slug: 'transformer-block', num: '34', title: '一个 Transformer Block', hook: '残差 + 归一化 + MLP 怎么组装成一层？', bridge: '完整的一层', status: 'live' },
+      { slug: 'causal-mask', num: '32', title: '因果掩码', hook: '预测下一个词时，怎么防止模型偷看后文？', bridge: 'decoder-only 的因果注意力、KV Cache 的前提', status: 'live', core: true },
+      { slug: 'multi-head', num: '33', title: '多头注意力', hook: '为什么要「分头」看？', bridge: 'multi-head', status: 'live' },
+      { slug: 'rope', num: '34', title: '位置编码与 RoPE', hook: '注意力本身分不清词序，位置信息怎么加进去？', bridge: 'RoPE 旋转位置编码（旋转矩阵的回归）', status: 'live' },
+      { slug: 'transformer-block', num: '35', title: '一个 Transformer Block', hook: '残差 + 归一化 + MLP 怎么组装成一层？', bridge: '完整的一层', status: 'live' },
     ],
   },
   {
     name: '第九部分 · 尾声：接到 LLM 工程',
     blurb: '地基打完，落到你的真实目标：训练、微调、推理。',
     chapters: [
-      { slug: 'lora-finetuning', num: '35', title: 'LoRA 与高效微调', hook: '为什么改一个低秩的小矩阵就能微调大模型？', bridge: '微调 / PEFT（低秩在这集大成）', status: 'live' },
-      { slug: 'sampling-decoding', num: '36', title: '采样与解码', hook: '模型怎么从概率分布里「选词」生成？', bridge: '推理：temperature / top-k / top-p', status: 'live' },
-      { slug: 'quantization', num: '37', title: '量化与数值', hook: '为什么权重能从 float 压到 int8/int4 还能用？', bridge: '推理效率、数值精度', status: 'live' },
+      { slug: 'lora-finetuning', num: '36', title: 'LoRA 与高效微调', hook: '为什么改一个低秩的小矩阵就能微调大模型？', bridge: '微调 / PEFT（低秩在这集大成）', status: 'live' },
+      { slug: 'sampling-decoding', num: '37', title: '采样与解码', hook: '模型怎么从概率分布里「选词」生成？', bridge: '推理：temperature / top-k / top-p', status: 'live' },
+      { slug: 'quantization', num: '38', title: '量化与数值', hook: '为什么权重能从 float 压到 int8/int4 还能用？', bridge: '推理效率、数值精度', status: 'live' },
     ],
   },
   {
     name: '第十部分 · 终点：完整的前向传播',
     blurb: '把前面所有零件串成一次完整的前向传播，然后交棒给正课。',
     chapters: [
-      { slug: 'forward-pass', num: '38', title: '跑通一次前向传播', hook: '一句话喂进模型，从 token 到下一个词，到底流过哪些矩阵？', bridge: '完整的 forward pass；接下来去哪', status: 'live', core: true },
+      { slug: 'forward-pass', num: '39', title: '跑通一次前向传播', hook: '一句话喂进模型，从 token 到下一个词，到底流过哪些矩阵？', bridge: '完整的 forward pass；接下来去哪', status: 'live', core: true },
     ],
   },
 ]
